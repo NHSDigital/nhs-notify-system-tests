@@ -1,0 +1,30 @@
+name: Baseline Zap Security Test
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      subdomain:
+        description: 'Target environment subdomain'
+        required: true
+        default: 'main'
+      path:
+        description: 'Base target path'
+        required: true
+        default: 'templates/manage-templates'
+  schedule:
+    - cron: "20 10 * * *"
+
+jobs:
+  test-security:
+    name: "Security test"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: "Run security test"
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: https://${{ github.event.inputs.subdomain || 'main' }}.web-gateway.dev.nhsnotify.national.nhs.uk/${{ inputs.path || 'templates/manage-templates' }}
+          allow_issue_writing: false
+          fail_action: true
+          cmd_options: '-d'
