@@ -11,3 +11,8 @@ version.json
 !project.code-workspace
 
 # Please, add your custom content below!
+
+# locust with playwright
+*.pyc
+results_*.csv
+.DS_Store
