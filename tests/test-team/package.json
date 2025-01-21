@@ -1,0 +1,20 @@
+{
+  "name": "nhs-notify-web-template-management-ui-tests",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test:dev-ui-e2e": "playwright test --project e2e-dev -c config/dev.config.ts"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-appsync": "^3.650.0",
+    "@aws-sdk/client-dynamodb": "^3.654.0",
+    "@aws-sdk/lib-dynamodb": "^3.654.0",
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.12.0",
+    "aws-amplify": "^6.6.0",
+    "playwright": "^1.50.0"
+  },
+  "resolutions": {
+    "@playwright/test": "1.49.1"
+  }
+}

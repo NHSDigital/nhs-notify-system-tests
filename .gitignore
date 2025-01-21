@@ -12,7 +12,21 @@ version.json
 
 # Please, add your custom content below!
 
+# dependencies
+node_modules
+.node-version
+*/node_modules
+/.pnp
+.pnp.js
+
 # locust with playwright
 *.pyc
 results_*.csv
 .DS_Store
+
+# Playwright e2e
+test-results/
+tests/test-team/playwright-report/
+tests/test-team/blob-report/
+tests/test-team/playwright/.cache/
+auth.json
