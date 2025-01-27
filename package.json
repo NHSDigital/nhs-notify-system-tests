@@ -3,5 +3,8 @@
   "workspaces": [
     "tests/test-team",
     "tests/security"
-  ]
+  ],
+  "devDependencies": {
+    "@playwright/test": "^1.49.1"
+  }
 }
