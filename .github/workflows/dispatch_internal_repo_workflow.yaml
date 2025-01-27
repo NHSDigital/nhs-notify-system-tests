@@ -10,7 +10,7 @@ on:
       infraRepoName:
         type: string
         description: Repository (this one) in the NHSDigital Github Org to deploy from
-        default: ""
+        required: true
       releaseVersion:
         type: string
         description: The Github release version, commit, or tag.
@@ -23,9 +23,13 @@ on:
         type: string
         description: The environment to test
         default: main
+      assumeRoleAccount:
+        type: string
+        description: The account in which the test runner will assume its role
+        default: ""
 
 concurrency:
-  group: ${{ inputs.targetEnvironment }}
+  group: ${{ inputs.targetEnvironment }}-${{ inputs.releaseVersion }}
 
 jobs:
   trigger:
@@ -47,13 +51,15 @@ jobs:
             --arg infraRepoName "${{ inputs.infraRepoName }}" \
             --arg releaseVersion ${{ inputs.releaseVersion }} \
             --arg targetEnvironment ${{ inputs.targetEnvironment }} \
+            --arg assumeRoleAccount ${{ inputs.assumeRoleAccount }} \
             '{
               "ref": "main",
               "inputs": (
-                (if $infraRepoName != "" then { "infraRepoName": $infraRepoName } else {} end) +
+                (if $assumeRoleAccount != "" then { "assumeRoleAccount": $assumeRoleAccount } else {} end) +
                 {
                   "releaseVersion": $releaseVersion,
-                  "targetEnvironment": $targetEnvironment
+                  "targetEnvironment": $targetEnvironment,
+                  "infraRepoName": $infraRepoName
                 }
               )
             }')
@@ -81,6 +87,7 @@ jobs:
               | jq -r '.workflow_runs[]
                 | select(.name
                 | contains("'${{ inputs.targetEnvironment }}'") and
+                | contains("'${{ inputs.jobName }}'")
                 | .url')
 
             if [[ -n "$workflow_run_url" && "$workflow_run_url" != null ]]; then
