@@ -53,14 +53,12 @@ startUrl="${base}/templates${templateManagementBranch}/create-and-submit-templat
 
 echo "starting ZAP scan at $startUrl"
 
-workspace=${GITHUB_WORKSPACE:-$(pwd)}
-
-chmod a+w $workspace
+chmod a+w $(pwd)
 
 docker pull "ghcr.io/zaproxy/zaproxy:stable"
 
 docker run \
-  -v ${workspace}:/zap/wrk/:rw \
+  -v $(pwd):/zap/wrk/:rw \
   -e ZAP_AUTH_HEADER=Cookie -e ZAP_AUTH_HEADER_VALUE="$cookie" \
   --network="host" \
   -t "ghcr.io/zaproxy/zaproxy:stable" zap-baseline.py \
