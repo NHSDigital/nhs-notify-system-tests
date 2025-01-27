@@ -61,7 +61,6 @@ jobs:
           # Trigger The workflow
           curl -L \
             --fail \
-            --silent \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.PR_TRIGGER_PAT }}" \
