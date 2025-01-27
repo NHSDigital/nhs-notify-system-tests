@@ -87,9 +87,6 @@ jobs:
                 -H "X-GitHub-Api-Version: 2022-11-28" \
                 "https://api.github.com/repos/NHSDigital/nhs-notify-internal/actions/runs?event=workflow_dispatch&status=in_progress"
             )
-
-            echo $in_progress
-
             workflow_run_url=$(
               echo $in_progress | jq -r \
                 --arg jobName "${{ inputs.jobName }}" \
@@ -98,7 +95,6 @@ jobs:
                   | contains("'${{ inputs.targetEnvironment }}'") and contains($jobName))
                   | .url'
             )
-
             if [[ -n "$workflow_run_url" && "$workflow_run_url" != null ]]; then
               ui_url=${workflow_run_url/api./}
               ui_url=${ui_url/\/repos/}
