@@ -87,8 +87,7 @@ jobs:
               "https://api.github.com/repos/NHSDigital/nhs-notify-internal/actions/runs?event=workflow_dispatch&status=in_progress" \
               | jq -r --arg jobName "${{ inputs.jobName }}" '.workflow_runs[]
                 | select(.name
-                | contains("'${{ inputs.targetEnvironment }}'") and
-                | contains($jobName))
+                | contains("'${{ inputs.targetEnvironment }}'") and contains($jobName))
                 | .url')
 
             if [[ -n "$workflow_run_url" && "$workflow_run_url" != null ]]; then
