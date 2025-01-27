@@ -19,4 +19,4 @@ jobs:
       releaseVersion: ${{ github.head_ref || github.ref_name }}
       targetWorkflow: dispatch-security-tests-static-env.yaml
       targetEnvironment: main
-      assumeRoleAccount: 975050048865
+      assumeRoleAccount: 975050048865 # iam-dev
