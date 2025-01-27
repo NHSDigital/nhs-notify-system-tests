@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  acceptance-tests:
-    name: Step 2
+  security-test:
+    name: Security Test
 
     permissions:
       id-token: write

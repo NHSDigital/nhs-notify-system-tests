@@ -50,7 +50,6 @@ jobs:
               "ref": "main",
               "inputs": (
                 (if $infraRepoName != "" then { "infraRepoName": $infraRepoName } else {} end) +
-                (if $terraformAction != "" then { "terraformAction": $terraformAction } else {} end) +
                 {
                   "releaseVersion": $releaseVersion,
                   "targetEnvironment": $targetEnvironment,
