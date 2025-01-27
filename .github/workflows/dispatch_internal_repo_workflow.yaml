@@ -52,9 +52,7 @@ jobs:
                 (if $infraRepoName != "" then { "infraRepoName": $infraRepoName } else {} end) +
                 {
                   "releaseVersion": $releaseVersion,
-                  "targetEnvironment": $targetEnvironment,
-                  "targetAccountGroup": $targetAccountGroup,
-                  "targetComponent": $targetComponent
+                  "targetEnvironment": $targetEnvironment
                 }
               )
             }')
