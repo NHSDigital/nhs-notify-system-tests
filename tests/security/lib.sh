@@ -10,7 +10,7 @@ password() {
   local upper=$(rnd 'A-Z' 3)
   local lower=$(rnd 'a-z' 3)
   local num=$(rnd '0-9' 3)
-  local special=$(rnd '^$*.[]{}()?-"!@#%&/\,><:;|_~+=' 3)
+  local special=$(rnd '^$*.[]{}()?"!@#%&/\,><:;|_~+=' 3)
 
   echo "$upper$lower$num$special"
 }
