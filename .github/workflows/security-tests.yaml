@@ -1,8 +1,7 @@
-name: Security scan
+name: Security tests
 
 on:
   push:
-  workflow_dispatch:
 
 jobs:
   security-test:
@@ -20,3 +19,4 @@ jobs:
       releaseVersion: ${{ github.head_ref || github.ref_name }}
       targetWorkflow: dispatch-security-tests-static-env.yaml
       targetEnvironment: main
+      assumeRoleAccount: 975050048865
