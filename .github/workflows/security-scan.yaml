@@ -1,0 +1,21 @@
+name: Acceptance stage
+
+on:
+  workflow_dispatch:
+
+jobs:
+  acceptance-tests:
+    name: Step 2
+
+    permissions:
+      id-token: write
+      contents: read
+
+    uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
+    secrets: inherit
+    with:
+      jobName: Acceptance tests
+      infraRepoName: nhs-notify-system-tests
+      releaseVersion: ${{ github.head_ref || github.ref_name }}
+      targetWorkflow: dispatch-acceptance-tests-dynamic-env.yaml
+      targetEnvironment: main
