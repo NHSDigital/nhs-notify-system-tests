@@ -18,5 +18,5 @@ jobs:
       jobName: Security test
       infraRepoName: nhs-notify-system-tests
       releaseVersion: ${{ github.head_ref || github.ref_name }}
-      targetWorkflow: dispatch-security-tests-static.yaml
+      targetWorkflow: dispatch-security-tests-static-env.yaml
       targetEnvironment: main
