@@ -6,7 +6,6 @@
     "fetch-cookie": "ts-node ./src/fetch-cookie.ts"
   },
   "devDependencies": {
-    "@playwright/test": "^1.49.1",
     "@tsconfig/node20": "^20.1.4",
     "@types/yargs": "^17.0.33",
     "ts-node": "^10.9.2",
