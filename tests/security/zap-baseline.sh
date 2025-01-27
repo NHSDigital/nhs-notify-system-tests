@@ -53,11 +53,10 @@ startUrl="${base}/templates${templateManagementBranch}/create-and-submit-templat
 
 echo "starting ZAP scan at $startUrl"
 
-chmod a+w $(pwd)
-
 docker pull "ghcr.io/zaproxy/zaproxy:stable"
 
 docker run \
+  --user root \
   -v $(pwd):/zap/wrk/:rw \
   -e ZAP_AUTH_HEADER=Cookie -e ZAP_AUTH_HEADER_VALUE="$cookie" \
   --network="host" \
