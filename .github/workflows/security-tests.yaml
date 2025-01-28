@@ -27,5 +27,5 @@ jobs:
       infraRepoName: nhs-notify-system-tests
       releaseVersion: ${{ github.head_ref || github.ref_name }}
       targetWorkflow: dispatch-security-tests-static-env.yaml
-      targetEnvironment: ${{ inputs.targetEnvironment  }}
+      targetEnvironment: ${{ inputs.targetEnvironment || 'main'  }}
       assumeRoleAccount: 975050048865 # iam-dev
