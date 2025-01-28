@@ -17,9 +17,14 @@ runs:
       shell: bash
       run: ./tests/security/run.sh
 
+    - name: Debug working directory
+      shell: bash
+      run: |
+        echo "Current working directory: $(pwd)"
+        ls -R tests/security
+
     - name: Archive security test results
       uses: actions/upload-artifact@v4
       with:
         name: Security test report
         path: "tests/security/zap-out-*.html"
-
