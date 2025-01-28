@@ -1,25 +1,21 @@
 name: Security scan
 description: "Run security scan"
 
-# inputs:
-#   testType:
-#     description: Type of test to run
-#     required: true
-#     default: main
+inputs:
+  webGatewayEnvironment:
+    description: Subdomain indicating a static web gateway
+    required: false
+    default: main
 
-#   targetEnvironment:
-#     description: Name of the environment under test
-#     required: true
-#     default: main
+  iamEnvironment:
+    description: Static IAM environment connected to the web gateway being tested
+    required: false
+    default: main
 
-#   targetAccountGroup:
-#     description: Name of the account group under test
-#     default: nhs-notify-iam-dev
-#     required: true
-
-#   targetComponent:
-#     description: Name of the component under test
-#     default: app
+  templateManagementBranch:
+    description: Branch level template management environment. If empty, main branch is used
+    required: false
+    default: ""
 
 runs:
   using: "composite"
@@ -31,16 +27,20 @@ runs:
         npm ci
     - name: Install Playwright Browsers
       shell: bash
-      run: npx playwright install --with-deps
+      run: npx -w=tests/security playwright install --with-deps
 
     - name: Run test - security scan
       shell: bash
       run: |
-        ./tests/security/zap-baseline.sh
+        ./tests/security/run.sh \
+          {{ inputs.webGatewayEnvironment }} \
+          {{ inputs.iamEnvironment }} \
+          {{ inputs.templateManagementBranch }} \
 
-    # - name: Archive ui test results
-    #   if: ${{ inputs.testType == 'ui' }}
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: UI test report
-    #     path: "tests/test-team/playwright-report"
+    - name: Archive security test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: Security test report
+        path:
+        - "tests/security/report/zap-out-auth.html"
+        - "tests/security/report/zap-out-no-auth.html"
