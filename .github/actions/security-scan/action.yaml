@@ -2,18 +2,10 @@ name: Security scan
 description: "Run security scan"
 
 inputs:
-  webGatewayEnvironment:
+  environment:
     description: "Web gateway subdomain to test"
     required: false
     default: main
-  iamEnvironment:
-    description: "Static IAM environment in which a test user will be created"
-    required: false
-    default: main
-  templateManagementBranch:
-    description: "Optional branch level web-template-management frontend to test. Empty default implies main"
-    required: false
-    default: ""
 
 runs:
   using: "composite"
@@ -32,9 +24,7 @@ runs:
       shell: bash
       run: |
         ./tests/security/run.sh \
-          "${{ inputs.webGatewayEnvironment  }}" \
-          "${{ inputs.iamEnvironment  }}" \
-          "${{ inputs.templateManagementBranch  }}" \
+          "${{ inputs.environment  }}" \
           || echo "exit_code=$?" >> $GITHUB_OUTPUT
 
     - name: Archive security test results
