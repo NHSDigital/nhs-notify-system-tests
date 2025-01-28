@@ -1,4 +1,4 @@
 {
   "extends": "@tsconfig/node20/tsconfig.json",
-  "include": ["src/**/*", "src/fetch-cookie.ts"]
+  "include": ["src/**/*"]
 }
