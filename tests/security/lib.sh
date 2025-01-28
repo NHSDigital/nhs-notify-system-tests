@@ -44,7 +44,7 @@ get_branch_segment() {
 }
 
 get_user_pool_id() {
-  local environment="$1"
+  local iam_environment="$1"
 
   local pools=$(aws cognito-idp list-user-pools --max-results 60) || pools="{}"
 
@@ -54,12 +54,12 @@ get_user_pool_id() {
   fi
 
   local pool_id=$(
-    echo $pools | jq -r --arg env $environment \
+    echo $pools | jq -r --arg env $iam_environment \
       '.UserPools[] | select(.Name == "nhs-notify-" + $env + "-app") | .Id'
   )
 
   if [ -z "$pool_id" ]; then
-    print_err "User pool for environment $environment not found"
+    print_err "User pool for IAM environment $iam_environment not found"
     return 1
   fi
 

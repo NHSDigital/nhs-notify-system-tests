@@ -21,7 +21,3 @@ node_modules
 # locust with playwright
 *.pyc
 results_*.csv
-
-# ZAP
-zap-out*.html
-zap.yaml
