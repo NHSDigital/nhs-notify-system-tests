@@ -27,7 +27,7 @@ runs:
         npm ci
     - name: Install Playwright Browsers
       shell: bash
-      run: npx -w=tests/security playwright install-deps chrome
+      run: npx -w=tests/security playwright install --with-deps --only-shell
 
     - name: Run test - security scan
       shell: bash
