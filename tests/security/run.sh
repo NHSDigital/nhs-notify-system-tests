@@ -69,7 +69,7 @@ docker run \
   --tty "$image" zap-baseline.py \
     -z "-configfile $zap_config" \
     -t $start_url \
-    -r report/zap-out-no-auth.html \
+    -r zap-out-no-auth.html \
     -c $rules_config \
     -j \
     -d
@@ -87,7 +87,7 @@ docker run \
   --tty "$image" zap-baseline.py \
     -z "-configfile $zap_config" \
     -t $start_url \
-    -r report/zap-out-auth.html \
+    -r zap-out-auth.html \
     -c $rules_config \
     -j \
     -d
