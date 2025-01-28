@@ -23,9 +23,8 @@ runs:
       id: test
       shell: bash
       run: |
-        ./tests/security/run.sh \
-          "${{ inputs.environment  }}" \
-          || echo "exit_code=$?" >> $GITHUB_OUTPUT
+        ./tests/security/run.sh "${{ inputs.environment  }}"
+        echo "exit_code=$?" >> $GITHUB_OUTPUT
 
     - name: Archive security test results
       uses: actions/upload-artifact@v4
