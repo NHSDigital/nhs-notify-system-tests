@@ -23,6 +23,7 @@ runs:
       id: test
       shell: bash
       run: |
+        set +e
         ./tests/security/run.sh "${{ inputs.environment  }}"
         echo "exit_code=$?" >> $GITHUB_OUTPUT
 
