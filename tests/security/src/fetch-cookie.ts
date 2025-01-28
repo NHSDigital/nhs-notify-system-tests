@@ -28,7 +28,7 @@ const argv = yargs(hideBin(process.argv))
   .parseSync();
 
 async function main() {
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch();
 
   try {
     const context = await browser.newContext();
