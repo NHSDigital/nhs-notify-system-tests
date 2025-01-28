@@ -12,7 +12,12 @@ version.json
 
 # Please, add your custom content below!
 
+#general
+.DS_Store
+
+# node
+node_modules
+
 # locust with playwright
 *.pyc
 results_*.csv
-.DS_Store
