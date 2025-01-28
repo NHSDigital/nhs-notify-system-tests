@@ -3,7 +3,7 @@ env:
   - excludePaths: []
     name: baseline
     urls:
-    - https://main.web-gateway.dev.nhsnotify.national.nhs.uk/templates/manage-templates
+    - https://main.web-gateway.dev.nhsnotify.national.nhs.uk/templates/create-and-submit-templates
     - https://main.web-gateway.dev.nhsnotify.national.nhs.uk/
   parameters:
     failOnError: true
@@ -17,6 +17,10 @@ jobs:
     maxDuration: 1
     url: https://main.web-gateway.dev.nhsnotify.national.nhs.uk/
   type: spider
+- parameters:
+    maxDuration: 1
+    url: https://main.web-gateway.dev.nhsnotify.national.nhs.uk/
+  type: spiderAjax
 - parameters:
     maxDuration: 0
   type: passiveScan-wait
