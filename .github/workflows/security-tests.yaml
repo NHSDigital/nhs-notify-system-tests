@@ -3,6 +3,12 @@ name: Security tests
 on:
   push:
   workflow_dispatch:
+    inputs:
+      targetEnvironment:
+        type: string
+        description: "Web gateway subdomain to test"
+        required: false
+        default: main
   schedule:
     - cron: "0 9 * * *"
 
@@ -21,5 +27,5 @@ jobs:
       infraRepoName: nhs-notify-system-tests
       releaseVersion: ${{ github.head_ref || github.ref_name }}
       targetWorkflow: dispatch-security-tests-static-env.yaml
-      targetEnvironment: main
+      targetEnvironment: ${{ inputs.targetEnvironment }}
       assumeRoleAccount: 975050048865 # iam-dev
