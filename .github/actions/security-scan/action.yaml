@@ -33,9 +33,9 @@ runs:
       shell: bash
       run: |
         ./tests/security/run.sh \
-          {{ inputs.webGatewayEnvironment }} \
-          {{ inputs.iamEnvironment }} \
-          {{ inputs.templateManagementBranch }} \
+          "${{ inputs.webGatewayEnvironment }}" \
+          "${{ inputs.iamEnvironment }}" \
+          "${{ inputs.templateManagementBranch }}"
 
     - name: Archive security test results
       uses: actions/upload-artifact@v4
