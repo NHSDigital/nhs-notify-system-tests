@@ -29,7 +29,7 @@ on:
         default: ""
 
 concurrency:
-  group: ${{ inputs.targetEnvironment }}-${{ inputs.releaseVersion }}
+  group: ${{ inputs.targetEnvironment }}-${{ inputs.releaseVersion }}-${{ inputs.targetWorkflow }}-${{ inputs.jobName }}
 
 jobs:
   trigger:
