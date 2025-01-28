@@ -2,12 +2,10 @@
   "name": "nhs-notify-system-security-test",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "fetch-cookie": "ts-node ./src/fetch-cookie.ts"
-  },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
     "@types/yargs": "^17.0.33",
+    "@playwright/test": "^1.49.1",
     "ts-node": "^10.9.2",
     "yargs": "^17.7.2"
   }
