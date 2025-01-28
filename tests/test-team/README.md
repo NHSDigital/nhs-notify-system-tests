@@ -11,4 +11,6 @@ This package includes:
 
 From the tests/test-team folder, run the following command:
 
-- npm run test:dev-ui-e2e
+```shell
+npm run test:dev-ui-e2e
+```
