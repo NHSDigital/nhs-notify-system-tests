@@ -47,7 +47,7 @@ cookie=$(
 print "Got cookie"
 
 base="https://${web_gateway_environment}.web-gateway.dev.nhsnotify.national.nhs.uk"
-start_url="${base}/templates${branch_segment}/manage-templates"
+start_url="${base}/templates${branch_segment}/create-and-submit-templates"
 
 image="ghcr.io/zaproxy/zaproxy:stable"
 container_volume="$(pwd):/zap/wrk/:rw"
@@ -71,6 +71,7 @@ docker run \
     -t $start_url \
     -r report/zap-out-no-auth.html \
     -c $rules_config \
+    -j \
     -d
 
 no_login_exit="$?"
@@ -88,6 +89,7 @@ docker run \
     -t $start_url \
     -r report/zap-out-auth.html \
     -c $rules_config \
+    -j \
     -d
 
 with_login_exit=$?

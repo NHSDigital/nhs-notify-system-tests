@@ -41,6 +41,5 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: Security test report
-        path:
-        - "tests/security/report/zap-out-auth.html"
-        - "tests/security/report/zap-out-no-auth.html"
+        path: "tests/security/report/zap-out-*.html"
+
