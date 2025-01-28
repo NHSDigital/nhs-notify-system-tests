@@ -1,7 +1,5 @@
 name: Security scan
 description: "Run security scan"
-
-inputs:
   webGatewayEnvironment:
     description: Subdomain indicating a static web gateway
     required: false
@@ -31,11 +29,7 @@ runs:
 
     - name: Run test - security scan
       shell: bash
-      run: |
-        ./tests/security/run.sh \
-          "${{ inputs.webGatewayEnvironment }}" \
-          "${{ inputs.iamEnvironment }}" \
-          "${{ inputs.templateManagementBranch }}"
+      run: ./tests/security/run.sh
 
     - name: Archive security test results
       uses: actions/upload-artifact@v4
