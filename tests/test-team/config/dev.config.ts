@@ -16,11 +16,12 @@ export default defineConfig({
       testMatch: '*-e2e.ts',
       use: {
         screenshot: 'only-on-failure',
-        baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk/templates/create-and-submit-templates',
+        baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',
         ...devices['Desktop Chrome'],
         headless: false,
+        storageState: 'auth.json', // Load saved authentication state
         launchOptions: {
-          slowMo: 500,
+          slowMo: 200,
         },
       },
     },

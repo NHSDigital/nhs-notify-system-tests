@@ -1,27 +1,28 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
-import { test } from '@playwright/test';
+import { loggedInTest, expect } from '../fixtures/login';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
-  startPage,
   chooseTemplate,
   createTemplate,
   previewPage,
   submitPage,
+  startNewTemplate,
 } from '../functions/template-mgmt-e2e-common-steps';
 
-test(`User creates and submits a new email template successfully`, async ({
-  page,
+loggedInTest(`User creates and submits a new email template successfully`, async ({
   baseURL,
+  loggedInPage,
 }) => {
   const props = {
-    basePage: new TemplateMgmtBasePage(page),
+    basePage: new TemplateMgmtBasePage(loggedInPage),
     baseURL,
   };
   const channel = 'Email';
   const channelPath = 'email';
 
-  await startPage(props);
+  //await startPage(props);  Moved to login fixture
+  await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath);
   await previewPage(props, channelPath);

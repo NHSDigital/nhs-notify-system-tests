@@ -29,3 +29,4 @@ test-results/
 tests/test-team/playwright-report/
 tests/test-team/blob-report/
 tests/test-team/playwright/.cache/
+auth.json

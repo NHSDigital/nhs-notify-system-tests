@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { loggedInTest as test, expect } from '../fixtures/login';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 
 type CommonStepsProps = {
@@ -18,6 +18,12 @@ export function startPage({ basePage, baseURL }: CommonStepsProps) {
       'Create and submit a template to NHS Notify'
     );
     await basePage.clickButtonByName('Start now');
+  });
+}
+
+export function startNewTemplate({ basePage }: CommonStepsProps) {
+  return test.step('start template process', async () => {
+    await basePage.clickButtonByName('Create template');
   });
 }
 
