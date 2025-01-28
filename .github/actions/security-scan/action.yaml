@@ -1,19 +1,5 @@
 name: Security scan
 description: "Run security scan"
-  webGatewayEnvironment:
-    description: Subdomain indicating a static web gateway
-    required: false
-    default: main
-
-  iamEnvironment:
-    description: Static IAM environment connected to the web gateway being tested
-    required: false
-    default: main
-
-  templateManagementBranch:
-    description: Branch level template management environment. If empty, main branch is used
-    required: false
-    default: ""
 
 runs:
   using: "composite"
@@ -35,5 +21,5 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: Security test report
-        path: "tests/security/report/zap-out-*.html"
+        path: "tests/security/zap-out-*.html"
 
