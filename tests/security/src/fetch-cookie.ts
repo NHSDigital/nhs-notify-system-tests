@@ -28,7 +28,7 @@ const argv = yargs(hideBin(process.argv))
   .parseSync();
 
 async function main() {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ headless: false });
 
   try {
     const context = await browser.newContext();
@@ -50,7 +50,12 @@ async function main() {
     const emailInput = page.locator('input[name="username"]');
     const passwordInput = page.locator('input[name="password"]');
     const confirmPasswordInput = page.locator('input[name="confirm_password"]');
-    const submitButton = page.locator('button[type="submit"]');
+    const submitButton = page.locator(
+      'button[type="submit"]:has-text("Sign in")'
+    );
+    const submitChangePassword = page.locator(
+      'button[type="submit"]:has-text("Change Password")'
+    );
 
     await emailInput.fill(argv.emailAddress);
 
@@ -61,7 +66,7 @@ async function main() {
     await passwordInput.fill(argv.finalPassword);
     await confirmPasswordInput.fill(argv.finalPassword);
 
-    await submitButton.click();
+    await submitChangePassword.click();
 
     const request = await requestPromise;
     const headers = await request.allHeaders();
