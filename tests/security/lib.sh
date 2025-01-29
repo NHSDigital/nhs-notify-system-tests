@@ -25,16 +25,6 @@ password() {
   echo "$upper$lower$num$special"
 }
 
-assert_account() {
-  local expected="975050048865"
-  local acct=$(aws sts get-caller-identity | jq -r .Account) || acct="none"
-
-  if [ "$acct" != "$expected" ]; then
-      print_err "You must be authenticated in the NHS Notify IAM Dev account to use this script"
-      return 1
-  fi
-}
-
 get_branch_segment() {
   local template_management_branch="$1"
 
