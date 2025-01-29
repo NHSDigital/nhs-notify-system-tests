@@ -7,8 +7,6 @@ web_gateway_environment="${1:-main}"
 iam_environment="${2:-main}"
 template_management_branch="${3:-}"
 
-assert_account
-
 email_prefix="security-test-login"
 email="${email_prefix}-$(rnd 'a-zA-Z0-9' 8)@nhs.net"
 temp_password=$(password)

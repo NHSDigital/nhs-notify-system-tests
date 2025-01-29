@@ -91,7 +91,9 @@ jobs:
               | jq -r --arg jobName "${{ inputs.jobName }}" \
                   '.workflow_runs[]
                     | select(.name
-                    | contains("'${{ inputs.targetEnvironment }}'") and contains($jobName))
+                    | contains("'${{ inputs.targetEnvironment }}'") and
+                      contains($jobName) and
+                      contains("'${{ inputs.infraRepoName }}'"))
                     | .url'
             )
             if [[ -n "$workflow_run_url" && "$workflow_run_url" != null ]]; then
