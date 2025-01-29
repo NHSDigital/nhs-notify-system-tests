@@ -93,7 +93,7 @@ jobs:
                     | select(.name
                     | contains("'${{ inputs.targetEnvironment }}'") and
                       contains($jobName) and
-                      contains("'${{ inputs.infraRepoName }}'"))
+                      contains("${{ inputs.infraRepoName }}"))
                     | .url'
             )
             if [[ -n "$workflow_run_url" && "$workflow_run_url" != null ]]; then
