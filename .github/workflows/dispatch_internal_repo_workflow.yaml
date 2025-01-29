@@ -48,8 +48,8 @@ jobs:
         run: |
           DISPATCH_EVENT=$(jq -ncM \
             --arg infraRepoName "${{ inputs.infraRepoName }}" \
-            --arg releaseVersion "${{ inputs.releaseVersion }}"" \
-            --arg targetEnvironment "${{ inputs.targetEnvironment }}"" \
+            --arg releaseVersion "${{ inputs.releaseVersion }}" \
+            --arg targetEnvironment "${{ inputs.targetEnvironment }}" \
             --arg assumeRoleAccount "${{ inputs.assumeRoleAccount }}" \
             '{
               "ref": "main",
