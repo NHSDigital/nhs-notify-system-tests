@@ -46,14 +46,13 @@ jobs:
       - name: Trigger nhs-notify-internal workflow
         shell: bash
         run: |
-          set -x
           DISPATCH_EVENT=$(jq -ncM \
             --arg infraRepoName "${{ inputs.infraRepoName }}" \
             --arg releaseVersion "${{ inputs.releaseVersion }}" \
             --arg targetEnvironment "${{ inputs.targetEnvironment }}" \
             --arg assumeRoleAccount "${{ inputs.assumeRoleAccount }}" \
             '{
-              "ref": "main",
+              "ref": "feature/CCM-5340_rename-zap-workflow",
               "inputs": (
                 (if $assumeRoleAccount != "" then { "assumeRoleAccount": $assumeRoleAccount } else {} end) +
                 {
