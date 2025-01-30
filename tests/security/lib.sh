@@ -38,7 +38,9 @@ get_user_pool_id() {
 
   local pools=$(aws cognito-idp list-user-pools --max-results 60) || pools="{}"
 
-  if [ "$(echo $pools | jq .NextToken)" != "null" ]; then
+  local next_token=$(echo $pools | jq .NextToken)
+
+  if [ -n "$next_token" ] && [ "$next_token" != "null" ]; then
     print_err "More than 60 user pools exist. Pagination is required"
     return 1
   fi
@@ -79,6 +81,8 @@ create_user() {
 delete_user() {
   local user_pool_id="$1"; local user_id="$2"
 
+  print "Cleanup - deleting user: $user_id"
+
   aws cognito-idp admin-disable-user --user-pool-id $user_pool_id --username $user_id
   aws cognito-idp admin-delete-user --user-pool-id $user_pool_id --username $user_id
 }
@@ -98,13 +102,18 @@ cleanup_previously_created_users() {
     return 1
   fi
 
+  if [ "$users" == "[]" ]; then
+    return 0
+  fi
+
+  print "Deleting pre-existing test users"
+
   for user in $(echo $users | jq -c '.[]'); do
     local user_create_date=$(echo $user | jq -r .UserCreateDate)
     local two_hours_ago=$(date -v -2H -u +"%Y-%m-%dT%H:%M:%S")
 
     if [ -z "$user_create_date" ] || [[ "$user_create_date" < "$two_hours_ago"  ]]; then
         local user_id=$(echo $user | jq -r .Username)
-        print "Deleting pre-existing test user $user_id"
         delete_user $user_pool_id $user_id
     fi
   done
