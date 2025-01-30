@@ -22,19 +22,14 @@ cleanup_previously_created_users $user_pool $email_prefix
 user_id=$(create_user $user_pool $email $temp_password)
 print "Username (user id): $user_id"
 
-cleanup() {
-  print "Cleanup - deleting user: $user_id"
-  delete_user $user_pool $user_id || true
-}
-
-trap cleanup EXIT
+trap 'delete_user $user_pool $user_id || true' EXIT
 
 print "Fetching cookie"
 
 branch_segment=$(get_branch_segment "$template_management_branch")
 
 cookie=$(
-  npx ts-node ./src/fetch-cookie.ts \
+  npx ts-node ./src/automation-setup.ts \
     --web-gateway-environment $web_gateway_environment \
     --branch-segment $branch_segment \
     --email-address $email \
@@ -42,10 +37,25 @@ cookie=$(
     --final-password $final_password
 )
 
+cleanup() {
+  print "Cleanup - deleting templates"
+  npx ts-node ./src/automation-teardown.ts \
+    --web-gateway-environment $web_gateway_environment \
+    --branch-segment $branch_segment \
+    --cookie "$cookie" \
+  || true
+
+  delete_user $user_pool $user_id || true
+}
+
+trap cleanup EXIT
+
 print "Got cookie"
 
+exit 0
+
 base="https://${web_gateway_environment}.web-gateway.dev.nhsnotify.national.nhs.uk"
-start_url="${base}/templates${branch_segment}/create-and-submit-templates"
+start_url="${base}/templates${branch_segment}/manage-templates"
 
 image="ghcr.io/zaproxy/zaproxy:stable"
 container_volume="$(pwd):/zap/wrk/:rw"

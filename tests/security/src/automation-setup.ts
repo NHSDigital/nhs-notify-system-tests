@@ -1,4 +1,4 @@
-import { chromium } from "@playwright/test";
+import { chromium, expect, Page } from "@playwright/test";
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 
@@ -28,7 +28,7 @@ const argv = yargs(hideBin(process.argv))
   .parseSync();
 
 async function main() {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ headless: true });
 
   try {
     const context = await browser.newContext();
@@ -75,12 +75,44 @@ async function main() {
       throw new Error("cookie is missing");
     }
 
+    expect(page).toHaveURL(loggedInUrl);
+
+    await createTemplate(page, "sms");
+
     return headers.cookie;
   } catch (err) {
     throw err;
   } finally {
     await browser.close();
   }
+}
+
+async function createTemplate(page: Page, commType: string) {
+  const createTemplateButton = page.locator('a[role="button"]');
+
+  await createTemplateButton.click();
+
+  await page.waitForLoadState("networkidle");
+
+  const commTypeRadio = page.locator(
+    `input[id="templateType-${commType.toUpperCase()}"]`
+  );
+  await commTypeRadio.click();
+
+  const continueButton = page.locator('button[type="submit"]');
+  await continueButton.click();
+
+  const nameField = page.locator(`input[id="${commType}TemplateName"]`);
+  const bodyField = page.locator(`textArea[id="${commType}TemplateMessage"]`);
+  await nameField.fill("Template Name");
+  await bodyField.fill("Greetings from NHS Notify!");
+
+  const saveButton = page.locator('button[type="submit"]');
+  await saveButton.click();
+
+  await page.waitForURL(/preview/);
+
+  await expect(page.locator('text="Template saved"')).toBeVisible();
 }
 
 main()
