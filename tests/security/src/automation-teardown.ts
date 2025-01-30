@@ -65,7 +65,7 @@ async function deleteTemplate(page: Page) {
     await deleteButton.click();
 
     await page.waitForURL(startUrl);
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(100)
     await page.reload()
   } else {
     return false;
