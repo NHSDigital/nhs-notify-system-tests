@@ -52,8 +52,6 @@ trap cleanup EXIT
 
 print "Got cookie"
 
-exit 0
-
 base="https://${web_gateway_environment}.web-gateway.dev.nhsnotify.national.nhs.uk"
 start_url="${base}/templates${branch_segment}/manage-templates"
 
