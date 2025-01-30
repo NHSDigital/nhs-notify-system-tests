@@ -52,7 +52,7 @@ jobs:
             --arg targetEnvironment "${{ inputs.targetEnvironment }}" \
             --arg assumeRoleAccount "${{ inputs.assumeRoleAccount }}" \
             '{
-              "ref": "feature/CCM-5340_rename-zap-workflow",
+              "ref": "main",
               "inputs": (
                 (if $assumeRoleAccount != "" then { "assumeRoleAccount": $assumeRoleAccount } else {} end) +
                 {
