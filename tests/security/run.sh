@@ -59,7 +59,6 @@ image="ghcr.io/zaproxy/zaproxy:stable"
 container_volume="$(pwd):/zap/wrk/:rw"
 zap_config="/zap/wrk/zap-config.prop"
 rules_config="/zap/wrk/rules.conf"
-progress_config="/zap/wrk/progress.json"
 
 # https://www.zaproxy.org/docs/docker/baseline-scan/
 docker pull "$image"
