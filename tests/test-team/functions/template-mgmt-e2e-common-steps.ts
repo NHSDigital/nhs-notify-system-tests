@@ -21,7 +21,7 @@ export function startPage({ basePage, baseURL }: CommonStepsProps) {
   });
 }
 
-export function startNewTemplate({ basePage }: CommonStepsProps) {
+export function startNewTemplate({ basePage }: CommonStepsProps, channel: string) {
   return test.step('start template process', async () => {
     await basePage.clickButtonByName('Create template');
   });

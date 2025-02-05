@@ -21,7 +21,7 @@ export default defineConfig({
         headless: false,
         storageState: 'auth.json', // Load saved authentication state
         launchOptions: {
-          slowMo: 100,
+          slowMo: 300,
         },
       },
     },
