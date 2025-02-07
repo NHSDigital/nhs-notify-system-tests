@@ -1,4 +1,4 @@
-import { loggedInTest as test, expect } from '../fixtures/login';
+import { test, expect } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 
 type CommonStepsProps = {
@@ -21,7 +21,7 @@ export function startPage({ basePage, baseURL }: CommonStepsProps) {
   });
 }
 
-export function startNewTemplate({ basePage }: CommonStepsProps, channel: string) {
+export function startNewTemplate({ basePage }: CommonStepsProps) {
   return test.step('start template process', async () => {
     await basePage.clickButtonByName('Create template');
   });
