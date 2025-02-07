@@ -12,7 +12,7 @@ export default defineConfig({
   globalSetup: './global.setup',
 
   use: {
-    trace: 'on', // Options: 'on', 'off', 'retain-on-failure', 'on-first-retry'
+    trace: 'retain-on-failure', // Options: 'on', 'off', 'retain-on-failure', 'on-first-retry'
   },
 
 
