@@ -9,11 +9,17 @@ export default defineConfig({
   expect: {
     timeout: 10_000,
   },
+  globalSetup: './global.setup',
+
+  use: {
+    trace: 'on', // Options: 'on', 'off', 'retain-on-failure', 'on-first-retry'
+  },
+
 
   projects: [
     {
       name: 'e2e-dev',
-      testMatch: '*-e2e.ts',
+      testMatch: '*sms-e2e.ts',
       use: {
         screenshot: 'only-on-failure',
         baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',
@@ -21,7 +27,7 @@ export default defineConfig({
         headless: false,
         storageState: 'auth.json', // Load saved authentication state
         launchOptions: {
-          slowMo: 300,
+          slowMo: 100,
         },
       },
     },
