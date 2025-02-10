@@ -6,7 +6,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default async function globalSetup() {
-  console.log(process.env.USER_NAME, process.env.PASSWORD)
   const loginUrl = process.env.LOGIN_URL as string;
   console.log(loginUrl)
   try {
