@@ -1,7 +1,6 @@
 name: Security tests
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       targetEnvironment:
