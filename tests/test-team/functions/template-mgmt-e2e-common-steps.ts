@@ -32,7 +32,6 @@ export function chooseTemplate(
   channel: string
 ) {
   return test.step('Choose template type', async () => {
-    await basePage.clickButtonByName('Create template');
     await expect(basePage.page).toHaveURL(
       `${baseURL}/templates/choose-a-template-type`
     );
