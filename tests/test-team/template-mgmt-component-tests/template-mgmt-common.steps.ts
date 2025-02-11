@@ -38,7 +38,7 @@ export function assertNotifyBannerLink({
 }
 
 export function assertLoginLink({ page, id, baseURL }: CommonStepsProps) {
-  return test.step('when user clicks "Log in", then user is redirected to "login page"', async () => {
+  return test.step('when user clicks "Sign in", then user is redirected to "login page"', async () => {
     await page.loadPage(id);
 
     await page.clickLoginLink();

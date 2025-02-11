@@ -28,10 +28,8 @@ export class TemplateMgmtBasePage {
       '[class="nhsuk-header__link nhsuk-header__link--service"]'
     );
 
-    this.loginLink = page
-      .locator('[class="nhsuk-account__login--link"]')
-      .and(page.getByText('Log in'));
-
+    this.loginLink = page.locator(`//a[text()='Sign in']`);
+    
     // Note: doing [class="nhsuk-back-link__link"] will not find the element if it has other class names
     this.goBackLink = page
       .locator('.nhsuk-back-link__link')
@@ -98,6 +96,6 @@ export class TemplateMgmtBasePage {
   }
 
   async logOut() {
-    await this.page.getByText("Log out").click();
+    await this.page.getByText("Sign out").click();
   }
 }
