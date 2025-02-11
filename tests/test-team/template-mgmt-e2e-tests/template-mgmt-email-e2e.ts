@@ -12,10 +12,10 @@ import {
 
 loggedInTest(`User creates and submits a new email template successfully`, async ({
   baseURL,
-  loggedInPage,
+  loggedInWithCognitoPage,
 }) => {
   const props = {
-    basePage: new TemplateMgmtBasePage(loggedInPage),
+    basePage: new TemplateMgmtBasePage(loggedInWithCognitoPage),
     baseURL,
   };
   const channel = 'Email';

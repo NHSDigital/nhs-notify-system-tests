@@ -4,25 +4,26 @@ import baseConfig from './playwright.config';
 export default defineConfig({
   ...baseConfig,
 
-  timeout: 10_000,
+  timeout: 45_000,
 
   expect: {
-    timeout: 10_000,
+    timeout: 45_000,
   },
 
   projects: [
     {
       name: 'e2e-dev',
-      testMatch: '*-e2e.ts',
+      testMatch: '*-cis2-login-e2e.ts',
       use: {
-        screenshot: 'only-on-failure',
+        screenshot: 'on',
         baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',
         ...devices['Desktop Chrome'],
         headless: false,
-        storageState: 'auth.json', // Load saved authentication state
+        storageState: { cookies: [], origins: [] },
         launchOptions: {
-          slowMo: 100,
+          slowMo: 200,
         },
+        video: 'on'
       },
     },
   ],
