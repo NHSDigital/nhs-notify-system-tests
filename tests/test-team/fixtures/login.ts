@@ -15,7 +15,6 @@ import {
 // Extend the base test to add a logged-in page fixture
 type LoggedInPageFixture = {
   loggedInWithCognitoPage: Page;
-  loggedInWithCis2Page: Page;
 };
 
 // Create a test with a custom fixture
@@ -75,74 +74,7 @@ const test = baseTest.extend<LoggedInPageFixture>({
       await context.close();
     }
   },
-  loggedInWithCis2Page: async ({ browser, baseURL }, use) => {
-    if (!baseURL) {
-      throw new Error(
-        "baseURL is not defined in Playwright config. Please ensure it is set."
-      );
-    }
-
-    let context: BrowserContext;
-
-    const cis2Credentials = await getCis2Credentials();
-
-    // If auth.json does not exist, create a new browser context and login
-    context = await browser.newContext();
-    const page = await context.newPage();
-
-    try {
-      const props = {
-        basePage: new TemplateMgmtBasePage(page),
-        baseURL,
-      };
-
-      await startPage(props);
-
-      // Click the CIS2 login button
-      await page.getByAltText("NHS Care Identity").click();
-
-      await page.getByLabel("Authenticator app").click();
-
-      await page.getByText(/\W+Continue\W+/).click();
-      await page.waitForSelector(`//input[@name='password']`);
-
-      await page.fill('input[name="email"]', cis2Credentials.username);
-      await page.fill('input[name="password"]', cis2Credentials.password);
-      await page.getByText(/\W+Continue\W+/).click();
-      await page.waitForSelector(
-        `//input[@data-vv-as='Enter verification code']`
-      );
-
-      await page
-        .locator(`//input[@data-vv-as='Enter verification code']`)
-        .fill(cis2Credentials.totp());
-      await page.getByText(/\W+Submit\W+/).click();
-
-      await page.waitForSelector("text=Message templates", {
-        timeout: 30000,
-      });
-      await use(page);
-    } catch (error) {
-      console.error("Error during login:", error);
-      throw error;
-    }
-  },
 });
-
-async function waitForSelector(
-  selector: string,
-  page: Page,
-  timeout: number
-): Promise<boolean> {
-  try {
-    await page.waitForSelector(selector, {
-      timeout,
-    });
-  } catch (_) {
-    return Promise.resolve(false);
-  }
-  return Promise.resolve(true);
-}
 
 async function enterCis2TotpCode(
   page: Page,
