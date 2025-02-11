@@ -53,7 +53,7 @@ test.describe('Start Page', () => {
   });
 
   test(
-    'should navigate to login page when "log in" link clicked',
+    'should navigate to login page when "sign in" link clicked',
     { tag: '@Update/CCM-4889' },
     async ({ page, baseURL }) => {
       const startPage = new TemplateMgmtStartPage(page);
