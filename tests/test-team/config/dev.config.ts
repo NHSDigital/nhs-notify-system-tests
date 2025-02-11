@@ -18,7 +18,7 @@ export default defineConfig({
   projects: [
     {
       name: 'e2e-dev',
-      testMatch: '*sms-e2e.ts',
+      testMatch: '*cis2-login-e2e.ts',
       use: {
         screenshot: 'on',
         baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',
