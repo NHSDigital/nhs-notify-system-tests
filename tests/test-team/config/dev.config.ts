@@ -4,16 +4,21 @@ import baseConfig from './playwright.config';
 export default defineConfig({
   ...baseConfig,
 
-  timeout: 45_000,
+  timeout: 30_000,
 
   expect: {
-    timeout: 45_000,
+    timeout: 30_000,
+  },
+  globalSetup: './global.setup',
+
+  use: {
+    trace: 'on',
   },
 
   projects: [
     {
       name: 'e2e-dev',
-      testMatch: '*-cis2-login-e2e.ts',
+      testMatch: '*sms-e2e.ts',
       use: {
         screenshot: 'on',
         baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',
@@ -21,7 +26,7 @@ export default defineConfig({
         headless: false,
         storageState: { cookies: [], origins: [] },
         launchOptions: {
-          slowMo: 200,
+          slowMo: 100,
         },
         video: 'on'
       },
