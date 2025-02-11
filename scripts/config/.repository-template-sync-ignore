@@ -1,7 +1,9 @@
 # Files and folders to ignore when syncing nhs-notify-repository-template back in to this repository
 scripts/config/.repository-template-sync-ignore
 .github/workflows/
+.github/CODEOWNERS
 nhs-notify-repository-template/
+.gitignore
 
 # Files and Folders in this repository to ignore
 .vscode/
@@ -9,6 +11,7 @@ CHANGELOG.md
 project.code-workspace
 README.md
 VERSION
+scripts/docker/examples/
 
 # Files and Folders in the template repository to disregard
 .devcontainer/

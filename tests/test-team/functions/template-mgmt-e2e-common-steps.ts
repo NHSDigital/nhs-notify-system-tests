@@ -1,4 +1,4 @@
-import { loggedInTest as test, expect } from '../fixtures/login';
+import { test, expect } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 
 type CommonStepsProps = {
@@ -32,6 +32,7 @@ export function chooseTemplate(
   channel: string
 ) {
   return test.step('Choose template type', async () => {
+    await basePage.clickButtonByName('Create template');
     await expect(basePage.page).toHaveURL(
       `${baseURL}/templates/choose-a-template-type`
     );

@@ -67,6 +67,10 @@ export class TemplateMgmtBasePage {
     await this.loginLink.click();
   }
 
+  async noTemplatesAvailable() {
+    return await this.page.getByTestId('no-templates-available').isVisible();
+  }
+
   async clickButtonByName(buttonName: string) {
     await this.page.getByRole('button', { name: buttonName }).click();
   }

@@ -1,11 +1,11 @@
 import { test } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
-  startPage,
   chooseTemplate,
   createTemplate,
   previewPage,
   submitPage,
+  startNewTemplate,
 } from '../functions/template-mgmt-e2e-common-steps';
 
 test(`User creates and submits a new email template successfully`, async ({
@@ -19,9 +19,9 @@ test(`User creates and submits a new email template successfully`, async ({
   const channel = 'NHS App message';
   const channelPath = 'nhs-app';
 
-  await startPage(props);
-  await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath);
-  await previewPage(props, channelPath);
-  await submitPage(props, channelPath);
+    await startNewTemplate(props);
+    await chooseTemplate(props, channel);
+    await createTemplate(props, channel, channelPath);
+    await previewPage(props, channelPath);
+    await submitPage(props, channelPath);
 });
