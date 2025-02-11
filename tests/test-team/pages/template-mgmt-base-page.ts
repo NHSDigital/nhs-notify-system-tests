@@ -92,4 +92,8 @@ export class TemplateMgmtBasePage {
   async checkRadio(radioName: string) {
     await this.page.getByRole('radio', { name: radioName }).check();
   }
+
+  async logOut() {
+    await this.page.getByText("Log out").click();
+  }
 }
