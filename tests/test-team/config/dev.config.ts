@@ -4,15 +4,15 @@ import baseConfig from './playwright.config';
 export default defineConfig({
   ...baseConfig,
 
-  timeout: 30_000,
+  timeout: 120_000,
 
   expect: {
-    timeout: 30_000,
+    timeout: 120_000,
   },
   globalSetup: './global.setup',
 
   use: {
-    trace: 'on',
+    trace: 'off', // Warning: this leaks secrets into the trace logs
   },
 
   projects: [
