@@ -19,7 +19,7 @@ export default defineConfig({
   projects: [
     {
       name: 'e2e-dev',
-      testMatch: '*sms-e2e.ts',
+      testMatch: '*nhsapp-e2e.ts',
       use: {
         screenshot: 'only-on-failure',
         baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',
