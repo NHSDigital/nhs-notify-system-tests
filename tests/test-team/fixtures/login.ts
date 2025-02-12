@@ -111,7 +111,6 @@ async function enterCis2TotpCodeWithRetry(
 }
 
 async function loginWithCis2(
-  baseURL: string,
   basePage: TemplateMgmtBasePage,
   targetHeadingText: string
 ) {
@@ -119,8 +118,6 @@ async function loginWithCis2(
   const page = basePage.page;
 
   try {
-    await startPage({ basePage, baseURL });
-
     // Notify WebUI - Click the CIS2 login button
     await page.getByAltText("NHS Care Identity").click();
 
