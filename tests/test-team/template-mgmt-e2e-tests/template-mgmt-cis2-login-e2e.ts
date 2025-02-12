@@ -12,7 +12,17 @@ import test from "playwright/test";
 
 test.use({ storageState: { cookies: [], origins: [] }});
 
-test("User logs in via CIS2 and submits a template successfully", async ({
+/**
+ * Intention is to cover:
+ * - Logging in with CIS2
+ * - Accessing the service behind the web-gateway (as the client's URL is important to the configuration of Cognito)
+ * - Using the access token in the templates app to create data (because this will need to obtain the user's ID token from Cognito)
+ * - Log out
+ * - Log back in, this should require the user to re-enter credentials proving that
+ *    - log out worked and
+ *    - CIS2 "prompt=login" works to force a re-authentication
+ */
+test("User logs in via CIS2, saves data in templates, logs out and logs back in again", async ({
   baseURL,
   page,
 }) => {
