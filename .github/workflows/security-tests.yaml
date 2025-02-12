@@ -1,0 +1,29 @@
+name: Security tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      targetEnvironment:
+        type: string
+        description: "Web gateway subdomain to test"
+        required: false
+        default: main
+  schedule:
+    - cron: "0 9 * * *"
+
+jobs:
+  security-test:
+    name: Security Test
+
+    permissions:
+      id-token: write
+      contents: read
+
+    uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
+    secrets: inherit
+    with:
+      jobName: Security Tests
+      infraRepoName: nhs-notify-system-tests
+      releaseVersion: ${{ github.head_ref || github.ref_name }}
+      targetWorkflow: dispatch-security-tests-static-env.yaml
+      targetEnvironment: ${{ inputs.targetEnvironment || 'main'  }}
