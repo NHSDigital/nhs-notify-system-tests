@@ -19,7 +19,7 @@ test(`User creates and submits a new email template successfully`, async ({
   const channel = 'NHS App message';
   const channelPath = 'nhs-app';
 
-    await startNewTemplate(props);
+    await startPage(props);
     await chooseTemplate(props, channel);
     await createTemplate(props, channel, channelPath);
     await previewPage(props, channelPath);
