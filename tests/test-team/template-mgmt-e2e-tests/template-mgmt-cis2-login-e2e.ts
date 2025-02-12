@@ -7,6 +7,7 @@ import {
   createTemplate,
   previewPage,
   startNewTemplate,
+  startPage,
 } from "../functions/template-mgmt-e2e-common-steps";
 import test from "playwright/test";
 
@@ -38,11 +39,13 @@ test("User logs in via CIS2, saves data in templates, logs out and logs back in 
   const channel = "Email";
   const channelPath = "email";
 
-  await loginWithCis2(baseURL, basePage, 'Message templates');
+  await startPage({ basePage, baseURL });
+  await loginWithCis2(basePage, 'Message templates');
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath);
   await previewPage(props, channelPath);
   await logOut(basePage);
-  await loginWithCis2(baseURL, basePage, 'Message templates')
+  await startPage({ basePage, baseURL });
+  await loginWithCis2(basePage, 'Message templates')
 });

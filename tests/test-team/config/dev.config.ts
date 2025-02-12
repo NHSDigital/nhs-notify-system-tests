@@ -26,7 +26,7 @@ export default defineConfig({
         headless: false,
         storageState: { cookies: [], origins: [] },
         launchOptions: {
-          slowMo: 1100,
+          slowMo: 100,
         },
         video: 'on'
       },
