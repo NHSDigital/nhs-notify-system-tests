@@ -1,0 +1,7 @@
+{
+  "name": "nhs-notify-system-tests",
+  "workspaces": [
+    "tests/test-team",
+    "tests/security"
+  ]
+}
