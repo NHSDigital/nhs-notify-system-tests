@@ -1,7 +1,6 @@
 import { test } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
-  startPage,
   chooseTemplate,
   createTemplate,
   previewPage,

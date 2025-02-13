@@ -1,6 +1,6 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
-import { loggedInTest, expect } from '../fixtures/login';
+import { loggedInTest } from '../fixtures/login';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
   chooseTemplate,
@@ -12,10 +12,10 @@ import {
 
 loggedInTest(`User creates and submits a new email template successfully`, async ({
   baseURL,
-  loggedInPage,
+  loggedInWithCognitoPage,
 }) => {
   const props = {
-    basePage: new TemplateMgmtBasePage(loggedInPage),
+    basePage: new TemplateMgmtBasePage(loggedInWithCognitoPage),
     baseURL,
   };
   const channel = 'Email';

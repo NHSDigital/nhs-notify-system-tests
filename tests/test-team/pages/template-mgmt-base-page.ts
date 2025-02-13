@@ -1,4 +1,4 @@
-import { Locator, type Page } from '@playwright/test';
+import { Locator, type Page } from "@playwright/test";
 
 export class TemplateMgmtBasePage {
   readonly page: Page;
@@ -28,31 +28,29 @@ export class TemplateMgmtBasePage {
       '[class="nhsuk-header__link nhsuk-header__link--service"]'
     );
 
-    this.loginLink = page
-      .locator('[class="nhsuk-account__login--link"]')
-      .and(page.getByText('Log in'));
+    this.loginLink = page.locator(`//a[text()='Sign in']`);
 
     // Note: doing [class="nhsuk-back-link__link"] will not find the element if it has other class names
     this.goBackLink = page
-      .locator('.nhsuk-back-link__link')
-      .and(page.getByText('Go back'));
+      .locator(".nhsuk-back-link__link")
+      .and(page.getByText("Go back"));
 
-    this.pageHeader = page.getByRole('heading', { level: 1 });
+    this.pageHeader = page.getByRole("heading", { level: 1 });
 
-    this.errorSummary = page.getByRole('alert', { name: 'There is a problem' });
+    this.errorSummary = page.getByRole("alert", { name: "There is a problem" });
 
-    this.errorSummaryHeading = page.getByRole('heading', {
+    this.errorSummaryHeading = page.getByRole("heading", {
       level: 2,
-      name: 'There is a problem',
+      name: "There is a problem",
     });
 
-    this.errorSummaryList = this.errorSummary.getByRole('listitem');
+    this.errorSummaryList = this.errorSummary.getByRole("listitem");
 
     this.submitButton = page.locator('button.nhsuk-button[type="submit"]');
 
     this.skipLink = page
       .locator('[id="skip-link"]')
-      .and(page.getByText('Skip to main content'));
+      .and(page.getByText("Skip to main content"));
   }
 
   async navigateTo(url: string) {
@@ -68,11 +66,11 @@ export class TemplateMgmtBasePage {
   }
 
   async noTemplatesAvailable() {
-    return await this.page.getByTestId('no-templates-available').isVisible();
+    return await this.page.getByTestId("no-templates-available").isVisible();
   }
 
   async clickButtonByName(buttonName: string) {
-    await this.page.getByRole('button', { name: buttonName }).click();
+    await this.page.getByRole("button", { name: buttonName }).click();
   }
 
   async clickSubmitButton() {
@@ -80,7 +78,7 @@ export class TemplateMgmtBasePage {
   }
 
   async loadPage(_: string) {
-    throw new Error('Not implemented');
+    throw new Error("Not implemented");
   }
 
   async clickBackLink() {
@@ -89,11 +87,15 @@ export class TemplateMgmtBasePage {
 
   async fillTextBox(textBoxName: string, textBoxContent: string) {
     await this.page
-      .getByRole('textbox', { name: textBoxName })
+      .getByRole("textbox", { name: textBoxName })
       .fill(textBoxContent);
   }
 
   async checkRadio(radioName: string) {
-    await this.page.getByRole('radio', { name: radioName }).check();
+    await this.page.getByRole("radio", { name: radioName }).check();
+  }
+
+  async logOut() {
+    await this.page.getByText("Sign out").click();
   }
 }
