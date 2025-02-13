@@ -42,7 +42,8 @@ cleanup() {
   npx ts-node ./src/automation-teardown.ts \
     --web-gateway-environment $web_gateway_environment \
     --branch-segment $branch_segment \
-    --cookie "$cookie" \
+    --email-address $email \
+    --password $final_password \
   || true
 
   delete_user $user_pool $user_id || true
