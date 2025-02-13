@@ -26,7 +26,7 @@ export default async function globalSetup() {
         console.error('Failed to load page:', error);
     }
 
-    await page.getByRole('link', { name: 'Log in' }).click();
+    await page.getByRole('link', { name: 'Sign in' }).click();
     console.log('Login button clicked');
 
     await page.fill('input[name="username"]', process.env.USER_NAME as string);
