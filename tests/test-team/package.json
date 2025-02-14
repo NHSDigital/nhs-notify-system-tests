@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "test:cis2-ui": "playwright test --project cis2-dev -c config/dev.config.ts",
     "test:dev-ui-e2e": "playwright test --project e2e-dev -c config/dev.config.ts"
   },
   "devDependencies": {
