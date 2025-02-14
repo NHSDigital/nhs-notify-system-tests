@@ -45,7 +45,7 @@ export default async function globalSetup() {
     }
   } catch(error){
     console.error('Global setup failed:', error);
-    // process.exit(1); // Force the process to exit with an error
+    process.exit(1); // Force the process to exit with an error
   }
 
 }
