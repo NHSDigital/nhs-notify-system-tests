@@ -11,6 +11,8 @@ export default defineConfig({
   },
   globalSetup: './global.setup',
 
+  workers: 4,
+
   use: {
     trace: 'off', // Warning: this leaks secrets into the trace logs
   },
@@ -33,7 +35,7 @@ export default defineConfig({
     },
     {
       name: 'e2e-dev',
-      testMatch: '*sms-e2e.ts',
+      testMatch: '*-e2e.ts',
       use: {
         screenshot: 'on',
         baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',

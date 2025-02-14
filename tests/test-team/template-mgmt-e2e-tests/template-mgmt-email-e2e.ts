@@ -3,6 +3,7 @@
 import { loggedInTest } from '../fixtures/login';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
+  startPage,
   chooseTemplate,
   createTemplate,
   previewPage,
@@ -21,7 +22,7 @@ loggedInTest(`User creates and submits a new email template successfully`, async
   const channel = 'Email';
   const channelPath = 'email';
 
-  //await startPage(props);  Moved to login fixture
+  await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath);
