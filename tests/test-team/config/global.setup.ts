@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export default async function globalSetup() {
+async function globalSetup() {
   const loginUrl = process.env.LOGIN_URL as string;
   console.log(loginUrl)
   try {
@@ -48,4 +48,20 @@ export default async function globalSetup() {
     process.exit(1); // Force the process to exit with an error
   }
 
+}
+
+async function teardown() {
+
+  if (fs.existsSync('auth.json')) {
+      fs.unlinkSync('auth.json'); // Deletes the file
+      console.log('Deleted auth.json');
+  }
+}
+
+export default async function globalSetupAndTeardown() {
+  await globalSetup();
+
+  return async () => {
+      await teardown();
+  };
 }
