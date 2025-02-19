@@ -22,7 +22,6 @@ node_modules
 # locust with playwright
 *.pyc
 results_*.csv
-
 .DS_Store
 
 # Playwright e2e
