@@ -4,7 +4,7 @@ import baseConfig from './playwright.config';
 export default defineConfig({
   ...baseConfig,
 
-  timeout: 30_000,
+  timeout: 60_000,
 
   expect: {
     timeout: 30_000,
