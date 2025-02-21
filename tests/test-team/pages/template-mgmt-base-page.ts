@@ -96,6 +96,6 @@ export class TemplateMgmtBasePage {
   }
 
   async logOut() {
-    await this.page.getByText("Sign out").click();
+    await this.page.locator(`//a[@data-testid='auth-link__link' and text()='Sign out']`).click();
   }
 }
