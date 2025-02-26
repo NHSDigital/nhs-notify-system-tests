@@ -119,7 +119,7 @@ async function loginWithCis2(
 
   try {
     // Notify WebUI - Click the CIS2 login button
-    await page.getByAltText("NHS Care Identity").click();
+    await page.getByAltText("Log in with my Care Identity").click();
 
     // CIS2 - Select credetials type
     await page.getByLabel("Authenticator app").click();
