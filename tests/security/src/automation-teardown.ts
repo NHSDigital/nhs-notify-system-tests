@@ -12,7 +12,11 @@ const argv = yargs(hideBin(process.argv))
       type: "string",
       default: "",
     },
-    cookie: {
+    "email-address": {
+      type: "string",
+      demandOption: true,
+    },
+    password: {
       type: "string",
       demandOption: true,
     },
@@ -28,13 +32,20 @@ async function main() {
     const context = await browser.newContext();
     const page = await context.newPage();
 
-    await context.setExtraHTTPHeaders({
-      Cookie: argv.cookie,
-    });
-
     await page.goto(startUrl, {
       waitUntil: "load",
     });
+
+    const emailInput = page.locator('input[name="username"]');
+    const passwordInput = page.locator('input[name="password"]');
+    const submitButton = page.locator(
+      'button[type="submit"]:has-text("Sign in")'
+    );
+
+    await emailInput.fill(argv.emailAddress);
+    await passwordInput.fill(argv.password);
+    await submitButton.click();
+
 
     await expect(
       page.locator('h1:has-text("Message templates")')
@@ -65,8 +76,8 @@ async function deleteTemplate(page: Page) {
     await deleteButton.click();
 
     await page.waitForURL(startUrl);
-    await page.waitForTimeout(100)
-    await page.reload()
+    await page.waitForTimeout(100);
+    await page.reload();
   } else {
     return false;
   }
@@ -74,8 +85,7 @@ async function deleteTemplate(page: Page) {
   return true;
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
