@@ -29,7 +29,7 @@ get_branch_segment() {
   local template_management_branch="$1"
 
   if [ -n "$template_management_branch" ]; then
-    echo "~$(echo $template_management_branch | tr -d '/_' | tr [:upper:] '[:lower:]')"
+    echo "~$(echo $template_management_branch | tr -d '/_' | tr [:upper:] '[:lower:]' | head -c 25)"
   fi
 }
 
