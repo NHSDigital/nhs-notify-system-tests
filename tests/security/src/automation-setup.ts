@@ -99,7 +99,7 @@ async function createTemplate(page: Page, commType: string) {
   );
   await commTypeRadio.click();
 
-  const continueButton = page.locator('button[type="submit"]');
+  const continueButton = page.locator('button[data-testid="submit-button"]');
   await continueButton.click();
 
   const nameField = page.locator(`input[id="${commType}TemplateName"]`);
@@ -107,7 +107,7 @@ async function createTemplate(page: Page, commType: string) {
   await nameField.fill("Template Name");
   await bodyField.fill("Greetings from NHS Notify!");
 
-  const saveButton = page.locator('button[type="submit"]');
+  const saveButton = page.locator('button[id="create-sms-template-submit-button"]');
   await saveButton.click();
 
   await page.waitForURL(/preview/);
