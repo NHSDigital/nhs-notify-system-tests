@@ -4,6 +4,7 @@ scripts/config/.repository-template-sync-ignore
 .github/CODEOWNERS
 nhs-notify-repository-template/
 .gitignore
+.tool-versions
 
 # Files and Folders in this repository to ignore
 .vscode/
