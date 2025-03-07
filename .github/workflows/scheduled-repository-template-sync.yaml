@@ -25,9 +25,9 @@ jobs:
         path: nhs-notify-repository-template
         token: ${{ github.token }}
 
-    - name: Run syncronisation script
+    - name: Run synchronisation script
       run: |
-        ./scripts/githooks/sync-template-repo.sh
+        ./nhs-notify-repository-template/scripts/githooks/sync-template-repo.sh
         rm -Rf ./nhs-notify-repository-template
 
     - name: Create Pull Request
