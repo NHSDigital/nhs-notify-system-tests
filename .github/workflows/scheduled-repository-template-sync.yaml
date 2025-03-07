@@ -25,8 +25,11 @@ jobs:
         path: nhs-notify-repository-template
         token: ${{ github.token }}
 
-    - name: Run syncronisation script
+    - name: Run synchronisation script
       run: |
+        mkdir -p ./scripts/maintenance
+        cp ./nhs-notify-repository-template/scripts/githooks/sync-template-repo.sh ./scripts/githooks/sync-template-repo.sh
+        cp ./nhs-notify-repository-template/scripts/maintenance/merge.js ./scripts/maintenance/merge.js
         ./scripts/githooks/sync-template-repo.sh
         rm -Rf ./nhs-notify-repository-template
 
