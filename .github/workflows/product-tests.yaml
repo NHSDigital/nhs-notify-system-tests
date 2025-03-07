@@ -3,7 +3,7 @@ name: Product level Playwright tests
 on:
   push:
     branches:
-      - main
+      - feature/CCM-8706_create_pipeline
   pull_request:
     branches:
       - main
