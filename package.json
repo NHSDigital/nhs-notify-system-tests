@@ -3,5 +3,11 @@
   "workspaces": [
     "tests/test-team",
     "tests/security"
-  ]
+  ],
+  "scripts": {
+    "test:dev-ui-e2e": "npm run test:dev-ui-e2e --prefix ./tests/test-team"
+  },
+  "devDependencies": {
+    "playwright": "^1.50.0"
+  }
 }

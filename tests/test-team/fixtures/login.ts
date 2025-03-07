@@ -121,7 +121,7 @@ async function loginWithCis2(
     // Notify WebUI - Click the CIS2 login button
     await page.getByAltText("Log in with my Care Identity").click();
 
-    // CIS2 - Select credetials type
+    // CIS2 - Select credentials type
     await page.getByLabel("Authenticator app").click();
     await page.getByText(/\W+Continue\W+/).click();
     await page.waitForSelector(`//input[@name='password']`);
