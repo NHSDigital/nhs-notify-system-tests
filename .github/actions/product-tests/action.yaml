@@ -1,0 +1,16 @@
+name: 'Run Playwright Tests'
+description: 'A custom GitHub Action to run Playwright tests'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install dependencies
+      run: npm install
+      shell: bash
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      shell: bash
+
+    - name: Run Playwright Tests
+      run: npm run test:dev-ui-e2e
+      shell: bash
