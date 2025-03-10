@@ -8,6 +8,7 @@ vale 3.6.0
 poetry 1.8.3
 python 3.11.6
 nodejs 20.13.1
+jq 1.6
 
 # ==============================================================================
 # The section below is reserved for Docker image versions.
