@@ -5,7 +5,7 @@ set -euo pipefail
 # Script to synchronise the nhs-notify-template-repository with this repository
 #
 # Usage:
-#   $ [options] ./check-terraform-format.sh
+#   $ [options] ./sync-template-repo.sh
 #
 # Options:
 #   new_only=true      # Only identify new files from the template-repository
@@ -13,7 +13,9 @@ set -euo pipefail
 
 # ==============================================================================
 
-# Command line prameters
+scriptdir=$(realpath "$(dirname "$0")")
+
+# Command line parameters
 new_only=${new_only:-false}
 changes_only=${changes_only:-false}
 
@@ -84,7 +86,7 @@ FILES_ADDED=()
 FILES_WITH_CHANGES=()
 
 # Loop through all files in the template directory
-while IFS= read -r -d '' file; do
+while IFS= read -r -d '' file || [[ -n $file ]]; do
   relative_path="${file#./}"  # Remove leading './'
 
   # Check if the file is ignored
@@ -109,16 +111,12 @@ while IFS= read -r -d '' file; do
         if is_merge "$relative_path"; then
           echo "Merging changes from $relative_path"
           cp "$target_path" "${target_path}.bak"
-          if git merge-file "$target_path" /dev/null "$file" --union; then
-              if ! cmp -s "$target_path" "${target_path}.bak"; then
-                  FILES_WITH_CHANGES+=("${relative_path}")
-              fi
-          else
-              echo "Merge failed for $relative_path, rolling back."
-              mv "${target_path}.bak" "$target_path"
-              diff3 "$target_path" /dev/null "$file"
+          node "${scriptdir}/../maintenance/merge.js" "$target_path" "$file" > "${target_path}.merged"
+          if ! cmp -s "${target_path}.merged" "${target_path}.bak"; then
+            FILES_WITH_CHANGES+=("${relative_path}")
+            mv "${target_path}.merged" "$target_path"
           fi
-          rm -f "${target_path}.bak"
+          rm -f "${target_path}.merged" "${target_path}.bak"
         else
           echo "Copying changes from $relative_path"
           cp "$file" "$target_path"
@@ -129,19 +127,19 @@ while IFS= read -r -d '' file; do
   fi
 done < <(find . -type f -print0)
 
-echo "${#FILES_ADDED[@]}" files added, "${#FILES_WITH_CHANGES[@]}" files with changes detected.
-
 echo ------------------------------------------
+echo "${#FILES_ADDED[@]} files added, ${#FILES_WITH_CHANGES[@]} files with changes detected."
 
-if [ "$changes_only" == false ]; then
+if [[ "$changes_only" == false && ${#FILES_ADDED[@]} -gt 0 ]]; then
   echo ------------------------------------------
   echo "New files added:"
   printf ' - %s\n' "${FILES_ADDED[@]}"
 fi
 
-
-if [ "$new_only" == false ]; then
+if [[ "$new_only" == false && ${#FILES_WITH_CHANGES[@]} -gt 0 ]]; then
   echo ------------------------------------------
   echo "Changed files:"
   printf ' - %s\n' "${FILES_WITH_CHANGES[@]}"
 fi
+
+echo ------------------------------------------
