@@ -54,7 +54,7 @@ trap cleanup EXIT
 print "Got cookie"
 
 base="https://${web_gateway_environment}.web-gateway.dev.nhsnotify.national.nhs.uk"
-start_url="${base}/templates${branch_segment}/manage-templates"
+start_url="${base}/templates${branch_segment}/message-templates"
 
 image="ghcr.io/zaproxy/zaproxy:stable"
 container_volume="$(pwd):/zap/wrk/:rw"

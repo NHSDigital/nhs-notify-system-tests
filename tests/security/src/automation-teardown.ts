@@ -23,7 +23,7 @@ const argv = yargs(hideBin(process.argv))
   })
   .parseSync();
 
-const startUrl = `https://${argv.webGatewayEnvironment}.web-gateway.dev.nhsnotify.national.nhs.uk/templates${argv.branchSegment}/manage-templates`;
+const startUrl = `https://${argv.webGatewayEnvironment}.web-gateway.dev.nhsnotify.national.nhs.uk/templates${argv.branchSegment}/message-templates`;
 
 async function main() {
   const browser = await chromium.launch({ headless: true });
