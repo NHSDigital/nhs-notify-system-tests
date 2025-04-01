@@ -46,7 +46,6 @@ test("User logs in via CIS2, saves data in templates, logs out and logs back in 
   await createTemplate(props, channel, channelPath);
   await previewPage(props, channelPath);
   await logOut(basePage);
-  await page.waitForLoadState('networkidle');
   await startPage({ basePage, baseURL });
   await loginWithCis2(basePage, 'Message templates')
 });

@@ -76,7 +76,7 @@ async function loginWithCis2(
 
 async function logOut(page: TemplateMgmtBasePage) {
   await page.logOut();
-  await page.loginLink.waitFor();
+  await expect(page.loginLink).toBeVisible();
 }
 
 export { loginWithCis2, expect, logOut };
