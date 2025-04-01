@@ -33,7 +33,7 @@ async function enterCis2TotpCodeWithRetry(
   cis2Credentials: Cis2CredentialProvider,
   targetHeadingText: string
 ) {
-  for (var i=0; i<3; i++) {
+  for (var i = 0; i < 3; i++) {
     const success = await enterCis2TotpCode(page, cis2Credentials, targetHeadingText);
     if (success) {
       return;
@@ -76,7 +76,7 @@ async function loginWithCis2(
 
 async function logOut(page: TemplateMgmtBasePage) {
   await page.logOut();
-  await expect(page.loginLink).toBeVisible();
+  await page.loginLink.waitFor({ state: 'visible' });
 }
 
 export { loginWithCis2, expect, logOut };
