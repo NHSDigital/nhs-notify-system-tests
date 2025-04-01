@@ -1,16 +1,35 @@
-name: 'Run Playwright Tests'
-description: 'A custom GitHub Action to run Playwright tests'
+name: Product tests
+description: "Run NHS Notify product tests"
+
+inputs:
+  targetComponent:
+    description: Name of the component under test
+    default: app
+
 runs:
-  using: 'composite'
+  using: "composite"
+
   steps:
-    - name: Install dependencies
-      run: npm install
+    # - name: Fetch terraform output
+    #   uses: actions/download-artifact@v4
+    #   with:
+    #     name: terraform-output-${{ inputs.targetComponent }}
+    - name: "Repo setup"
       shell: bash
-
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: |
+        npm ci
+    # - name: Generate outputs file
+    #   shell: bash
+    #   run: |
+    #     root_dir=${GITHUB_WORKSPACE}
+    #     mv ./terraform_output.json ./sandbox_tf_outputs.json
+    #     npm run generate-outputs sandbox-output
+    - name: Run test - ${{ inputs.testType }}
       shell: bash
-
-    - name: Run Playwright Tests
-      run: npm run test:dev-ui-e2e
-      shell: bash
+      run: |
+        make test-product
+    - name: Archive product test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: Product test report
+        path: "tests/test-team/playwright-report"

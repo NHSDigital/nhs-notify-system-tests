@@ -1,40 +1,29 @@
 name: Product level Playwright tests
 
 on:
-  push:
-    branches:
-      - feature/CCM-8706_create_pipeline
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      targetEnvironment:
+        type: string
+        description: "Web gateway branch to test"
+        required: false
+        default: main
+  schedule:
+    - cron: "0 9 * * *"
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  product-tests:
+    name: Product Test
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    permissions:
+      id-token: write
+      contents: read
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run Playwright Tests
-        run: npm run test:dev-ui-e2e
-
-      - name: Upload Playwright Report (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
+    uses: ./.github/workflows/dispatch_internal_repo_workflow.yaml
+    secrets: inherit
+    with:
+      jobName: Product Tests
+      infraRepoName: nhs-notify-system-tests
+      releaseVersion: ${{ github.head_ref || github.ref_name }}
+      targetWorkflow: dispatch-product-tests-static-env.yaml
+      targetEnvironment: ${{ inputs.targetEnvironment || 'main'  }}

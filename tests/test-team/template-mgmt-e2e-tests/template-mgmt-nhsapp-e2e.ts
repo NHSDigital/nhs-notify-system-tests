@@ -9,6 +9,8 @@ import {
   startNewTemplate,
 } from '../functions/template-mgmt-e2e-common-steps';
 
+test.use({ storageState: 'auth.json' });
+
 test(`User creates and submits a new email template successfully`, async ({
   page,
   baseURL,
