@@ -14,7 +14,7 @@ export default defineConfig({
   workers: 4,
 
   use: {
-    trace: 'off', // Warning: this leaks secrets into the trace logs
+    trace: 'on', // Warning: this leaks secrets into the trace logs
   },
 
   projects: [
