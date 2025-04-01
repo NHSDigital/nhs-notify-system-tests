@@ -25,6 +25,10 @@ export default defineConfig({
         screenshot: 'on',
         baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',
         ...devices['Desktop Chrome'],
+        launchOptions: {
+          slowMo: 100,
+        },
+        video: 'on'
       },
     },
   ],
