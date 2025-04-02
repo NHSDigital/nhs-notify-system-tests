@@ -20,11 +20,13 @@ aws sso login
 ```
 
 From the root folder, run the following command:
+
 ```shell
 make test-product
 ```
 
 Or from the tests/test-team folder, run the following command:
+
 ```shell
 npm run test:product
 ```
