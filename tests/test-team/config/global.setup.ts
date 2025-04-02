@@ -19,7 +19,7 @@ async function globalSetup() {
       console.log('File exists:', fs.existsSync('auth.json'));
       console.log('Storage state file not found. Creating a new one...');
 
-      const [temporary, permanent] = generate.generateMultiple(2, {
+      const password = generate.generate({
         length: 12,
         numbers: true,
         uppercase: true,
@@ -27,10 +27,10 @@ async function globalSetup() {
         strict: true,
       });
 
-      process.env.TEMPORARY_USER_PASSWORD = temporary;
-      process.env.USER_PASSWORD = permanent;
-
-      user = await cognitoHelper.createUser('product-tests-sign-in');
+      user = await cognitoHelper.createUser(
+        'product-tests-sign-in',
+        password,
+      );
       const browser = await chromium.launch();
       const context = await browser.newContext();
       const page = await context.newPage();
@@ -46,7 +46,7 @@ async function globalSetup() {
       console.log('Login button clicked');
 
       await page.fill('input[name="username"]', user.email as string);
-      await page.fill('input[name="password"]', process.env.USER_PASSWORD as string);
+      await page.fill('input[name="password"]', password as string);
       await page.getByRole('button', { name: 'Sign in' }).click();
 
       await page.waitForSelector('text=Message templates', { timeout: 30000 });

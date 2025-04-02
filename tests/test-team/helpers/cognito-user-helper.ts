@@ -41,7 +41,7 @@ export class CognitoUserHelper {
     throw new Error(`User pool with name "${poolName}" not found`);
   }
 
-  async createUser(username: string): Promise<User> {
+  async createUser(username: string, password: string): Promise<User> {
     const email = `${username}@nhs.net`;
 
     const user = await this.client.send(
@@ -59,7 +59,6 @@ export class CognitoUserHelper {
           },
         ],
         MessageAction: 'SUPPRESS',
-        TemporaryPassword: process.env.TEMPORARY_USER_PASSWORD,
       })
     );
 
@@ -71,7 +70,7 @@ export class CognitoUserHelper {
       new AdminSetUserPasswordCommand({
         UserPoolId: this.userPoolId,
         Username: email,
-        Password: process.env.USER_PASSWORD,
+        Password: password,
         Permanent: true,
       })
     );
