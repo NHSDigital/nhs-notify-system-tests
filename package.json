@@ -3,11 +3,5 @@
   "workspaces": [
     "tests/test-team",
     "tests/security"
-  ],
-  "scripts": {
-    "test:product": "npm run test:product --prefix ./tests/test-team"
-  },
-  "devDependencies": {
-    "playwright": "^1.50.0"
-  }
+  ]
 }
