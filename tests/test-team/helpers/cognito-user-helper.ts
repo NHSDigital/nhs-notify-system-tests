@@ -4,6 +4,7 @@ import {
   AdminDisableUserCommand,
   AdminSetUserPasswordCommand,
   CognitoIdentityProviderClient,
+  ListUserPoolsCommand
 } from '@aws-sdk/client-cognito-identity-provider';
 
 export type User = {
@@ -13,11 +14,31 @@ export type User = {
 
 export class CognitoUserHelper {
   private readonly client: CognitoIdentityProviderClient;
+  private readonly userPoolId: string;
 
-  constructor() {
-    this.client = new CognitoIdentityProviderClient({
-      region: 'eu-west-2',
-    });
+  private constructor(client: CognitoIdentityProviderClient, userPoolId: string) {
+    this.client = client;
+    this.userPoolId = userPoolId;
+  }
+
+  static async init(poolName: string): Promise<CognitoUserHelper> {
+    const client = new CognitoIdentityProviderClient({ region: 'eu-west-2' });
+
+    let nextToken: string | undefined = undefined;
+
+    do {
+      const response = await client.send(new ListUserPoolsCommand({
+        MaxResults: 60,
+        NextToken: nextToken,
+      }));
+
+      const pool = response.UserPools?.find(p => p.Name === poolName);
+      if (pool) return new CognitoUserHelper(client, pool.Id!);
+
+      nextToken = response.NextToken;
+    } while (nextToken);
+
+    throw new Error(`User pool with name "${poolName}" not found`);
   }
 
   async createUser(username: string): Promise<User> {
@@ -25,7 +46,7 @@ export class CognitoUserHelper {
 
     const user = await this.client.send(
       new AdminCreateUserCommand({
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
+        UserPoolId: this.userPoolId,
         Username: email,
         UserAttributes: [
           {
@@ -46,9 +67,9 @@ export class CognitoUserHelper {
       throw new Error('Unable to generate cognito user');
     }
 
-    const usesr = await this.client.send(
+    await this.client.send(
       new AdminSetUserPasswordCommand({
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
+        UserPoolId: this.userPoolId,
         Username: email,
         Password: process.env.USER_PASSWORD,
         Permanent: true,
@@ -64,14 +85,14 @@ export class CognitoUserHelper {
   async deleteUser(username: string) {
     await this.client.send(
       new AdminDisableUserCommand({
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
+        UserPoolId: this.userPoolId,
         Username: username,
       })
     );
 
     await this.client.send(
       new AdminDeleteUserCommand({
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
+        UserPoolId: this.userPoolId,
         Username: username,
       })
     );

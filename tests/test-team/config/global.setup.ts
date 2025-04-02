@@ -2,18 +2,16 @@ import { chromium } from '@playwright/test';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import generate from 'generate-password';
-// import { AmplifyConfigurationHelper } from '../helpers/amplify-configuration-helper';
 import { CognitoUserHelper, User } from '../helpers/cognito-user-helper';
 
 dotenv.config();
 
 let user: User;
-const cognitoHelper = new CognitoUserHelper();
-// const configHelper = new AmplifyConfigurationHelper();
+let cognitoHelper: CognitoUserHelper;
 
 async function globalSetup() {
-  // const loginUrl = process.env.LOGIN_URL as string;
-  const loginUrl = 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk/auth';
+  cognitoHelper = await CognitoUserHelper.init(`nhs-notify-${process.env.TARGET_ENVIRONMENT}-app`);
+  const loginUrl = `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk/auth`;
   console.log(loginUrl)
   try {
     if (!fs.existsSync('auth.json')) {
@@ -29,8 +27,6 @@ async function globalSetup() {
         strict: true,
       });
 
-      // process.env.AWS_COGNITO_USER_POOL_ID = configHelper.getUserPoolId();
-      process.env.AWS_COGNITO_USER_POOL_ID = 'eu-west-2_aFa0RioV9';
       process.env.TEMPORARY_USER_PASSWORD = temporary;
       process.env.USER_PASSWORD = permanent;
 

@@ -14,7 +14,7 @@ export default defineConfig({
   workers: 4,
 
   use: {
-    trace: 'on', // Warning: this leaks secrets into the trace logs
+    trace: 'off', // Warning: this leaks secrets into the trace logs
   },
 
   projects: [
@@ -23,7 +23,7 @@ export default defineConfig({
       testMatch: '*-e2e.ts',
       use: {
         screenshot: 'on',
-        baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',
+        baseURL: `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`,
         ...devices['Desktop Chrome'],
         launchOptions: {
           slowMo: 100,
