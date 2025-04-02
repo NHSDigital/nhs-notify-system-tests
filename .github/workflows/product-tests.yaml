@@ -5,7 +5,7 @@ on:
     inputs:
       targetEnvironment:
         type: string
-        description: "Web gateway environmnet to test"
+        description: "Web gateway environment to test"
         required: false
         default: main
   schedule:
