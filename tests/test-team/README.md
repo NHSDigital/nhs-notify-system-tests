@@ -10,7 +10,7 @@ This package includes:
 
 ## Running the tests
 
-Make sure the .env variables are correctly setup and sourced.  See .env.template for format.
+Make sure the .env variable TARGET_ENVIRONMENT is correctly setup and sourced.  See .env.template for example.
 
 Login with AWS profile for iam-dev so that CIS2 test can connect to retrieve secrets.
 
@@ -19,8 +19,12 @@ export AWS_PROFILE=iam-dev
 aws sso login
 ```
 
-From the tests/test-team folder, run the following command:
-
+From the root folder, run the following command:
 ```shell
-npm run test:dev-ui-e2e
+make test-product
+```
+
+Or from the tests/test-team folder, run the following command:
+```shell
+npm run test:product
 ```
