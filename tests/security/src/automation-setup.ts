@@ -35,7 +35,7 @@ async function main() {
     const page = await context.newPage();
 
     const base = `https://${argv.webGatewayEnvironment}.web-gateway.dev.nhsnotify.national.nhs.uk`;
-    const redirect = `templates${argv.branchSegment}/manage-templates`;
+    const redirect = `templates${argv.branchSegment}/message-templates`;
     const authUrl = `${base}/auth?redirect=/${redirect}`;
     const loggedInUrl = `${base}/${redirect}`;
 
