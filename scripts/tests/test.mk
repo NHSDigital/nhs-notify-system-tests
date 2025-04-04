@@ -51,6 +51,9 @@ test-ui: # Run your UI tests from scripts/test/ui @Testing
 test-ui-performance: # Run UI render tests from scripts/test/ui-performance @Testing
 	make _test name="ui-performance"
 
+test-product:
+	make _test name="product"
+
 test: # Run all the test tasks @Testing
 	make \
 		test-unit \
@@ -88,4 +91,5 @@ ${VERBOSE}.SILENT: \
 	test-security \
 	test-ui \
 	test-ui-performance \
+	test-product \
 	test-unit \

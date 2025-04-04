@@ -1,0 +1,29 @@
+name: Product tests
+description: "Run NHS Notify product tests"
+
+inputs:
+  targetEnvironment:
+    description: Name of the environment under test
+    required: true
+    default: main
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: "Repo setup"
+      shell: bash
+      run: |
+        npm ci
+    - name: Run product tests
+      shell: bash
+      env:
+        TARGET_ENVIRONMENT: ${{ inputs.targetEnvironment }}
+      run: |
+        make test-product
+    - name: Archive product test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: Product test report
+        path: "tests/test-team/playwright-report"

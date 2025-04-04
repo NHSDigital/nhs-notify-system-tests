@@ -19,29 +19,12 @@ export default defineConfig({
 
   projects: [
     {
-      name: 'cis2-dev',
-      testMatch: '*cis2-login-e2e.ts',
-      use: {
-        screenshot: 'on',
-        baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',
-        ...devices['Desktop Chrome'],
-        headless: false,
-        storageState: { cookies: [], origins: [] },
-        launchOptions: {
-          slowMo: 100,
-        },
-        video: 'on'
-      },
-    },
-    {
-      name: 'e2e-dev',
+      name: 'product',
       testMatch: '*-e2e.ts',
       use: {
         screenshot: 'on',
-        baseURL: 'https://main.web-gateway.dev.nhsnotify.national.nhs.uk',
+        baseURL: `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`,
         ...devices['Desktop Chrome'],
-        headless: false,
-        storageState: 'auth.json',
         launchOptions: {
           slowMo: 100,
         },

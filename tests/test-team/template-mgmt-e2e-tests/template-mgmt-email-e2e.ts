@@ -1,6 +1,6 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
-import { loggedInTest } from '../fixtures/login';
+import { test } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
   startPage,
@@ -11,12 +11,14 @@ import {
   startNewTemplate,
 } from '../functions/template-mgmt-e2e-common-steps';
 
-loggedInTest(`User creates and submits a new email template successfully`, async ({
+test.use({ storageState: 'auth.json' });
+
+test(`User creates and submits a new email template successfully`, async ({
+  page,
   baseURL,
-  loggedInWithCognitoPage,
 }) => {
   const props = {
-    basePage: new TemplateMgmtBasePage(loggedInWithCognitoPage),
+    basePage: new TemplateMgmtBasePage(page),
     baseURL,
   };
   const channel = 'Email';
