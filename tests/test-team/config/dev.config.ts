@@ -28,7 +28,8 @@ export default defineConfig({
         launchOptions: {
           slowMo: 100,
         },
-        video: 'on'
+        video: 'on',
+        headless: false
       },
     },
   ],

@@ -61,6 +61,10 @@ export function createTemplate(
       await expect(basePage.pageHeader).toHaveText(
         `Create text message template`
       );
+     } else if (channel === 'Letter') {
+        await expect(basePage.pageHeader).toHaveText(
+          `Upload a letter template`
+        );
     } else {
       await expect(basePage.pageHeader).toHaveText(
         `Create ${channel} template`

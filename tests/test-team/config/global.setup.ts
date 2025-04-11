@@ -31,7 +31,7 @@ async function globalSetup() {
         'product-tests-sign-in',
         password,
       );
-      const browser = await chromium.launch();
+      const browser = await chromium.launch({headless: false,slowMo: 200});
       const context = await browser.newContext();
       const page = await context.newPage();
 
