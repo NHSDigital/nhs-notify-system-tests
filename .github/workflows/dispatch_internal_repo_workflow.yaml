@@ -67,6 +67,7 @@ jobs:
           curl -L \
             --fail \
             --silent \
+            -w "HTTP status code: %{http_code}\n" \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.ACTION_TRIGGER_PAT }}" \
