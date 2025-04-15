@@ -67,6 +67,7 @@ jobs:
           curl -L \
             --fail \
             --silent \
+            -w "HTTP status code: %{http_code}\n" \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.ACTION_TRIGGER_PAT }}" \
@@ -76,9 +77,13 @@ jobs:
 
           echo "Workflow triggered. Waiting for the workflow to complete.."
 
+      - name: Wait for nhs-notify-internal workflow to start
+        shell: bash
+        timeout-minutes: 15
+        run: |
           # Poll GitHub API to check the workflow status
           workflow_run_url=""
-          for i in {1..12}; do
+          while true; do
             in_progress=$(
               curl -s \
                 -H "Accept: application/vnd.github+json" \
@@ -105,14 +110,14 @@ jobs:
             fi
 
             echo "Waiting for workflow to start..."
-            sleep 10
+            sleep 15
           done
 
-          if [[ -z "$workflow_run_url" || "$workflow_run_url" == null ]]; then
-            echo "Failed to get the workflow run url. Exiting."
-            exit 1
-          fi
+          echo "Pipeline started successfully"
 
+      - name: Wait for nhs-notify-internal to complete
+        shell: bash
+        run: |
           # Wait for workflow completion
           while true; do
             sleep 10
