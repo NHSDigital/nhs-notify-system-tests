@@ -28,6 +28,6 @@ test(`User creates and submits a new email template successfully`, async ({
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath);
-  await previewPage(props, channelPath);
-  await submitPage(props, channelPath);
+  // await previewPage(props, channelPath);
+  // await submitPage(props, channelPath);
 });

@@ -77,9 +77,18 @@ export function createTemplate(
       await basePage.fillTextBox('Subject line', 'E2E subject');
     }
 
-    await basePage.fillTextBox('Message', 'E2E Message');
+    if (channel != 'Letter') {
+      await basePage.fillTextBox('Message', 'E2E Message');
+      await basePage.clickButtonByName('Save and preview');
+    }
 
-    await basePage.clickButtonByName('Save and preview');
+    if (channel === 'Letter') {
+      await basePage.selectLetterOption('Letter type','x1');
+      await basePage.selectLetterOption('Letter language','fr');
+      await basePage.uploadLetterTemplate('Letter template PDF');
+    }
+
+
   });
 }
 
