@@ -29,7 +29,7 @@ export default defineConfig({
           slowMo: 100,
         },
         video: 'on',
-        headless: false
+        headless: true
       },
     },
   ],
