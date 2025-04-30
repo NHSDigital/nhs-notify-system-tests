@@ -85,7 +85,7 @@ export function createTemplate(
     if (channel === 'Letter') {
       await basePage.selectLetterOption('Letter type','x1');
       await basePage.selectLetterOption('Letter language','fr');
-      await basePage.uploadLetterTemplate('Letter template PDF');
+      await basePage.uploadLetterTemplate('Letter template PDFXX');
     }
 
 
