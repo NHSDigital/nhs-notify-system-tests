@@ -1,4 +1,4 @@
-import { Locator, type Page } from "@playwright/test";
+import { Locator, type Page, expect } from "@playwright/test";
 
 export class TemplateMgmtBasePage {
   readonly page: Page;
@@ -93,6 +93,18 @@ export class TemplateMgmtBasePage {
 
   async checkRadio(radioName: string) {
     await this.page.getByRole("radio", { name: radioName }).check();
+  }
+
+  async selectLetterOption(labelName: string, optionName: string) {
+    await this.page.getByLabel(labelName).selectOption(optionName);
+  }
+
+  async uploadLetterTemplate(templateName: string) {
+    await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
+    await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
+
+    await this.page.getByRole('textbox', { name: templateName }).setInputFiles('template.pdf');
+    await this.page.getByTestId('submit-button').click();
   }
 
   async logOut() {
