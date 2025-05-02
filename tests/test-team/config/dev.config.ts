@@ -15,6 +15,10 @@ export default defineConfig({
 
   use: {
     trace: 'off', // Warning: this leaks secrets into the trace logs
+    ...(process.env.PLAYWRIGHT_ZAP_PROXY && {
+      ignoreHTTPSErrors: true,
+      proxy: { server: process.env.PLAYWRIGHT_ZAP_PROXY }
+    })
   },
 
   projects: [
