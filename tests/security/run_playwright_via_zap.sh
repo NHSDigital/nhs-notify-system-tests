@@ -9,29 +9,27 @@ run_playwright_via_zap() {
   printf "api.disablekey=true\napi.addrs.addr.name=.*\napi.addrs.addr.regex=true" >> $config_file
 
   # add baseline test ignore rules to config
-  rules="rules.conf"
-  rule_index=0
-  while IFS= read -r line
-  do
-    if [[ "$line" != \#* ]]; then
-      rule_array=($line)
+  # rules="rules.conf"
+  # rule_index=0
+  # while IFS= read -r line
+  # do
+  #   if [[ "$line" != \#* ]]; then
+  #     rule_array=($line)
 
-      printf "\n\nglobalalertfilter.filters.filter($rule_index).ruleid=${rule_array[0]}" >> $config_file
-      # set level to false positive
-      printf "\nglobalalertfilter.filters.filter($rule_index).newrisk=-1" >> $config_file
+  #     printf "\n\nglobalalertfilter.filters.filter($rule_index).ruleid=${rule_array[0]}" >> $config_file
+  #     # set level to false positive
+  #     printf "\nglobalalertfilter.filters.filter($rule_index).newrisk=-1" >> $config_file
 
-      # set url for out of scope rules
-      if [[ ${rule_array[1]} == "OUTOFSCOPE" ]]; then
-        printf "\nglobalalertfilter.filters.filter($rule_index).url=${rule_array[2]}" >> $config_file
-        printf "\nglobalalertfilter.filters.filter($rule_index).urlregex=true" >> $config_file
-      fi
+  #     # set url for out of scope rules
+  #     if [[ ${rule_array[1]} == "OUTOFSCOPE" ]]; then
+  #       printf "\nglobalalertfilter.filters.filter($rule_index).url=${rule_array[2]}" >> $config_file
+  #       printf "\nglobalalertfilter.filters.filter($rule_index).urlregex=true" >> $config_file
+  #     fi
 
-      printf "\nglobalalertfilter.filters.filter($rule_index).enabled=true" >> $config_file
-      ((rule_index++))
-    fi
-  done < "$rules"
-
-  cat $config_file
+  #     printf "\nglobalalertfilter.filters.filter($rule_index).enabled=true" >> $config_file
+  #     ((rule_index++))
+  #   fi
+  # done < "$rules"
 
   zap_wait=10
   print "Starting ZAP headless and waiting $zap_wait seconds for proxy"
