@@ -1,4 +1,4 @@
-zap_proxy_playwright() {
+run_playwright_via_zap() {
   cd "$(git rev-parse --show-toplevel)"
 
   print "Installing Playwright"
@@ -68,7 +68,7 @@ zap_proxy_playwright() {
   sleep $zap_wait
 
   # Check alert count output included High/Medium/Low all at 0
-  if [ -z "$(echo "$alerts" | jq 'if (.High == 0 and .Medium == 0 and .Low == 0) then passed else empty end')" ]; then
+  if [ -z "$(echo "$alerts" | jq 'if (.High == 0 and .Medium == 0 and .Low == 0) then true else empty end')" ]; then
     print_err "Non-informational alerts occurred or unexpected result from alert count"
     exit 1
   fi

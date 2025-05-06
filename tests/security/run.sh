@@ -2,7 +2,7 @@
 set -euo pipefail
 cd $(dirname $BASH_SOURCE[0])
 source lib.sh
-source playwright_proxy_test.sh
+source run_playwright_via_zap.sh
 
 web_gateway_environment="${1:-main}"
 iam_environment="${2:-main}"
@@ -108,7 +108,7 @@ with_login_exit=$?
 
 print "Scan 3 - starting ZAP scan at $start_url - via Playwright system tests"
 
-zap_proxy_playwright
+run_playwright_via_zap
 
 system_test_exit=$?
 
