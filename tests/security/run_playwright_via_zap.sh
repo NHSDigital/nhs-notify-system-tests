@@ -1,26 +1,15 @@
 run_playwright_via_zap() {
-  cd "$(git rev-parse --show-toplevel)"
-
-  print "Installing Playwright"
-
-  npx playwright install --with-deps > /dev/null
-
-  print "Installing ZAP"
-  wget https://github.com/zaproxy/zaproxy/releases/download/v2.16.1/ZAP_2.16.1_Linux.tar.gz
-  tar -xzf ZAP_2.16.1_Linux.tar.gz
-  cd ZAP_2.16.1
-
   print "Generating config with ignore rules"
   config_file="full-zap-config.prop"
 
   # start with baseline test config
-  cp "../tests/security/zap-config.prop" $config_file
+  cp "zap-config.prop" $config_file
 
-  # disable auth on zap api
-  printf "api.disablekey=true" >> $config_file
+  # make api accessible from runner
+  printf "api.disablekey=true\napi.addrs.addr.name=.*\napi.addrs.addr.regex=true" >> $config_file
 
   # add baseline test ignore rules to config
-  rules="../tests/security/rules.conf"
+  rules="rules.conf"
   rule_index=0
   while IFS= read -r line
   do
@@ -42,28 +31,37 @@ run_playwright_via_zap() {
     fi
   done < "$rules"
 
+  cat $config_file
+
   zap_wait=10
-  print "Initialising ZAP daemon and waiting $zap_wait seconds for proxy"
-  ./zap.sh -daemon -host "127.0.0.1" -port 8888 -configfile $config_file &
+  print "Starting ZAP headless and waiting $zap_wait seconds for proxy"
+  docker run -v "$(pwd):/zap/wrk/:rw" -u zap -p 8888:8888 -i ghcr.io/zaproxy/zaproxy:stable zap.sh -daemon -host 0.0.0.0 -port 8888 -configfile /zap/wrk/$config_file &
   sleep $zap_wait
 
-  cd ../tests/test-team
+  zap_proxy="http://127.0.0.1:8888"
+  export PLAYWRIGHT_ZAP_PROXY=$zap_proxy
 
-  export PLAYWRIGHT_ZAP_PROXY="http://127.0.0.1:8888"
+  cd "$(git rev-parse --show-toplevel)"
+
+  print "Installing Playwright"
+
+  npx playwright install --with-deps > /dev/null
+
+  cd tests/test-team
 
   print "Running product tests via ZAP proxy"
 
   npm run test:product
 
   print "Downloading ZAP report"
-  curl http://127.0.0.1:8888/OTHER/core/other/htmlreport/ > ../security/zap-out-product-tests.html
+  curl $zap_proxy/OTHER/core/other/htmlreport/ > ../security/zap-out-product-tests.html
 
   print "Checking ZAP alert counts"
-  alerts="$(curl http://127.0.0.1:8888/JSON/alert/view/alertCountsByRisk/)"
+  alerts="$(curl $zap_proxy/JSON/alert/view/alertCountsByRisk/)"
   print "Alert counts: $alerts"
 
   print "Shutting down ZAP proxy and waiting $zap_wait seconds"
-  curl http://127.0.0.1:8888/JSON/core/action/shutdown/
+  curl $zap_proxy/JSON/core/action/shutdown/
   echo
   sleep $zap_wait
 
