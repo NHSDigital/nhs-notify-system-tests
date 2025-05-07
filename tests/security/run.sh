@@ -2,10 +2,13 @@
 set -euo pipefail
 cd $(dirname $BASH_SOURCE[0])
 source lib.sh
+source run_playwright_via_zap.sh
 
 web_gateway_environment="${1:-main}"
 iam_environment="${2:-main}"
 template_management_branch="${3:-}"
+
+export TARGET_ENVIRONMENT=$web_gateway_environment
 
 email_prefix="security-test-login"
 email="${email_prefix}-$(rnd 'a-zA-Z0-9' 8)@nhs.net"
@@ -38,6 +41,9 @@ cookie=$(
 )
 
 cleanup() {
+  cd "$(git rev-parse --show-toplevel)"
+  cd $(dirname $BASH_SOURCE[0])
+
   print "Cleanup - deleting templates"
   npx ts-node ./src/automation-teardown.ts \
     --web-gateway-environment $web_gateway_environment \
@@ -100,9 +106,16 @@ docker run \
 
 with_login_exit=$?
 
-if [[ $no_login_exit -ne 0 || $with_login_exit -ne 0 ]]; then
+print "Scan 3 - starting ZAP scan at $start_url - via Playwright system tests"
+
+run_playwright_via_zap
+
+system_test_exit=$?
+
+if [[ $no_login_exit -ne 0 || $with_login_exit -ne 0 || $system_test_exit -ne 0 ]]; then
   print_err "Security scan failed"
   print_err "Scan 1 (without login) exit code: $no_login_exit"
   print_err "Scan 2 (with login) exit code: $with_login_exit"
+  print_err "Scan 3 (proxying system tests) exit code: $system_test_exit"
   exit 1
 fi
