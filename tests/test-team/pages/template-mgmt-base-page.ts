@@ -73,6 +73,10 @@ export class TemplateMgmtBasePage {
     await this.page.getByRole("button", { name: buttonName }).click();
   }
 
+  async clickLinkByName(linkName: string) {
+    await this.page.getByRole("link", { name: linkName, exact: true }).click();
+  }
+
   async clickSubmitButton() {
     await this.submitButton.click();
   }

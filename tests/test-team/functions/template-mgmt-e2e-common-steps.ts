@@ -110,6 +110,23 @@ export function previewPage(
   });
 }
 
+export function deleteTemplate(
+  { basePage, baseURL }: CommonStepsProps,
+  channelPath: string
+) {
+  return test.step('Delete template', async () => {
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/message-templates`)
+    );
+
+  await basePage.clickLinkByName('Delete E2E Name');
+  await basePage.clickButtonByName('No, go back');
+  await basePage.clickLinkByName('Delete E2E Name');
+  await basePage.clickButtonByName('Yes, delete template');
+  });
+}
+
 export function submitPage(
   { basePage, baseURL }: CommonStepsProps,
   channelPath: string
