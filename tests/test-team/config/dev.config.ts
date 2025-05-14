@@ -24,7 +24,7 @@ export default defineConfig({
   projects: [
     {
       name: 'product',
-      testMatch: '*-e2e.ts',
+      testMatch: '*delete-e2e.ts',
       use: {
         screenshot: 'on',
         baseURL: `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`,
@@ -33,7 +33,7 @@ export default defineConfig({
           slowMo: 100,
         },
         video: 'on',
-        headless: true
+        headless: false
       },
     },
   ],
