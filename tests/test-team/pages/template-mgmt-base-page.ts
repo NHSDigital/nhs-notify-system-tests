@@ -31,9 +31,7 @@ export class TemplateMgmtBasePage {
     this.loginLink = page.locator(`//a[text()='Sign in']`);
 
     // Note: doing [class="nhsuk-back-link__link"] will not find the element if it has other class names
-    this.goBackLink = page
-      .locator(".nhsuk-back-link__link")
-      .and(page.getByText("Go back"));
+    this.goBackLink = page.locator('#maincontent').getByRole('link', { name: 'Back to all templates' });
 
     this.pageHeader = page.getByRole("heading", { level: 1 });
 
@@ -97,6 +95,12 @@ export class TemplateMgmtBasePage {
 
   async checkRadio(radioName: string) {
     await this.page.getByRole("radio", { name: radioName }).check();
+  }
+
+  async tableRows() {
+    const rows = this.page.locator('table tbody tr');
+    const rowCount = await rows.count();
+    return rowCount;
   }
 
   async selectLetterOption(labelName: string, optionName: string) {
