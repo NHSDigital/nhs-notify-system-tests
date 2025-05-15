@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { assert } from 'console';
 
 type CommonStepsProps = {
   basePage: TemplateMgmtBasePage;
@@ -111,19 +112,34 @@ export function previewPage(
 }
 
 export function deleteTemplate(
-  { basePage, baseURL }: CommonStepsProps,
-  channelPath: string
+  { basePage, baseURL }: CommonStepsProps
 ) {
   return test.step('Delete template', async () => {
+    await basePage.goBackLink.click();
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
       new RegExp(`${baseURL}/templates/message-templates`)
     );
+    let rowCount = await basePage.tableRows();
 
-  await basePage.clickLinkByName('Delete E2E Name');
-  await basePage.clickButtonByName('No, go back');
-  await basePage.clickLinkByName('Delete E2E Name');
-  await basePage.clickButtonByName('Yes, delete template');
+    await basePage.clickLinkByName('Delete E2E Name');
+    await basePage.clickButtonByName('No, go back');
+    await expect(basePage.page).toHaveURL(
+        // eslint-disable-next-line security/detect-non-literal-regexp
+        new RegExp(`${baseURL}/templates/message-templates`)
+      );
+    rowCount = await basePage.tableRows();
+    expect(rowCount).toBe(1);
+
+    await basePage.clickLinkByName('Delete E2E Name');
+    await basePage.clickButtonByName('Yes, delete template');
+    await expect(basePage.page).toHaveURL(
+        // eslint-disable-next-line security/detect-non-literal-regexp
+        new RegExp(`${baseURL}/templates/message-templates`)
+      );
+    rowCount = await basePage.tableRows();
+    expect(rowCount).toBe(0);
+    await basePage.noTemplatesAvailable();
   });
 }
 

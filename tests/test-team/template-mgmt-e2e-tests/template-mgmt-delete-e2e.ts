@@ -13,7 +13,7 @@ import {
 
 test.use({ storageState: 'auth.json' });
 
-test(`User copies and then deletes a template`, async ({
+test(`User deletes a template`, async ({
   page,
   baseURL,
 }) => {
@@ -29,6 +29,5 @@ test(`User copies and then deletes a template`, async ({
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath);
   await previewPage(props, channelPath);
-  await page.locator('#maincontent').getByRole('link', { name: 'Back to all templates' }).click();
-  await deleteTemplate(props, channelPath);
+  await deleteTemplate(props);
 });
