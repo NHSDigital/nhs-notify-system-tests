@@ -23,11 +23,12 @@ test(`User creates and submits a new email template successfully`, async ({
   };
   const channel = 'Email';
   const channelPath = 'email';
+  const name = 'E2E Name';
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath);
-  await previewPage(props, channelPath);
-  await submitPage(props, channelPath);
+  await createTemplate(props, channel, channelPath, name);
+  await previewPage(props, channelPath, name);
+  await submitPage(props, channelPath, name);
 });

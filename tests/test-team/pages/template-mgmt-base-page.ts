@@ -21,6 +21,8 @@ export class TemplateMgmtBasePage {
 
   readonly skipLink: Locator;
 
+  readonly templateToDelete: Locator;
+
   constructor(page: Page) {
     this.page = page;
 
@@ -45,6 +47,8 @@ export class TemplateMgmtBasePage {
     this.errorSummaryList = this.errorSummary.getByRole("listitem");
 
     this.submitButton = page.locator('button.nhsuk-button[type="submit"]');
+
+    this.templateToDelete = page.getByRole('link', { name: 'Test delete', exact: true });
 
     this.skipLink = page
       .locator('[id="skip-link"]')

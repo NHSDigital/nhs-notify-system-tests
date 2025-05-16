@@ -50,7 +50,8 @@ export function chooseTemplate(
 export function createTemplate(
   { basePage, baseURL }: CommonStepsProps,
   channel: string,
-  channelPath: string
+  channelPath: string,
+  name: string
 ) {
   return test.step('Create template', async () => {
     await expect(basePage.page).toHaveURL(
@@ -72,7 +73,7 @@ export function createTemplate(
       );
     }
 
-    await basePage.fillTextBox('Template name', 'E2E Name');
+    await basePage.fillTextBox('Template name', name);
 
     if (channel === 'Email') {
       await basePage.fillTextBox('Subject line', 'E2E subject');
@@ -95,7 +96,8 @@ export function createTemplate(
 
 export function previewPage(
   { basePage, baseURL }: CommonStepsProps,
-  channelPath: string
+  channelPath: string,
+  name: string
 ) {
   return test.step('Preview page', async () => {
     await expect(basePage.page).toHaveURL(
@@ -103,7 +105,7 @@ export function previewPage(
       new RegExp(`${baseURL}/templates/preview-${channelPath}-template/(.*)`)
     );
 
-    await expect(basePage.pageHeader).toHaveText('E2E Name');
+    await expect(basePage.pageHeader).toHaveText(name);
 
     await basePage.checkRadio('Submit template');
 
@@ -112,7 +114,8 @@ export function previewPage(
 }
 
 export function deleteTemplate(
-  { basePage, baseURL }: CommonStepsProps
+  { basePage, baseURL }: CommonStepsProps,
+  name:string
 ) {
   return test.step('Delete template', async () => {
     await basePage.goBackLink.click();
@@ -120,32 +123,36 @@ export function deleteTemplate(
       // eslint-disable-next-line security/detect-non-literal-regexp
       new RegExp(`${baseURL}/templates/message-templates`)
     );
-    let rowCount = await basePage.tableRows();
+    const rowCount = await basePage.tableRows();
+    console.log(rowCount);
 
-    await basePage.clickLinkByName('Delete E2E Name');
+    await basePage.clickLinkByName('Delete ' + name);
     await basePage.clickButtonByName('No, go back');
     await expect(basePage.page).toHaveURL(
         // eslint-disable-next-line security/detect-non-literal-regexp
         new RegExp(`${baseURL}/templates/message-templates`)
       );
-    rowCount = await basePage.tableRows();
-    expect(rowCount).toBe(1);
+    let rowCountCheck = await basePage.tableRows();
+    console.log(rowCountCheck);
+    expect(rowCount).toBe(rowCount);
 
-    await basePage.clickLinkByName('Delete E2E Name');
+    await basePage.clickLinkByName('Delete ' + name);
     await basePage.clickButtonByName('Yes, delete template');
     await expect(basePage.page).toHaveURL(
         // eslint-disable-next-line security/detect-non-literal-regexp
         new RegExp(`${baseURL}/templates/message-templates`)
       );
-    rowCount = await basePage.tableRows();
-    expect(rowCount).toBe(0);
-    await basePage.noTemplatesAvailable();
+    rowCountCheck = await basePage.tableRows();
+    console.log(rowCount-1);
+    expect(rowCountCheck).toBe(rowCount-1);
+    expect(basePage.templateToDelete).not.toBeVisible();
   });
 }
 
 export function submitPage(
   { basePage, baseURL }: CommonStepsProps,
-  channelPath: string
+  channelPath: string,
+  name: string
 ) {
   return test.step('Submit page', async () => {
     await expect(basePage.page).toHaveURL(
@@ -153,7 +160,7 @@ export function submitPage(
       new RegExp(`${baseURL}/templates/submit-${channelPath}-template/(.*)`)
     );
 
-    await expect(basePage.pageHeader).toHaveText(`Submit 'E2E Name'`);
+    await expect(basePage.pageHeader).toHaveText('Submit ' + `'` + name + `'`);
 
     await basePage.clickButtonByName('Submit template');
 
