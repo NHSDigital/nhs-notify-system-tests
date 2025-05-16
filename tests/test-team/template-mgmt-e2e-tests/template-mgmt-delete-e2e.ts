@@ -23,11 +23,12 @@ test(`User deletes a template`, async ({
   };
   const channel = 'Email';
   const channelPath = 'email';
+  const name = 'Test delete'
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath);
-  await previewPage(props, channelPath);
-  await deleteTemplate(props);
+  await createTemplate(props, channel, channelPath, name);
+  await previewPage(props, channelPath, name);
+  await deleteTemplate(props, name);
 });

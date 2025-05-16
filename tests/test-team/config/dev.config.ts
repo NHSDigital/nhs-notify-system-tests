@@ -11,7 +11,7 @@ export default defineConfig({
   },
   globalSetup: './global.setup',
 
-  workers: 4,
+  workers: 6,
 
   use: {
     trace: 'off', // Warning: this leaks secrets into the trace logs
@@ -24,7 +24,7 @@ export default defineConfig({
   projects: [
     {
       name: 'product',
-      testMatch: '*delete-e2e.ts',
+      testMatch: '*-e2e.ts',
       use: {
         screenshot: 'on',
         baseURL: `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`,

@@ -25,13 +25,14 @@ test(`User copies and then deletes a template`, async ({
   const randomChannel = getRandomChannel();
   const channel = randomChannel.name;
   const channelPath = randomChannel.path;
+  const name = 'Test edit';
 
   console.log('name = ',channel, 'path = ',channelPath)
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath);
-  await previewPage(props, channelPath);
+  await createTemplate(props, channel, channelPath, name);
+  await previewPage(props, channelPath,name);
 
 });
