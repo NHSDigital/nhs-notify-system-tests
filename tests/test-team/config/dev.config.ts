@@ -11,7 +11,7 @@ export default defineConfig({
   },
   globalSetup: './global.setup',
 
-  workers: 6,
+  workers: 7,
 
   use: {
     trace: 'off', // Warning: this leaks secrets into the trace logs
@@ -30,10 +30,10 @@ export default defineConfig({
         baseURL: `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`,
         ...devices['Desktop Chrome'],
         launchOptions: {
-          slowMo: 100,
+          slowMo: 0,
         },
         video: 'on',
-        headless: false
+        headless: true
       },
     },
   ],

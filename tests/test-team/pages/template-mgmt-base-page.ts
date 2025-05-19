@@ -1,4 +1,5 @@
 import { Locator, type Page, expect } from "@playwright/test";
+import exp from "constants";
 
 export class TemplateMgmtBasePage {
   readonly page: Page;
@@ -22,6 +23,8 @@ export class TemplateMgmtBasePage {
   readonly skipLink: Locator;
 
   readonly templateToDelete: Locator;
+
+  readonly templateEdited: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -49,6 +52,8 @@ export class TemplateMgmtBasePage {
     this.submitButton = page.locator('button.nhsuk-button[type="submit"]');
 
     this.templateToDelete = page.getByRole('link', { name: 'Test delete', exact: true });
+
+    this.templateEdited = page.getByRole('link', { name: 'Test edit changed', exact: true })
 
     this.skipLink = page
       .locator('[id="skip-link"]')
@@ -88,7 +93,12 @@ export class TemplateMgmtBasePage {
   }
 
   async clickBackLink() {
-    await this.goBackLink.click();
+    await this.goBackLink.click({ force: true });
+  }
+
+  async waitForLoad() {
+    // await this.page.waitForLoadState('networkidle');
+    await this.page.reload({ waitUntil: 'networkidle' });
   }
 
   async fillTextBox(textBoxName: string, textBoxContent: string) {
@@ -105,6 +115,12 @@ export class TemplateMgmtBasePage {
     const rows = this.page.locator('table tbody tr');
     const rowCount = await rows.count();
     return rowCount;
+  }
+
+  async clickFirstTableRowLink() {
+    const link = this.page.locator('table:nth-of-type(1) tr:nth-of-type(1) td:nth-of-type(1) a');
+    await expect(link).toContainText("COPY");
+    await link.click();
   }
 
   async selectLetterOption(labelName: string, optionName: string) {

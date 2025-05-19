@@ -9,11 +9,12 @@ import {
   createTemplate,
   previewPage,
   startNewTemplate,
+  copyTemplate,
 } from '../functions/template-mgmt-e2e-common-steps';
 
 test.use({ storageState: 'auth.json' });
 
-test(`User copies and then deletes a template`, async ({
+test(`User copies a template`, async ({
   page,
   baseURL,
 }) => {
@@ -34,5 +35,6 @@ test(`User copies and then deletes a template`, async ({
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath,name);
+  await copyTemplate(props, name);
 
 });

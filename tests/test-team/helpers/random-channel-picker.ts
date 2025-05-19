@@ -5,8 +5,8 @@ type Channel = {
 
 const channels: Channel[] = [
   { name: 'Email', path: 'email' },
-  { name: 'SMS', path: 'sms' },
-  { name: 'NHSApp', path: 'nhsapp' }
+  { name: 'Text message (SMS)', path: 'text-message' },
+  { name: 'NHS App message', path: 'nhs-app' }
 ];
 
 export function getRandomChannel(): Channel {

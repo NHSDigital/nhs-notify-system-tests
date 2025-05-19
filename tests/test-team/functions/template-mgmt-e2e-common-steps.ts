@@ -149,6 +149,40 @@ export function deleteTemplate(
   });
 }
 
+export function copyTemplate(
+  { basePage, baseURL }: CommonStepsProps,
+  name:string
+) {
+  return test.step('Copy template', async () => {
+    await basePage.goBackLink.click();
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/message-templates`)
+    );
+    const rowCount = await basePage.tableRows();
+    console.log(rowCount);
+
+    await basePage.clickLinkByName('Copy ' + name);
+    await basePage.checkRadio('Email');
+    await basePage.clickButtonByName('Continue');
+    await basePage.clickFirstTableRowLink();
+    await basePage.checkRadio('Edit template');
+    await basePage.clickButtonByName('Continue');
+    await basePage.fillTextBox('Template name', 'Test edit changed');
+    await basePage.clickButtonByName('Save and preview');
+    await expect(basePage.pageHeader).toHaveText('Test edit changed');
+    await basePage.clickBackLink();
+    await basePage.waitForLoad();
+    await expect(basePage.templateEdited).toBeVisible();
+
+    const rowCountCheck = await basePage.tableRows();
+    console.log(rowCountCheck)
+    expect(rowCountCheck).toBe(rowCount+1);
+
+
+  });
+}
+
 export function submitPage(
   { basePage, baseURL }: CommonStepsProps,
   channelPath: string,
