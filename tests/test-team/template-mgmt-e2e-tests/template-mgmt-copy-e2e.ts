@@ -12,7 +12,10 @@ import {
   copyTemplate,
 } from '../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'auth.json' });
+
+
+test.use({ storageState: 'copy.json' });
+
 
 test(`User copies a template`, async ({
   page,

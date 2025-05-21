@@ -11,7 +11,7 @@ import {
   deleteTemplate,
 } from '../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'auth.json' });
+test.use({ storageState: 'delete.json' });
 
 test(`User deletes a template`, async ({
   page,
