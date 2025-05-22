@@ -1,4 +1,5 @@
 import { Locator, type Page, expect } from "@playwright/test";
+import exp from "constants";
 
 export class TemplateMgmtBasePage {
   readonly page: Page;
@@ -21,6 +22,10 @@ export class TemplateMgmtBasePage {
 
   readonly skipLink: Locator;
 
+  readonly templateToDelete: Locator;
+
+  readonly templateEdited: Locator;
+
   constructor(page: Page) {
     this.page = page;
 
@@ -31,9 +36,7 @@ export class TemplateMgmtBasePage {
     this.loginLink = page.locator(`//a[text()='Sign in']`);
 
     // Note: doing [class="nhsuk-back-link__link"] will not find the element if it has other class names
-    this.goBackLink = page
-      .locator(".nhsuk-back-link__link")
-      .and(page.getByText("Go back"));
+    this.goBackLink = page.locator('#maincontent').getByRole('link', { name: 'Back to all templates' });
 
     this.pageHeader = page.getByRole("heading", { level: 1 });
 
@@ -47,6 +50,10 @@ export class TemplateMgmtBasePage {
     this.errorSummaryList = this.errorSummary.getByRole("listitem");
 
     this.submitButton = page.locator('button.nhsuk-button[type="submit"]');
+
+    this.templateToDelete = page.getByRole('link', { name: 'Test delete', exact: true });
+
+    this.templateEdited = page.getByRole('link', { name: 'Test edit changed', exact: true })
 
     this.skipLink = page
       .locator('[id="skip-link"]')
@@ -73,6 +80,10 @@ export class TemplateMgmtBasePage {
     await this.page.getByRole("button", { name: buttonName }).click();
   }
 
+  async clickLinkByName(linkName: string) {
+    await this.page.getByRole("link", { name: linkName, exact: true }).click();
+  }
+
   async clickSubmitButton() {
     await this.submitButton.click();
   }
@@ -82,7 +93,12 @@ export class TemplateMgmtBasePage {
   }
 
   async clickBackLink() {
-    await this.goBackLink.click();
+    await this.goBackLink.click({ force: true });
+  }
+
+  async waitForLoad() {
+    // await this.page.waitForLoadState('networkidle');
+    await this.page.reload({ waitUntil: 'networkidle' });
   }
 
   async fillTextBox(textBoxName: string, textBoxContent: string) {
@@ -93,6 +109,18 @@ export class TemplateMgmtBasePage {
 
   async checkRadio(radioName: string) {
     await this.page.getByRole("radio", { name: radioName }).check();
+  }
+
+  async tableRows() {
+    const rows = this.page.locator('table tbody tr');
+    const rowCount = await rows.count();
+    return rowCount;
+  }
+
+  async clickFirstTableRowLink() {
+    const link = this.page.locator('table:nth-of-type(1) tr:nth-of-type(1) td:nth-of-type(1) a');
+    await expect(link).toContainText("COPY");
+    await link.click();
   }
 
   async selectLetterOption(labelName: string, optionName: string) {

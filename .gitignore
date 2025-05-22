@@ -30,6 +30,9 @@ tests/test-team/playwright-report/
 tests/test-team/blob-report/
 tests/test-team/playwright/.cache/
 auth.json
+copy.json
+delete.json
+createdUsers.json
 
 # DOTENV
 .env
