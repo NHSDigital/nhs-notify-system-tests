@@ -21,9 +21,10 @@ test(`User creates and submits a new letter template successfully`, async ({
   };
   const channel = 'Letter';
   const channelPath = 'letter';
+  const name = 'E2E Name';
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath);
+  await createTemplate(props, channel, channelPath, name);
 });

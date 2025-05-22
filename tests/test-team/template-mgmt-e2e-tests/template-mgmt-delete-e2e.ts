@@ -7,13 +7,13 @@ import {
   chooseTemplate,
   createTemplate,
   previewPage,
-  submitPage,
   startNewTemplate,
+  deleteTemplate,
 } from '../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'auth.json' });
+test.use({ storageState: 'delete.json' });
 
-test(`User creates and submits a new sms template successfully`, async ({
+test(`User deletes a template`, async ({
   page,
   baseURL,
 }) => {
@@ -21,14 +21,14 @@ test(`User creates and submits a new sms template successfully`, async ({
     basePage: new TemplateMgmtBasePage(page),
     baseURL,
   };
-  const channel = 'Text message (SMS)';
-  const channelPath = 'text-message';
-  const name = 'E2E Name';
+  const channel = 'Email';
+  const channelPath = 'email';
+  const name = 'Test delete'
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath, name);
-  await submitPage(props, channelPath, name);
+  await deleteTemplate(props, name);
 });
