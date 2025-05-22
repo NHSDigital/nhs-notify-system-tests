@@ -11,7 +11,7 @@ nodejs 20.13.1
 jq 1.6
 
 # ==============================================================================
-# The section below is reserved for Docker image versions.
+# The section below is reserved for Docker image versions
 
 
 # TODO: Move this section - consider using a different file for the repository template dependencies.
