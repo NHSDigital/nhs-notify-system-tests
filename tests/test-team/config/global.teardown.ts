@@ -1,22 +1,45 @@
-import fs from 'fs';
-import { CognitoUserHelper } from '../helpers/cognito-user-helper';
+import fs from "fs";
+import { CognitoUserHelper } from "../helpers/cognito-user-helper";
+
+function extractCis2Subject(): string {
+  type AuthContext = {
+    cookies: Array<{
+      name: string;
+      value: string;
+    }>;
+  };
+
+  const authContextData = fs.readFileSync("cis2.json", "utf-8");
+  const authContext = JSON.parse(authContextData) as AuthContext;
+  const accessTokenCookies = authContext.cookies.filter((cookie) =>
+    /^CognitoIdentityServiceProvider\..+\.accessToken$/.test(cookie.name)
+  );
+  return accessTokenCookies
+    .map((cookie) => cookie.value)
+    .map((token) => token.split(".")[1])
+    .map((jwtPayload) => atob(jwtPayload))
+    .map((jwtBody) => JSON.parse(jwtBody).sub)
+    .pop();
+}
 
 export default async function globalTeardown() {
   try {
-    if (!fs.existsSync('createdUsers.json')) {
-      console.log('No createdUsers.json file found, skipping teardown.');
+    if (!fs.existsSync("createdUsers.json")) {
+      console.log("No createdUsers.json file found, skipping teardown.");
       return;
     }
 
-    const data = fs.readFileSync('createdUsers.json', 'utf-8');
+    const data = fs.readFileSync("createdUsers.json", "utf-8");
     const createdUsers = JSON.parse(data) as { userId: string }[];
 
     if (!createdUsers.length) {
-      console.log('No users to delete.');
+      console.log("No users to delete.");
       return;
     }
 
-    const cognitoHelper = await CognitoUserHelper.init(`nhs-notify-${process.env.TARGET_ENVIRONMENT}-app`);
+    const cognitoHelper = await CognitoUserHelper.init(
+      `nhs-notify-${process.env.TARGET_ENVIRONMENT}-app`
+    );
 
     for (const user of createdUsers) {
       if (user?.userId) {
@@ -29,8 +52,21 @@ export default async function globalTeardown() {
       }
     }
 
+    // Write out the user references so that we can perform the cleanup needed to keep the
+    // database small and the tests running deterministically
+    const cis2Subject = extractCis2Subject();
+    const userSubjects = createdUsers.map((user) => user.userId);
+    userSubjects.push(cis2Subject);
+    fs.writeFileSync("./test-data-cleanup.json", JSON.stringify(userSubjects));
+
     // Delete storage state files and createdUsers.json
-    const filesToDelete = ['auth.json', 'copy.json', 'delete.json', 'createdUsers.json'];
+    const filesToDelete = [
+      "auth.json",
+      "copy.json",
+      "delete.json",
+      "createdUsers.json",
+      "cis2.json",
+    ];
 
     for (const file of filesToDelete) {
       if (fs.existsSync(file)) {
@@ -39,8 +75,8 @@ export default async function globalTeardown() {
       }
     }
 
-    console.log('Global teardown complete.');
+    console.log("Global teardown complete.");
   } catch (error) {
-    console.error('Error during globalTeardown:', error);
+    console.error("Error during globalTeardown:", error);
   }
 }

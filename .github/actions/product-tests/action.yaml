@@ -27,3 +27,7 @@ runs:
       with:
         name: Product test report
         path: "tests/test-team/playwright-report"
+    - name: Output test user IDs for cleanup
+      shell: bash
+      run: |
+        echo test_users=$(cat tests/test-team/test-data-cleanup.json | jq -c) >> "$GITHUB_OUTPUT"

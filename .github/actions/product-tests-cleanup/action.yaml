@@ -1,0 +1,20 @@
+name: Product tests cleanup
+description: "Run product tests cleanup"
+
+inputs:
+  targetEnvironment:
+    description: Name of the environment under test
+    required: true
+    default: main
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Run product tests
+      shell: bash
+      env:
+        TARGET_ENVIRONMENT: ${{ inputs.targetEnvironment }}
+      run: |
+        echo $TEST_USERS
+        echo $TARGET_ENVIRONMENT

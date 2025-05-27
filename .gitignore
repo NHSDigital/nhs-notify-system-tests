@@ -33,6 +33,8 @@ auth.json
 copy.json
 delete.json
 createdUsers.json
+cis2.json
+test-data-cleanup.json
 
 # DOTENV
 .env

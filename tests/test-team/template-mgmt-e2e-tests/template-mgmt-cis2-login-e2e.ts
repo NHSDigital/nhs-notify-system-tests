@@ -11,7 +11,8 @@ import {
 } from "../functions/template-mgmt-e2e-common-steps";
 import test from "playwright/test";
 
-test.use({ storageState: { cookies: [], origins: [] }});
+// test.use({ storageState: 'cis2.json' });
+test.use({ storageState: { cookies: [], origins: [] } });
 
 /**
  * Intention is to cover:
@@ -26,6 +27,7 @@ test.use({ storageState: { cookies: [], origins: [] }});
 test("User logs in via CIS2, saves data in templates, logs out and logs back in again", async ({
   baseURL,
   page,
+  context,
 }) => {
   if (!baseURL) {
     throw new Error(`Missing baseURL ${baseURL}`);
@@ -38,16 +40,17 @@ test("User logs in via CIS2, saves data in templates, logs out and logs back in 
   };
   const channel = "Email";
   const channelPath = "email";
-  const name = 'E2E Name'
+  const name = "E2E Name";
 
   await startPage({ basePage, baseURL });
-  await loginWithCis2(basePage, 'Message templates');
+  await loginWithCis2(basePage, "Message templates");
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath, name);
   await logOut(basePage);
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState("networkidle");
   await startPage({ basePage, baseURL });
-  await loginWithCis2(basePage, 'Message templates');
+  await loginWithCis2(basePage, "Message templates");
+  await context.storageState({ path: "cis2.json" });
 });
