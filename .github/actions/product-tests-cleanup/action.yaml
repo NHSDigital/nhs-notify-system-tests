@@ -6,6 +6,9 @@ inputs:
     description: Name of the environment under test
     required: true
     default: main
+  test_users:
+    description: JSON Array<string> of test user IDs (subject)
+    required: true
 
 runs:
   using: "composite"
@@ -15,6 +18,7 @@ runs:
       shell: bash
       env:
         TARGET_ENVIRONMENT: ${{ inputs.targetEnvironment }}
+        TEST_USERS: ${{ inputs.test_users }}
       run: |
         echo $TEST_USERS
         echo $TARGET_ENVIRONMENT
