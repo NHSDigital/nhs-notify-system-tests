@@ -54,7 +54,7 @@ test-ui-performance: # Run UI render tests from scripts/test/ui-performance @Tes
 test-product:
 	make _test name="product"
 
-data-cleanup:
+test-data-cleanup:
 	make _test name="data-cleanup"
 
 test: # Run all the test tasks @Testing
