@@ -14,11 +14,14 @@ runs:
   using: "composite"
 
   steps:
-    - name: Run product tests
+    - name: "Repo setup"
+      shell: bash
+      run: |
+        npm ci
+    - name: Cleanup test data
       shell: bash
       env:
         TARGET_ENVIRONMENT: ${{ inputs.targetEnvironment }}
         TEST_USERS: ${{ inputs.testUsers }}
       run: |
-        echo $TEST_USERS
-        echo $TARGET_ENVIRONMENT
+        make test-data-cleanup
