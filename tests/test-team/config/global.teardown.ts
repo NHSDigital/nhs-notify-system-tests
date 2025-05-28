@@ -57,7 +57,11 @@ export default async function globalTeardown() {
     const cis2Subject = extractCis2Subject();
     const userSubjects = createdUsers.map((user) => user.userId);
     userSubjects.push(cis2Subject);
-    fs.writeFileSync("./test-data-cleanup.json", JSON.stringify(userSubjects));
+    const filteredUserSubjects = userSubjects.filter((sub) => !!sub);
+    fs.writeFileSync(
+      "./test-data-cleanup.json",
+      JSON.stringify(filteredUserSubjects)
+    );
 
     // Delete storage state files and createdUsers.json
     const filesToDelete = [
