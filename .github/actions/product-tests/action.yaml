@@ -10,6 +10,7 @@ inputs:
 outputs:
   test_users:
     description: Test users
+    value: ${{ steps.generate-output.outputs.test_users }}
 
 runs:
   using: "composite"
