@@ -7,11 +7,10 @@ inputs:
     required: true
     default: main
 
-outputs:
-  test_users: ${{ steps.generate-output.test_users }}
-
 runs:
   using: "composite"
+  outputs:
+  test_users: ${{ steps.generate-output.test_users }}
 
   steps:
     - name: "Repo setup"
