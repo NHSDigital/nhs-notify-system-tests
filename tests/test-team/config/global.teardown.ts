@@ -14,11 +14,13 @@ function extractCis2Subject(): string {
   const accessTokenCookies = authContext.cookies.filter((cookie) =>
     /^CognitoIdentityServiceProvider\..+\.accessToken$/.test(cookie.name)
   );
+  console.log(`Found ${accessTokenCookies.length} access token cookies`);
   return accessTokenCookies
     .map((cookie) => cookie.value)
     .map((token) => token.split(".")[1])
-    .map((jwtPayload) => atob(jwtPayload))
+    .map((jwtPayload) => Buffer.from(jwtPayload, "base64").toString())
     .map((jwtBody) => JSON.parse(jwtBody).sub)
+    .filter((sub) => !!sub)
     .pop();
 }
 
@@ -57,7 +59,9 @@ export default async function globalTeardown() {
     const cis2Subject = extractCis2Subject();
     const userSubjects = createdUsers.map((user) => user.userId);
     userSubjects.push(cis2Subject);
+
     const filteredUserSubjects = userSubjects.filter((sub) => !!sub);
+    console.log(`Found ${filteredUserSubjects.length} users to cleanup`);
     fs.writeFileSync(
       "./test-data-cleanup.json",
       JSON.stringify(filteredUserSubjects)
