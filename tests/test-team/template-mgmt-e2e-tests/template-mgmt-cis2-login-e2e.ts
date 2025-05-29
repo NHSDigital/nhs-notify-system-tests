@@ -9,9 +9,9 @@ import {
   startNewTemplate,
   startPage,
 } from "../functions/template-mgmt-e2e-common-steps";
-import test from "playwright/test";
+import test, { expect } from "playwright/test";
+import { findCis2AccessTokens } from "../helpers/cis2-credentials-provider";
 
-// test.use({ storageState: 'cis2.json' });
 test.use({ storageState: { cookies: [], origins: [] } });
 
 /**
@@ -52,5 +52,10 @@ test("User logs in via CIS2, saves data in templates, logs out and logs back in 
   await page.waitForLoadState("networkidle");
   await startPage({ basePage, baseURL });
   await loginWithCis2(basePage, "Message templates");
-  await context.storageState({ path: "cis2.json" });
+  const browserContext = await context.storageState({ path: "cis2.json" });
+  const accessTokenCookies = findCis2AccessTokens(browserContext);
+  expect(
+    accessTokenCookies.length,
+    browserContext.cookies.map((c) => c.name).join(",")
+  ).toBe(1);
 });

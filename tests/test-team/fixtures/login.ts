@@ -21,7 +21,7 @@ async function enterCis2TotpCode(
   const happyPathSelector = page.getByText(targetHeadingText);
   const reVerificationSelector = page.locator(`//button[text()=' Re-enter verification code ']`);
 
-  await happyPathSelector.or(reVerificationSelector).waitFor({ timeout: 20_000 });
+  await happyPathSelector.or(reVerificationSelector).waitFor({ timeout: 25_000 });
   if (await happyPathSelector.isVisible()) {
     return true;
   }

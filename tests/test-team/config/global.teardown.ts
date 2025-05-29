@@ -1,20 +1,14 @@
 import fs from "fs";
 import { CognitoUserHelper } from "../helpers/cognito-user-helper";
+import { BrowserState, findCis2AccessTokens } from "../helpers/cis2-credentials-provider";
 
 function extractCis2Subject(): string {
-  type AuthContext = {
-    cookies: Array<{
-      name: string;
-      value: string;
-    }>;
-  };
 
-  const authContextData = fs.readFileSync("cis2.json", "utf-8");
-  const authContext = JSON.parse(authContextData) as AuthContext;
-  const accessTokenCookies = authContext.cookies.filter((cookie) =>
-    /^CognitoIdentityServiceProvider\..+\.accessToken$/.test(cookie.name)
-  );
-  console.log(`Found ${accessTokenCookies.length} access token cookies`);
+  const browserStateData = fs.readFileSync("cis2.json", "utf-8");
+  const browserState = JSON.parse(browserStateData) as BrowserState;
+  const accessTokenCookies = findCis2AccessTokens(browserState)
+  console.log(`Found ${accessTokenCookies.length} access token cookies of ${browserState.cookies.length} cookies`);
+  
   return accessTokenCookies
     .map((cookie) => cookie.value)
     .map((token) => token.split(".")[1])
