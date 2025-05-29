@@ -1,12 +1,12 @@
-import fs from "fs";
-import { CognitoUserHelper } from "../helpers/cognito-user-helper";
+import fs from 'fs';
+import { CognitoUserHelper } from '../helpers/cognito-user-helper';
 import {
   BrowserState,
   findCis2AccessTokens,
-} from "../helpers/cis2-credentials-provider";
+} from '../helpers/cis2-credentials-provider';
 
 function extractCis2Subject(): string {
-  const browserStateData = fs.readFileSync("cis2.json", "utf-8");
+  const browserStateData = fs.readFileSync('cis2.json', 'utf-8');
   const browserState = JSON.parse(browserStateData) as BrowserState;
   const accessTokenCookies = findCis2AccessTokens(browserState);
   console.log(
@@ -15,8 +15,8 @@ function extractCis2Subject(): string {
 
   return accessTokenCookies
     .map((cookie) => cookie.value)
-    .map((token) => token.split(".")[1])
-    .map((jwtPayload) => Buffer.from(jwtPayload, "base64").toString())
+    .map((token) => token.split('.')[1])
+    .map((jwtPayload) => Buffer.from(jwtPayload, 'base64').toString())
     .map((jwtBody) => JSON.parse(jwtBody).sub)
     .filter((sub) => !!sub)
     .pop();
@@ -24,16 +24,16 @@ function extractCis2Subject(): string {
 
 export default async function globalTeardown() {
   try {
-    if (!fs.existsSync("createdUsers.json")) {
-      console.log("No createdUsers.json file found, skipping teardown.");
+    if (!fs.existsSync('createdUsers.json')) {
+      console.log('No createdUsers.json file found, skipping teardown.');
       return;
     }
 
-    const data = fs.readFileSync("createdUsers.json", "utf-8");
+    const data = fs.readFileSync('createdUsers.json', 'utf-8');
     const createdUsers = JSON.parse(data) as { userId: string }[];
 
     if (!createdUsers.length) {
-      console.log("No users to delete.");
+      console.log('No users to delete.');
       return;
     }
 
@@ -61,17 +61,17 @@ export default async function globalTeardown() {
     const filteredUserSubjects = userSubjects.filter((sub) => !!sub);
     console.log(`Found ${filteredUserSubjects.length} users to cleanup`);
     fs.writeFileSync(
-      "./test-data-cleanup.json",
+      './test-data-cleanup.json',
       JSON.stringify(filteredUserSubjects)
     );
 
     // Delete storage state files and createdUsers.json
     const filesToDelete = [
-      "auth.json",
-      "copy.json",
-      "delete.json",
-      "createdUsers.json",
-      "cis2.json",
+      'auth.json',
+      'copy.json',
+      'delete.json',
+      'createdUsers.json',
+      'cis2.json',
     ];
 
     for (const file of filesToDelete) {
@@ -81,8 +81,8 @@ export default async function globalTeardown() {
       }
     }
 
-    console.log("Global teardown complete.");
+    console.log('Global teardown complete.');
   } catch (error) {
-    console.error("Error during globalTeardown:", error);
+    console.error('Error during globalTeardown:', error);
   }
 }
