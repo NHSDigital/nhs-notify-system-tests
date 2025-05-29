@@ -172,6 +172,7 @@ export function copyTemplate(
     await basePage.clickButtonByName('Save and preview');
     await expect(basePage.pageHeader).toHaveText('Test edit changed');
     await basePage.clickBackLink();
+    await basePage.page.getByText('Message templates').waitFor();
     await basePage.waitForLoad();
     await expect(basePage.templateEdited).toBeVisible();
 
