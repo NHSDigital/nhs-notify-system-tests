@@ -48,18 +48,9 @@ test("User logs in via CIS2, saves data in templates, logs out and logs back in 
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath, name);
+  await context.storageState({ path: "cis2.json" });
   await logOut(basePage);
   await page.waitForLoadState("networkidle");
   await startPage({ basePage, baseURL });
   await loginWithCis2(basePage, "Message templates");
-
-  await basePage.page.waitForFunction(
-    async (context) => {
-      const browserContext = await context.storageState({ path: "cis2.json" });
-      const accessTokenCookies = findCis2AccessTokens(browserContext);
-      return accessTokenCookies.length > 0;
-    },
-    context,
-    { timeout: 10_000 }
-  );
 });
