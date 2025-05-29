@@ -53,13 +53,13 @@ test("User logs in via CIS2, saves data in templates, logs out and logs back in 
   await startPage({ basePage, baseURL });
   await loginWithCis2(basePage, "Message templates");
 
-  basePage.page.waitForFunction(
-    async () => {
+  await basePage.page.waitForFunction(
+    async (context) => {
       const browserContext = await context.storageState({ path: "cis2.json" });
       const accessTokenCookies = findCis2AccessTokens(browserContext);
       return accessTokenCookies.length > 0;
     },
-    undefined,
+    context,
     { timeout: 10_000 }
   );
 });
