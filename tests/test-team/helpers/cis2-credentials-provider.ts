@@ -30,3 +30,18 @@ export async function getCis2Credentials(): Promise<Cis2CredentialProvider> {
       }).otp as string,
   };
 }
+
+type Cookie = {
+  name: string;
+  value: string;
+};
+
+export type BrowserState = {
+  cookies: Array<Cookie>;
+};
+
+export function findCis2AccessTokens(browserState: BrowserState): Array<Cookie> {
+  return browserState.cookies.filter((cookie) =>
+    /^CognitoIdentityServiceProvider\..+\.accessToken$/.test(cookie.name)
+  );
+}
