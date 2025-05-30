@@ -97,7 +97,6 @@ export class TemplateMgmtBasePage {
   }
 
   async waitForLoad() {
-    // await this.page.waitForLoadState('networkidle');
     await this.page.reload({ waitUntil: 'networkidle' });
   }
 

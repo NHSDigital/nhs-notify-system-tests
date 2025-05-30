@@ -1,17 +1,17 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
-import { loginWithCis2, logOut } from "../fixtures/login";
-import { TemplateMgmtBasePage } from "../pages/template-mgmt-base-page";
+import { loginWithCis2, logOut } from '../fixtures/login';
+import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
   chooseTemplate,
   createTemplate,
   previewPage,
   startNewTemplate,
   startPage,
-} from "../functions/template-mgmt-e2e-common-steps";
-import test from "playwright/test";
+} from '../functions/template-mgmt-e2e-common-steps';
+import test from 'playwright/test';
 
-test.use({ storageState: { cookies: [], origins: [] }});
+test.use({ storageState: { cookies: [], origins: [] } });
 
 /**
  * Intention is to cover:
@@ -21,11 +21,12 @@ test.use({ storageState: { cookies: [], origins: [] }});
  * - Log out
  * - Log back in, this should require the user to re-enter credentials proving that
  *    - log out worked and
- *    - CIS2 "prompt=login" works to force a re-authentication
+ *    - CIS2 'prompt=login' works to force a re-authentication
  */
-test("User logs in via CIS2, saves data in templates, logs out and logs back in again", async ({
+test('User logs in via CIS2, saves data in templates, logs out and logs back in again', async ({
   baseURL,
   page,
+  context,
 }) => {
   if (!baseURL) {
     throw new Error(`Missing baseURL ${baseURL}`);
@@ -36,9 +37,9 @@ test("User logs in via CIS2, saves data in templates, logs out and logs back in 
     basePage,
     baseURL,
   };
-  const channel = "Email";
-  const channelPath = "email";
-  const name = 'E2E Name'
+  const channel = 'Email';
+  const channelPath = 'email';
+  const name = 'E2E Name';
 
   await startPage({ basePage, baseURL });
   await loginWithCis2(basePage, 'Message templates');
@@ -46,6 +47,7 @@ test("User logs in via CIS2, saves data in templates, logs out and logs back in 
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath, name);
+  await context.storageState({ path: 'cis2.json' });
   await logOut(basePage);
   await page.waitForLoadState('networkidle');
   await startPage({ basePage, baseURL });

@@ -1,0 +1,23 @@
+name: Test Data Cleanup
+description: "Cleanup data created by product tests"
+
+inputs:
+  targetEnvironment:
+    description: Name of the environment under test
+    required: true
+    default: main
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: "Repo setup"
+      shell: bash
+      run: |
+        npm ci
+    - name: Run product tests
+      shell: bash
+      env:
+        TARGET_ENVIRONMENT: ${{ inputs.targetEnvironment }}
+      run: |
+        make test-data-cleanup
