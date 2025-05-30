@@ -52,7 +52,7 @@ jobs:
             --arg targetEnvironment "${{ inputs.targetEnvironment }}" \
             --arg assumeRoleAccount "${{ inputs.assumeRoleAccount }}" \
             '{
-              "ref": "feature/CCM-10132_test-data-cleanup",
+              "ref": "main",
               "inputs": (
                 (if $assumeRoleAccount != "" then { "assumeRoleAccount": $assumeRoleAccount } else {} end) +
                 {
