@@ -1,10 +1,17 @@
 from locust import events
+from utils.cognito_user_manager import create_test_users
 import logging
+
 
 @events.init_command_line_parser.add_listener
 def _(parser):
     parser.add_argument('--user-name', default='', help='Enter username')
     parser.add_argument('--password', default='', help='Enter password')
+
+@events.test_start.add_listener
+def _(environment, **kw):
+    print("Creating test users...")
+    create_test_users(count=1)  # Create Cognito users
 
 @events.test_stop.add_listener
 def _(environment, **kw):
