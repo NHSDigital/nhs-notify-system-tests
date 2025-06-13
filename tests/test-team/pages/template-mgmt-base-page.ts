@@ -132,6 +132,9 @@ export class TemplateMgmtBasePage {
 
     await this.page.getByRole('textbox', { name: templateName }).setInputFiles('template.pdf');
     await this.page.getByTestId('submit-button').click();
+    await expect(this.page.getByText('Checking files')).toBeVisible();
+    await this.goBackLink.click();
+    await expect(this.page.getByText('Files uploaded')).toBeVisible();
   }
 
   async logOut() {
