@@ -127,6 +127,8 @@ export class TemplateMgmtBasePage {
   }
 
   async uploadLetterTemplate(templateName: string) {
+    const maxRetries = 10;
+    const retryInterval = 2000;
     await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
     await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
 
@@ -134,7 +136,21 @@ export class TemplateMgmtBasePage {
     await this.page.getByTestId('submit-button').click();
     await expect(this.page.getByText('Checking files')).toBeVisible();
     await this.goBackLink.click();
-    await expect(this.page.getByText('Files uploaded')).toBeVisible();
+    for (let i = 0; i < maxRetries; i++) {
+  try {
+    await this.page.reload(); // or this.page.goto(url) if needed
+    await expect(this.page.getByText('Files uploaded')).toBeVisible({ timeout: 1000 });
+    console.log('Success: "Files uploaded" is visible.');
+    break;
+  } catch (e) {
+    console.log(`Attempt ${i + 1} failed, retrying in ${retryInterval}ms...`);
+    await this.page.waitForTimeout(retryInterval);
+    if (i === maxRetries - 1) {
+      throw new Error('"Files uploaded" was not visible after maximum retries.');
+    }
+  }
+}
+    // await expect(this.page.getByText('Files uploaded')).toBeVisible();
   }
 
   async logOut() {
