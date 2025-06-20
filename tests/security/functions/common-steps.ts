@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
-import { assert } from 'console';
 
 type CommonStepsProps = {
   basePage: TemplateMgmtBasePage;

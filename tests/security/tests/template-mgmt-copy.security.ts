@@ -1,8 +1,8 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
 import { test } from '@playwright/test';
-import { TemplateMgmtBasePage } from '../../test-team/pages/template-mgmt-base-page';
-import { getRandomChannel } from '../../test-team/helpers/random-channel-picker';
+import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { getRandomChannel } from '../helpers/random-channel-picker';
 import {
   startPage,
   chooseTemplate,
@@ -10,7 +10,7 @@ import {
   previewPage,
   startNewTemplate,
   copyTemplate,
-} from '../../test-team/functions/template-mgmt-e2e-common-steps';
+} from '../functions/common-steps';
 
 
 
