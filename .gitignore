@@ -26,9 +26,9 @@ results_*.csv
 
 # Playwright e2e
 test-results/
-tests/test-team/playwright-report/
-tests/test-team/blob-report/
-tests/test-team/playwright/.cache/
+playwright-report/
+blob-report/
+playwright/.cache/
 auth.json
 copy.json
 delete.json
