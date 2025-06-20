@@ -24,8 +24,8 @@ export default defineConfig({
 
   projects: [
     {
-      name: 'product',
-      testMatch: '*-e2e.ts',
+      name: 'security',
+      testMatch: '*.security.ts',
       use: {
         screenshot: 'on',
         baseURL: `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`,

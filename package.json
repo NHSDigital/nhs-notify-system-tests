@@ -4,11 +4,5 @@
     "tests/test-data-cleanup",
     "tests/test-team",
     "tests/security"
-  ],
-  "dependencies": {
-    "generate-password": "^1.7.1"
-  },
-  "devDependencies": {
-    "tsx": "^4.19.4"
-  }
+  ]
 }

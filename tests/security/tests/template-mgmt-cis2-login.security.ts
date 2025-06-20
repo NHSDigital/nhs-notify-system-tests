@@ -1,14 +1,14 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
-import { loginWithCis2, logOut } from '../fixtures/login';
-import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { loginWithCis2, logOut } from '../../test-team/fixtures/login';
+import { TemplateMgmtBasePage } from '../../test-team/pages/template-mgmt-base-page';
 import {
   chooseTemplate,
   createTemplate,
   previewPage,
   startNewTemplate,
   startPage,
-} from '../functions/template-mgmt-e2e-common-steps';
+} from '../../test-team/functions/template-mgmt-e2e-common-steps';
 import test from 'playwright/test';
 
 test.use({ storageState: { cookies: [], origins: [] } });

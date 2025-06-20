@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtBasePage } from '../../test-team/pages/template-mgmt-base-page';
 import {
   startPage,
   chooseTemplate,
@@ -7,7 +7,7 @@ import {
   previewPage,
   submitPage,
   startNewTemplate,
-} from '../functions/template-mgmt-e2e-common-steps';
+} from '../../test-team/functions/template-mgmt-e2e-common-steps';
 
 test.use({ storageState: 'auth.json' });
 
