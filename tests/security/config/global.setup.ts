@@ -74,9 +74,9 @@ async function createStorageStateFile(username: string, fileName: string) {
 }
 
 async function globalSetup() {
-  const user1 = await createStorageStateFile('product-tests-sign-in', 'auth.json');
-  const user2 = await createStorageStateFile('copy-tests-sign-in', 'copy.json');
-  const user3 = await createStorageStateFile('delete-tests-sign-in', 'delete.json');
+  const user1 = await createStorageStateFile('product-tests-sign-in.security', 'auth.json');
+  const user2 = await createStorageStateFile('copy-tests-sign-in.security', 'copy.json');
+  const user3 = await createStorageStateFile('delete-tests-sign-in.security', 'delete.json');
 
   createdUsers.push(user1, user2, user3);
 
