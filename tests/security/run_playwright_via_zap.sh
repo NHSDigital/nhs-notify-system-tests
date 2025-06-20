@@ -47,9 +47,9 @@ run_playwright_via_zap() {
 
   cd tests/test-team
 
-  print "Running product tests via ZAP proxy"
+  print "Running security playwright tests via ZAP proxy"
 
-  npm run test:product
+  npm run test:security
 
   print "Downloading ZAP report"
   curl $zap_proxy/OTHER/core/other/htmlreport/ > ../security/zap-out-product-tests.html

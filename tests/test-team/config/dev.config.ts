@@ -37,5 +37,19 @@ export default defineConfig({
         headless: true
       },
     },
+    {
+      name: 'security',
+      testMatch: '*.security.ts',
+      use: {
+        screenshot: 'on',
+        baseURL: `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`,
+        ...devices['Desktop Chrome'],
+        launchOptions: {
+          slowMo: 0,
+        },
+        video: 'on',
+        headless: true
+      },
+    },
   ],
 });
