@@ -60,6 +60,8 @@ export class TemplateMgmtBasePage {
       .and(page.getByText("Skip to main content"));
   }
 
+
+
   async navigateTo(url: string) {
     await this.page.goto(url);
   }
@@ -98,6 +100,10 @@ export class TemplateMgmtBasePage {
 
   async waitForLoad() {
     await this.page.reload({ waitUntil: 'networkidle' });
+  }
+
+  async checkStatus(status: string) {
+    await expect(this.page.getByText(status)).toBeVisible();
   }
 
   async fillTextBox(textBoxName: string, textBoxContent: string) {
