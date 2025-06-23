@@ -36,5 +36,8 @@ createdUsers.json
 cis2.json
 test-data-cleanup.json
 
+# security tests
+tests/security/full-zap-config.prop
+
 # DOTENV
 .env

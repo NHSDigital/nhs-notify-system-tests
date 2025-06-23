@@ -45,11 +45,11 @@ run_playwright_via_zap() {
 
   npx playwright install --with-deps > /dev/null
 
-  cd tests/security
+  cd tests/test-team
 
   print "Running security playwright tests via ZAP proxy"
 
-  npm run test:security
+  npm run test:product
 
   print "Downloading ZAP report"
   curl $zap_proxy/OTHER/core/other/htmlreport/ > ../security/zap-out-product-tests.html
