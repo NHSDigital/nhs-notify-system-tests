@@ -109,12 +109,18 @@ export function previewPage(
 }
 
 export function previewPageChooseSubmit(
-  { basePage }: CommonStepsProps
+  { basePage, baseURL }: CommonStepsProps,
+  channelPath: string,
 ) {
   return test.step('Preview page - select submit', async () => {
     await basePage.checkRadio('Submit template');
 
     await basePage.clickButtonByName('Continue');
+
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/submit-${channelPath}-template/(.*)`)
+    );
   });
 }
 
