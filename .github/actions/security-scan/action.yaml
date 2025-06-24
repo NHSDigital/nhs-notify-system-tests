@@ -33,6 +33,12 @@ runs:
         name: Security test report
         path: "tests/security/zap-out-*.html"
 
+    - name: Archive playwright test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: Playwright test report
+        path: "tests/security/playwright-report"
+
     - name: Fail workflow on test failure
       shell: bash
       if: steps.test.outputs.exit_code != 0
