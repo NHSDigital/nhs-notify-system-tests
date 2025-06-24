@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test:security": "playwright test --project security -c config/dev.config.ts"
+    "test:security": "playwright test --project security -c config/playwright.config.ts"
   },
   "devDependencies": {
     "@aws-sdk/client-appsync": "^3.650.0",

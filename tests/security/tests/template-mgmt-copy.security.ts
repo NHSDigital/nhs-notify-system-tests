@@ -12,10 +12,7 @@ import {
   copyTemplate,
 } from '../functions/common-steps';
 
-
-
 test.use({ storageState: 'copy.json' });
-
 
 test(`User copies a template`, async ({
   page,
@@ -30,8 +27,6 @@ test(`User copies a template`, async ({
   const channel = randomChannel.name;
   const channelPath = randomChannel.path;
   const name = 'Test edit';
-
-  console.log('name = ',channel, 'path = ',channelPath)
 
   await startPage(props);
   await startNewTemplate(props);

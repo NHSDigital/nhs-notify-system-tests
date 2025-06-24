@@ -123,7 +123,6 @@ export function deleteTemplate(
       new RegExp(`${baseURL}/templates/message-templates`)
     );
     const rowCount = await basePage.tableRows();
-    console.log(rowCount);
 
     await basePage.clickLinkByName('Delete ' + name);
     await basePage.clickButtonByName('No, go back');
@@ -132,7 +131,6 @@ export function deleteTemplate(
         new RegExp(`${baseURL}/templates/message-templates`)
       );
     let rowCountCheck = await basePage.tableRows();
-    console.log(rowCountCheck);
     expect(rowCount).toBe(rowCount);
 
     await basePage.clickLinkByName('Delete ' + name);
@@ -142,7 +140,6 @@ export function deleteTemplate(
         new RegExp(`${baseURL}/templates/message-templates`)
       );
     rowCountCheck = await basePage.tableRows();
-    console.log(rowCount-1);
     expect(rowCountCheck).toBe(rowCount-1);
     expect(basePage.templateToDelete).not.toBeVisible();
   });
@@ -159,7 +156,6 @@ export function copyTemplate(
       new RegExp(`${baseURL}/templates/message-templates`)
     );
     const rowCount = await basePage.tableRows();
-    console.log(rowCount);
 
     await basePage.clickLinkByName('Copy ' + name);
     await basePage.checkRadio('Email');
@@ -176,10 +172,7 @@ export function copyTemplate(
     await expect(basePage.templateEdited).toBeVisible();
 
     const rowCountCheck = await basePage.tableRows();
-    console.log(rowCountCheck)
     expect(rowCountCheck).toBe(rowCount+1);
-
-
   });
 }
 

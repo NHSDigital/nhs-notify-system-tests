@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: '../',
@@ -6,8 +6,7 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   retries: 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 4 : undefined,
+  workers: 7,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['line'],
@@ -15,17 +14,39 @@ export default defineConfig({
       'html',
       {
         outputFolder: '../playwright-report',
-        open: process.env.CI ? 'never' : 'on-failure',
+        open: 'never',
       },
     ],
   ],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-    ...(process.env.PLAYWRIGHT_ZAP_PROXY && {
-      ignoreHTTPSErrors: true,
-      proxy: { server: process.env.PLAYWRIGHT_ZAP_PROXY }
-    })
+
+  timeout: 60_000,
+
+  expect: {
+    timeout: 30_000,
   },
+  globalSetup: './global.setup',
+  globalTeardown: './global.teardown',
+
+  use: {
+    trace: 'off', // Warning: this leaks secrets into the trace logs
+    ignoreHTTPSErrors: true,
+    proxy: { server: process.env.PLAYWRIGHT_ZAP_PROXY },
+  },
+
+  projects: [
+    {
+      name: 'security',
+      testMatch: '*.security.ts',
+      use: {
+        screenshot: 'on',
+        baseURL: `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`,
+        ...devices['Desktop Chrome'],
+        launchOptions: {
+          slowMo: 0,
+        },
+        video: 'on',
+        headless: true,
+      },
+    },
+  ],
 });
