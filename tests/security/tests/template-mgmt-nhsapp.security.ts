@@ -7,6 +7,7 @@ import {
   previewPage,
   submitPage,
   startNewTemplate,
+  previewPageChooseSubmit,
 } from '../functions/common-steps';
 
 test.use({ storageState: 'auth.json' });
@@ -28,5 +29,6 @@ test(`User creates and submits a new nhsapp template successfully`, async ({
     await chooseTemplate(props, channel);
     await createTemplate(props, channel, channelPath, name);
     await previewPage(props, channelPath, name);
+    await previewPageChooseSubmit(props);
     await submitPage(props, channelPath, name);
 });

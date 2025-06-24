@@ -1,5 +1,4 @@
 import { Locator, type Page, expect } from "@playwright/test";
-import exp from "constants";
 
 export class TemplateMgmtBasePage {
   readonly page: Page;

@@ -105,7 +105,13 @@ export function previewPage(
     );
 
     await expect(basePage.pageHeader).toHaveText(name);
+  });
+}
 
+export function previewPageChooseSubmit(
+  { basePage }: CommonStepsProps
+) {
+  return test.step('Preview page - select submit', async () => {
     await basePage.checkRadio('Submit template');
 
     await basePage.clickButtonByName('Continue');
