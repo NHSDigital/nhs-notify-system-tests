@@ -175,8 +175,22 @@ export function copyTemplate(
     console.log(rowCount);
 
     await basePage.clickLinkByName('Copy ' + name);
+    
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/copy-template/(.*)`)
+    );
+
     await basePage.checkRadio('Email');
     await basePage.clickButtonByName('Continue');
+
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/message-templates`)
+    );
+
+    await basePage.page.reload(); // shouldn't need to do this
+    
     await basePage.clickFirstTableRowLink();
     await basePage.checkRadio('Edit template');
     await basePage.clickButtonByName('Continue');
@@ -191,8 +205,6 @@ export function copyTemplate(
     const rowCountCheck = await basePage.tableRows();
     console.log(rowCountCheck)
     expect(rowCountCheck).toBe(rowCount+1);
-
-
   });
 }
 

@@ -170,8 +170,22 @@ export function copyTemplate(
     const rowCount = await basePage.tableRows();
 
     await basePage.clickLinkByName('Copy ' + name);
-    await basePage.checkRadio('Email');
-    await basePage.clickButtonByName('Continue');
+
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/copy-template/(.*)`)
+    );
+
+    await basePage.checkRadio("Email");
+    await basePage.clickButtonByName("Continue");
+
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/message-templates`)
+    );
+
+    await basePage.page.reload(); // shouldn't need to do this
+
     await basePage.clickFirstTableRowLink();
     await basePage.checkRadio('Edit template');
     await basePage.clickButtonByName('Continue');
