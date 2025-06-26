@@ -65,7 +65,7 @@ runs:
         ARTIFACT_NAME="${{ inputs.service }}-setup.json"
         DEST_PATH="${{ steps.check-script.outputs.script_dir }}"
         echo "Attempting to download artifact '$ARTIFACT_NAME' to $DEST_PATH ..."
-        if gh run download "${{ inputs.run_id }}" --name "$ARTIFACT_NAME" --dir "$DEST_PATH"; then
+        if gh run download "${{ inputs.github_run_id }}" --name "$ARTIFACT_NAME" --dir "$DEST_PATH"; then
           echo "Artifact '$ARTIFACT_NAME' downloaded successfully."
         else
           echo "Artifact '$ARTIFACT_NAME' not found. Continuing without it."
