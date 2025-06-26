@@ -1,0 +1,45 @@
+name: "Run Lifecycle Script"
+description: "Runs a setup or teardown script for a given service and test suite, if it exists"
+
+inputs:
+  environment:
+    description: "The name of the static environment being tested (e.g. main)"
+    required: true
+  phase:
+    description: "The lifecycle phase to run: (setup or teardown)"
+    required: true
+  service:
+    description: "The service name (e.g., auth, templates)"
+    required: true
+  suite:
+    description: "The test suite name being executed: (security, product)"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Validate phase input
+      run: |
+        case "${{ inputs.phase }}" in
+          setup|teardown)
+            echo "Valid phase input: ${{ inputs.phase }}"
+            ;;
+          *)
+            echo "Invalid phase input: '${{ inputs.phase }}'"
+            echo "Phase must be either 'setup' or 'teardown'"
+            exit 1
+            ;;
+        esac
+      shell: bash
+
+    - name: Run ${{ inputs.suite }} test suite ${{ inputs.phase }} lifecycle script for {{ inputs.service }} service
+      run: |
+        script="./tests/${{ inputs.suite }}/lifecycle/${{ inputs.service }}/${{ inputs.phase }}.sh"
+
+        if [ -f "$script" ]; then
+          echo "Running $script..."
+          bash "$script" "${{ inputs.environment }}"
+        else
+          echo "No ${{ inputs.phase }} lifecycle script found for suite '${{ inputs.suite }}' and service '${{ inputs.service }}' – skipping."
+        fi
+      shell: bash

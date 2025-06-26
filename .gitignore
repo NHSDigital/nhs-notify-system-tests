@@ -37,7 +37,8 @@ cis2.json
 test-data-cleanup.json
 
 # security tests
-tests/security/full-zap-config.prop
+full-zap-config.prop
+zap-out-product-tests.html
 
 # DOTENV
 .env
