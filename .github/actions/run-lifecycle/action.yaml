@@ -32,14 +32,49 @@ runs:
         esac
       shell: bash
 
-    - name: Run ${{ inputs.suite }} test suite ${{ inputs.phase }} lifecycle script for {{ inputs.service }} service
+    - name: Check if lifecycle script exists
+      id: check-script
       run: |
         script="./tests/${{ inputs.suite }}/lifecycle/${{ inputs.service }}/${{ inputs.phase }}.sh"
-
         if [ -f "$script" ]; then
-          echo "Running $script..."
-          bash "$script" "${{ inputs.environment }}"
+          echo "Found script at $script"
+          dir="$(cd "$(dirname "$script")" && pwd)"
+          file="$dir/${{ inputs.phase }}.sh"
+          echo "script_exists=true" >> "$GITHUB_OUTPUT"
+          echo "script_dir=$dir" >> "$GITHUB_OUTPUT"
+          echo "script_file=$file" >> "$GITHUB_OUTPUT"
         else
-          echo "No ${{ inputs.phase }} lifecycle script found for suite '${{ inputs.suite }}' and service '${{ inputs.service }}' – skipping."
+          echo "No script found at $script — skipping execution"
+          echo "script_exists=false" >> "$GITHUB_OUTPUT"
+          echo "script_dir=" >> "$GITHUB_OUTPUT"
+          echo "script_file=" >> "$GITHUB_OUTPUT"
         fi
       shell: bash
+
+    - name: Pre-teardown - attempt to download setup JSON artifact
+      if: inputs.phase == 'teardown' && steps.check-script.outputs.script_exists == 'true'
+      run: |
+        ARTIFACT_NAME="${{ inputs.service }}-setup.json"
+        DEST_PATH="${{ steps.check-script.outputs.script_dir }}"
+        echo "Attempting to download artifact '$ARTIFACT_NAME' to $DEST_PATH ..."
+        if gh run download --name "$ARTIFACT_NAME" --dir "$DEST_PATH"; then
+          echo "Artifact '$ARTIFACT_NAME' downloaded successfully."
+        else
+          echo "Artifact '$ARTIFACT_NAME' not found. Continuing without it."
+        fi
+      shell: bash
+
+    - name: Run ${{ inputs.suite }} test suite ${{ inputs.phase }} lifecycle script for {{ inputs.service }} service
+      if: steps.check-script.outputs.script_exists == 'true'
+      run: |
+        echo "Running ${{ steps.check-script.outputs.script_file }} with environment '${{ inputs.environment }}'..."
+        bash "${{ steps.check-script.outputs.script_file }}" "${{ inputs.environment }}"
+      shell: bash
+
+  - name: Post-setup - upload setup JSON file if it exists
+      if: inputs.phase == 'setup' && steps.check-script.outputs.script_exists == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.service }}-setup.json
+        path: ${{ steps.check-script.outputs.script_dir }}/setup.json
+        if-no-files-found: ignore
