@@ -14,6 +14,9 @@ inputs:
   suite:
     description: "The test suite name being executed: (security, product)"
     required: true
+  github_token:
+    description: GitHub access token
+    required: true
 
 runs:
   using: "composite"
@@ -53,6 +56,8 @@ runs:
 
     - name: Pre-teardown - attempt to download setup JSON artifact
       if: inputs.phase == 'teardown' && steps.check-script.outputs.script_exists == 'true'
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         ARTIFACT_NAME="${{ inputs.service }}-setup.json"
         DEST_PATH="${{ steps.check-script.outputs.script_dir }}"
