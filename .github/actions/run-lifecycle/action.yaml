@@ -71,7 +71,7 @@ runs:
         bash "${{ steps.check-script.outputs.script_file }}" "${{ inputs.environment }}"
       shell: bash
 
-  - name: Post-setup - upload setup JSON file if it exists
+    - name: Post-setup - upload setup JSON file if it exists
       if: inputs.phase == 'setup' && steps.check-script.outputs.script_exists == 'true'
       uses: actions/upload-artifact@v4
       with:
