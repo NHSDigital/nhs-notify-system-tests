@@ -63,7 +63,7 @@ runs:
     - name: Pre-teardown - attempt to download setup JSON artifact
       if: inputs.phase == 'teardown' && steps.check-script.outputs.script_exists == 'true'
       env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
+        GH_TOKEN: ${{ inputs.github_token }}
       run: |
         ARTIFACT_NAME="${{ inputs.service }}-setup.json"
         DEST_PATH="${{ steps.check-script.outputs.script_dir }}"
