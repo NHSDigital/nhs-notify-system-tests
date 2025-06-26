@@ -4,7 +4,10 @@ set -euo pipefail
 
 TARGET_ENVIRONMENT=$1
 
-echo "Hello from the product test templates teardown script."
-echo "Target Environment $TARGET_ENVIRONMENT"
+echo "Running the product test templates teardown script..."
+echo "Target Environment: $TARGET_ENVIRONMENT"
 
-aws sts get-caller-identity
+sftp_poll_rule_name="nhs-notify-$TARGET_ENVIRONMENT-app-api-sftp-poll-wtmmock"
+
+aws events put-rule --name $sftp_poll_rule_name --schedule-expression "rate(1 hour)"
+
