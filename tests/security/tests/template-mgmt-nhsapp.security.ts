@@ -8,7 +8,7 @@ import {
   submitPage,
   startNewTemplate,
   previewPageChooseSubmit,
-} from '../functions/template-mgmt-e2e-common-steps';
+} from '../functions/common-steps';
 
 test.use({ storageState: 'auth.json' });
 

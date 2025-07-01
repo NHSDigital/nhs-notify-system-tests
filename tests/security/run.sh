@@ -106,7 +106,7 @@ docker run \
 
 with_login_exit=$?
 
-print "Scan 3 - starting ZAP scan at $start_url - via Playwright system tests"
+print "Scan 3 - starting ZAP scan at $start_url - via Playwright security tests"
 
 run_playwright_via_zap
 

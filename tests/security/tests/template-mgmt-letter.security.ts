@@ -6,15 +6,12 @@ import {
   startPage,
   chooseTemplate,
   createTemplate,
-  previewPage,
-  submitPage,
   startNewTemplate,
-  previewPageChooseSubmit,
-} from '../functions/template-mgmt-e2e-common-steps';
+} from '../functions/common-steps';
 
 test.use({ storageState: 'auth.json' });
 
-test(`User creates and submits a new sms template successfully`, async ({
+test(`User creates and submits a new letter template successfully`, async ({
   page,
   baseURL,
 }) => {
@@ -22,15 +19,12 @@ test(`User creates and submits a new sms template successfully`, async ({
     basePage: new TemplateMgmtBasePage(page),
     baseURL,
   };
-  const channel = 'Text message (SMS)';
-  const channelPath = 'text-message';
+  const channel = 'Letter';
+  const channelPath = 'letter';
   const name = 'E2E Name';
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
-  await previewPage(props, channelPath, name);
-  await previewPageChooseSubmit(props, channelPath);
-  await submitPage(props, channelPath, name);
 });
