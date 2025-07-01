@@ -2,19 +2,19 @@
 
 import { test } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { getRandomChannel } from '../helpers/random-channel-picker';
 import {
   startPage,
   chooseTemplate,
   createTemplate,
   previewPage,
-  submitPage,
   startNewTemplate,
-  previewPageChooseSubmit,
-} from '../functions/template-mgmt-e2e-common-steps';
+  copyTemplate,
+} from '../functions/common-steps';
 
-test.use({ storageState: 'auth.json' });
+test.use({ storageState: 'copy.json' });
 
-test(`User creates and submits a new sms template successfully`, async ({
+test(`User copies a template`, async ({
   page,
   baseURL,
 }) => {
@@ -22,15 +22,17 @@ test(`User creates and submits a new sms template successfully`, async ({
     basePage: new TemplateMgmtBasePage(page),
     baseURL,
   };
-  const channel = 'Text message (SMS)';
-  const channelPath = 'text-message';
-  const name = 'E2E Name';
+
+  const randomChannel = getRandomChannel();
+  const channel = randomChannel.name;
+  const channelPath = randomChannel.path;
+  const name = 'Test edit';
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
-  await previewPage(props, channelPath, name);
-  await previewPageChooseSubmit(props, channelPath);
-  await submitPage(props, channelPath, name);
+  await previewPage(props, channelPath,name);
+  await copyTemplate(props, name);
+
 });

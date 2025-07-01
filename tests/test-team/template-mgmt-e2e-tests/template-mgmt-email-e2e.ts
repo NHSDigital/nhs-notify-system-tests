@@ -9,6 +9,7 @@ import {
   previewPage,
   submitPage,
   startNewTemplate,
+  previewPageChooseSubmit,
 } from '../functions/template-mgmt-e2e-common-steps';
 
 test.use({ storageState: 'auth.json' });
@@ -30,5 +31,6 @@ test(`User creates and submits a new email template successfully`, async ({
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath, name);
+  await previewPageChooseSubmit(props, channelPath);
   await submitPage(props, channelPath, name);
 });
