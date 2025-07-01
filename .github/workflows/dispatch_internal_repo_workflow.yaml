@@ -27,6 +27,10 @@ on:
         type: string
         description: The account in which the test runner will assume its role
         default: ""
+      internalRef:
+        type: string
+        description: Internal repo reference (branch or tag)
+        default: "main"
 
 concurrency:
   group: ${{ inputs.targetEnvironment }}-${{ inputs.releaseVersion }}-${{ inputs.targetWorkflow }}-${{ inputs.jobName }}
@@ -52,7 +56,7 @@ jobs:
             --arg targetEnvironment "${{ inputs.targetEnvironment }}" \
             --arg assumeRoleAccount "${{ inputs.assumeRoleAccount }}" \
             '{
-              "ref": "main",
+              "ref": "${{ inputs.internalRef }}",
               "inputs": (
                 (if $assumeRoleAccount != "" then { "assumeRoleAccount": $assumeRoleAccount } else {} end) +
                 {

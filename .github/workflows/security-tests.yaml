@@ -8,6 +8,10 @@ on:
         description: "Web gateway subdomain to test"
         required: false
         default: main
+      internalRef:
+        type: string
+        description: Internal repo reference (branch or tag)
+        default: "main"
   schedule:
     - cron: "0 10 * * *"
 
@@ -27,3 +31,4 @@ jobs:
       releaseVersion: ${{ github.head_ref || github.ref_name }}
       targetWorkflow: dispatch-security-tests-static-env.yaml
       targetEnvironment: ${{ inputs.targetEnvironment || 'main'  }}
+      internalRef: ${{ inputs.internalRef }}
