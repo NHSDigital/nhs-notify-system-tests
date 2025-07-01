@@ -41,5 +41,8 @@ tests/*/lifecycle/*/setup.json
 full-zap-config.prop
 zap-out-product-tests.html
 
+# security tests
+tests/security/full-zap-config.prop
+
 # DOTENV
 .env

@@ -28,8 +28,6 @@ async function createStorageStateFile(username: string, fileName: string) {
         strict: true,
       });
 
-      // let user: { email: any; userId?: string; };
-
       user = await cognitoHelper.createUser(
         username,
         password,
@@ -68,7 +66,6 @@ async function createStorageStateFile(username: string, fileName: string) {
       await cognitoHelper.deleteUser(user.userId)
     }
     console.error('Global setup failed:', error);
-    // process.exit(1); // Force the process to exit with an error
     throw error;
   }
 }
