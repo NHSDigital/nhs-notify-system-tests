@@ -7,6 +7,7 @@ import {
   chooseTemplate,
   createTemplate,
   startNewTemplate,
+  requestProof,
 } from '../functions/template-mgmt-e2e-common-steps';
 
 test.use({ storageState: 'auth.json' });
@@ -27,4 +28,5 @@ test(`User creates and submits a new letter template successfully`, async ({
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
+  await requestProof(props, channel, channelPath);
 });
