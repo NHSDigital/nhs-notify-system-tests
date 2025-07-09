@@ -159,6 +159,27 @@ export class TemplateMgmtBasePage {
   await expect(this.page.getByText('Request a proof')).toBeVisible({ timeout: 1000 });
   }
 
+  async waitForProofRequest() {
+    const maxRetries = 100;
+    const retryInterval = 3000;
+
+    for (let i = 0; i < maxRetries; i++) {
+    try {
+      await this.page.reload({ waitUntil: 'domcontentloaded' });
+      await expect(this.page.getByText('Proof available')).toBeVisible({ timeout: 1000 });
+      console.log('Success: "Proof available" is visible.');
+      break;
+    } catch (e) {
+      console.log(`Attempt ${i + 1} failed, retrying in ${retryInterval}ms...`);
+      await this.page.waitForTimeout(retryInterval);
+      if (i === maxRetries - 1) {
+        throw new Error('"Proof available" was not visible after maximum retries.');
+      }
+    }
+  }
+  // await expect(this.page.getByText('Request a proof')).toBeVisible({ timeout: 1000 });
+  }
+
   async logOut() {
     await this.page.locator(`//a[@data-testid='auth-link__link' and text()='Sign out']`).click();
   }
