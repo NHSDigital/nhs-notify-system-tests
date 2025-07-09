@@ -100,6 +100,8 @@ export function requestProof(
   channelPath: string,
 ) {
   return test.step('Request Proof', async () => {
+    const maxRetries = 10;
+    const retryInterval = 2000;
     await basePage.clickButtonByName('Request a proof');
     await basePage.clickButtonByName('Go back');
     await expect(basePage.page).toHaveURL(
@@ -113,8 +115,7 @@ export function requestProof(
     );
     await basePage.clickButtonByName('Request a proof');
     await basePage.checkStatus('Waiting for proof');
-
-
+    await basePage.waitForProofRequest();
 
 })
 }
