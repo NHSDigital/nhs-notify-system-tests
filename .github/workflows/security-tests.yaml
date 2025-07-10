@@ -31,4 +31,4 @@ jobs:
       releaseVersion: ${{ github.head_ref || github.ref_name }}
       targetWorkflow: dispatch-security-tests-static-env.yaml
       targetEnvironment: ${{ inputs.targetEnvironment || 'main'  }}
-      internalRef: ${{ inputs.internalRef }}
+      internalRef: ${{ inputs.internalRef || 'main' }}
