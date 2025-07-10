@@ -160,7 +160,7 @@ export class TemplateMgmtBasePage {
   }
 
   async waitForProofRequest() {
-    const maxRetries = 100;
+    const maxRetries = 50;
     const retryInterval = 3000;
 
     for (let i = 0; i < maxRetries; i++) {
@@ -177,7 +177,7 @@ export class TemplateMgmtBasePage {
       }
     }
   }
-  // await expect(this.page.getByText('Request a proof')).toBeVisible({ timeout: 1000 });
+  await expect(this.page.locator('a[data-testid^="proof-link_"]').first()).toBeVisible({ timeout: 1000 });
   }
 
   async logOut() {
