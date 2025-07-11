@@ -182,7 +182,14 @@ export class TemplateMgmtBasePage {
     }
   }
   await expect(this.page.locator('a[data-testid^="proof-link_"]').first()).toBeVisible({ timeout: 1000 });
-  expect(this.submitButton.isVisible());
+  expect(this.submitTemplateButton.isVisible());
+  }
+
+  async submitLetterTemplate() {
+    await this.submitTemplateButton.click();
+    await this.page.getByText("Approve and submit").click();
+    expect(this.page.getByText("Approve and submit").isVisible());
+
   }
 
   async logOut() {
