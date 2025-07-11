@@ -14,6 +14,7 @@ import {
   PutParameterCommand,
   SSMClient,
 } from "@aws-sdk/client-ssm";
+import { randomUUID } from "crypto";
 
 export type User = {
   email: string;
@@ -78,7 +79,7 @@ export class CognitoUserHelper {
     password: string,
     client: TestClientConfig
   ): Promise<User> {
-    const email = `${username}@nhs.net`;
+    const email = `${username}${randomUUID().slice(0, 6)}@nhs.net`;
 
     const user = await this.cognito.send(
       new AdminCreateUserCommand({
