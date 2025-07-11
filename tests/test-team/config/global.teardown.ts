@@ -41,7 +41,7 @@ export default async function globalTeardown() {
     }
 
     const cognitoHelper = await CognitoUserHelper.init(
-      `nhs-notify-${process.env.TARGET_ENVIRONMENT}-app`
+      process.env.TARGET_ENVIRONMENT!
     );
 
     for (const user of createdUsers) {
