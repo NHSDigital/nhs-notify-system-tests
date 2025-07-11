@@ -25,7 +25,7 @@ echo "{
 
 aws events put-rule --name $sftp_poll_rule_name --schedule-expression "rate(1 minute)"
 
-static_auth_data_path="$script_path/../config/static-auth-data.json"
+static_auth_data_path="$script_path/../../config/static-auth-data.json"
 ssm_client_prefix="/nhs-notify-${TARGET_ENVIRONMENT}-app/clients"
 
 jq -r '
