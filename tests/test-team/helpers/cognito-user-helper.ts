@@ -128,13 +128,13 @@ export class CognitoUserHelper {
     };
   }
 
-  async deleteUser(username: string, client: TestClientConfig) {
-    if (this.clientIds.has(client.id)) {
-      this.clientIds.delete(client.id);
+  async deleteUser(username: string, clientId: string) {
+    if (this.clientIds.has(clientId)) {
+      this.clientIds.delete(clientId);
 
-      await this.deleteClientConfig(client.id);
+      await this.deleteClientConfig(clientId);
 
-      await this.deleteClientGroup(client.id);
+      await this.deleteClientGroup(clientId);
     }
 
     await this.cognito.send(

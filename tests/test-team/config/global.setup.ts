@@ -21,7 +21,9 @@ const $TestClientConfig = z.object({
 function getStaticAuthData() {
   return z
     .object({ clients: z.record(z.string(), $TestClientConfig) })
-    .parse(JSON.parse(fs.readFileSync("./static-auth-data.json", "utf8")));
+    .parse(
+      JSON.parse(fs.readFileSync("./config/static-auth-data.json", "utf8"))
+    );
 }
 
 async function createStorageStateFile(
