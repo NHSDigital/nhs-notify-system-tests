@@ -32,7 +32,7 @@ async function createStorageStateFile(
   fileName: string
 ) {
   cognitoHelper ??= await CognitoUserHelper.init(
-    `nhs-notify-${process.env.TARGET_ENVIRONMENT}-app`
+    process.env.TARGET_ENVIRONMENT
   );
   const loginUrl = `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk/auth`;
 
