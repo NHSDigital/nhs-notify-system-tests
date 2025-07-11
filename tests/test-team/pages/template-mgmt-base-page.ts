@@ -20,6 +20,8 @@ export class TemplateMgmtBasePage {
 
   readonly submitButton: Locator;
 
+  readonly submitTemplateButton: Locator;
+
   readonly skipLink: Locator;
 
   readonly templateToDelete: Locator;
@@ -50,6 +52,8 @@ export class TemplateMgmtBasePage {
     this.errorSummaryList = this.errorSummary.getByRole("listitem");
 
     this.submitButton = page.locator('button.nhsuk-button[type="submit"]');
+
+    this.submitTemplateButton = page.getByText("Submit template");
 
     this.templateToDelete = page.getByRole('link', { name: 'Test delete', exact: true });
 
@@ -178,6 +182,7 @@ export class TemplateMgmtBasePage {
     }
   }
   await expect(this.page.locator('a[data-testid^="proof-link_"]').first()).toBeVisible({ timeout: 1000 });
+  expect(this.submitButton.isVisible());
   }
 
   async logOut() {
