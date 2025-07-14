@@ -1,6 +1,6 @@
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
-import { CognitoUserHelper } from '../cognito-user-helper';
+import { CognitoUserHelper } from 'nhs-notify-system-tests-shared';
 
 const argv = yargs(hideBin(process.argv))
   .options({
