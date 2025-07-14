@@ -14,7 +14,7 @@ client_name=$(jq -r '.clients.Client4.name' ./fixtures/clients.json)
 pw=$(password)
 
 user_id=$(
-  ts-node -T ./helpers/helper-cli/create-user.ts \
+  npx ts-node -T ./helpers/helper-cli/create-user.ts \
     --environment "$iam_environment" \
     --email-prefix "$email_prefix" \
     --password "$pw" \
@@ -25,7 +25,7 @@ user_id=$(
 print "Username (user id): $user_id"
 
 delete_user() {
-  ts-node -T ./helpers/helper-cli/delete-user.ts \
+  npx ts-node -T ./helpers/helper-cli/delete-user.ts \
     --environment "$iam_environment" \
     --username "$user_id" \
     --client-id "$client_id"
@@ -36,7 +36,7 @@ trap 'delete_user' SIGINT SIGTERM EXIT
 print "Fetching cookie"
 
 cookie=$(
-  ts-node -T ./helpers/helper-cli/zap-spider-setup.ts \
+  npx ts-node -T ./helpers/helper-cli/zap-spider-setup.ts \
     --web-gateway-environment $web_gateway_environment \
     --email-address "${email_prefix}@nhs.net" \
     --password $pw
@@ -45,7 +45,7 @@ cookie=$(
 cleanup() {
   print "Cleanup - deleting templates"
 
-  ts-node -T ./helpers/helper-cli/zap-spider-teardown.ts \
+  npx ts-node -T ./helpers/helper-cli/zap-spider-teardown.ts \
     --web-gateway-environment $web_gateway_environment \
     --email-address "${email_prefix}@nhs.net" \
     --password $pw \
