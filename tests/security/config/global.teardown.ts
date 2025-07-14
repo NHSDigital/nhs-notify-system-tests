@@ -1,9 +1,9 @@
 import fs from 'fs';
-import { CognitoUserHelper } from '../helpers/cognito-user-helper';
 import {
+  CognitoUserHelper,
   BrowserState,
   findCis2AccessTokens,
-} from '../helpers/cis2-credentials-provider';
+} from 'nhs-notify-system-tests-shared';
 
 function extractCis2Subject(): string {
   const browserStateData = fs.readFileSync('cis2.json', 'utf-8');
@@ -40,7 +40,9 @@ export default async function globalTeardown() {
       return;
     }
 
-    const cognitoHelper = await CognitoUserHelper.init(process.env.TARGET_ENVIRONMENT!);
+    const cognitoHelper = await CognitoUserHelper.init(
+      process.env.TARGET_ENVIRONMENT!
+    );
 
     for (const user of createdUsers) {
       if (user?.userId) {

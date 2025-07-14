@@ -159,7 +159,7 @@ export class CognitoUserHelper {
       new CreateGroupCommand({
         GroupName: `client:${clientId}`,
         UserPoolId: this.userPoolId,
-        Description: 'Product Tests'
+        Description: 'Playwright'
       })
     );
   }

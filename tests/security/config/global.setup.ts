@@ -4,7 +4,7 @@ import generate from 'generate-password';
 import {
   CognitoUserHelper,
   TestClientConfig,
-} from '../helpers/cognito-user-helper';
+} from 'nhs-notify-system-tests-shared';
 import { z } from 'zod';
 
 let cognitoHelper: CognitoUserHelper;
@@ -50,12 +50,12 @@ async function createStorageStateFile(
     const context = await browser.newContext();
     const page = await context.newPage();
 
-      try {
-        await page.goto(loginUrl);
-        console.log('Page loaded successfully');
-      } catch (error) {
-        console.error('Failed to load page:', error);
-      }
+    try {
+      await page.goto(loginUrl);
+      console.log('Page loaded successfully');
+    } catch (error) {
+      console.error('Failed to load page:', error);
+    }
 
     await page.getByRole('link', { name: 'Sign in' }).click();
     console.log('Login button clicked');

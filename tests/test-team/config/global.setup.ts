@@ -4,7 +4,7 @@ import generate from 'generate-password';
 import {
   CognitoUserHelper,
   TestClientConfig,
-} from '../helpers/cognito-user-helper';
+} from 'nhs-notify-system-tests-shared';
 import { z } from 'zod';
 
 let cognitoHelper: CognitoUserHelper;

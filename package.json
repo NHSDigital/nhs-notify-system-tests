@@ -1,9 +1,10 @@
 {
   "name": "nhs-notify-system-tests",
   "workspaces": [
+    "tests/security",
+    "tests/shared",
     "tests/test-data-cleanup",
-    "tests/test-team",
-    "tests/security"
+    "tests/test-team"
   ],
   "dependencies": {
     "generate-password": "^1.7.1"
