@@ -56,7 +56,7 @@ async function createStorageStateFile(
       } catch (error) {
         console.error('Failed to load page:', error);
       }
-      
+
     await page.getByRole('link', { name: 'Sign in' }).click();
     console.log('Login button clicked');
 

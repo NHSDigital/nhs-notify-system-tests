@@ -19,7 +19,7 @@ run_lifecycle_phase() {
 
   for d in "${lifecycle_dir}/*/"; do
     [[ -d "$d" ]] || continue
-    
+
     acct_key=$(basename "$d")
     profile_var="AWS_PROFILE_${acct_key}"
 
