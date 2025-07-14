@@ -1,9 +1,9 @@
 import fs from 'fs';
-import { CognitoUserHelper } from '../helpers/cognito-user-helper';
 import {
+  CognitoUserHelper,
   BrowserState,
   findCis2AccessTokens,
-} from '../helpers/cis2-credentials-provider';
+} from 'nhs-notify-system-tests-shared';
 
 function extractCis2Subject(): string {
   const browserStateData = fs.readFileSync('cis2.json', 'utf-8');
