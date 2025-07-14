@@ -2,8 +2,6 @@
 
 set -eu
 
-original_aws_profile="$AWS_PROFILE"
-
 pkg_dir="$1"
 test_cmd="$2"
 target_environment="$3"
@@ -72,7 +70,5 @@ else
 fi
 
 run_lifecycle_phase teardown
-
-export AWS_PROFILE="$original_aws_profile"
 
 exit "$exit_code"
