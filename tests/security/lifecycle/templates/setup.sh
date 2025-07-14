@@ -4,44 +4,57 @@ set -euo pipefail
 
 script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
-TARGET_ENVIRONMENT=$1
+TARGET_ENVIRONMENT="$1"
 
-echo "Running the product test templates setup script..."
-echo "Target Environment: $TARGET_ENVIRONMENT"
+echo "Running the security test templates setup script..."
+echo "Target Environment: ${TARGET_ENVIRONMENT}"
 
-sftp_poll_rule_name="nhs-notify-$TARGET_ENVIRONMENT-app-api-sftp-poll-wtmmock"
+increase_sftp_polling_frequency() {
+  sftp_poll_rule_name="nhs-notify-${TARGET_ENVIRONMENT}-app-api-sftp-poll-wtmmock"
 
-sftp_poll_rule=$(aws events describe-rule \
-  --name $sftp_poll_rule_name \
-  --output json)
+  sftp_poll_rule=$(aws events describe-rule \
+    --name $sftp_poll_rule_name \
+    --output json)
 
-echo "{
-  \"initialState\": {
-    \"rules\": {
-      \"$sftp_poll_rule_name\": $sftp_poll_rule
+  echo "{
+    \"initialState\": {
+      \"rules\": {
+        \"$sftp_poll_rule_name\": $sftp_poll_rule
+      }
     }
-  }
-}" > $script_path/setup.json
+  }" > $script_path/setup.json
 
-aws events put-rule --name $sftp_poll_rule_name --schedule-expression "rate(1 minute)"
+  aws events put-rule --name $sftp_poll_rule_name --schedule-expression "rate(1 minute)"
+}
 
-static_auth_data_path="$script_path/../../config/static-auth-data.json"
-ssm_client_prefix="/nhs-notify-${TARGET_ENVIRONMENT}-app/clients"
+seed_client_configuration() {
+  static_auth_data_path="${script_path}/../../fixtures/clients.json"
+  ssm_client_prefix="/nhs-notify-${TARGET_ENVIRONMENT}-app/clients"
 
-jq -r '
-  .clients
-  | to_entries[]
-  | [ .value.id, .value.campaignId, (.value.features | @json) ]
-  | @tsv' "$static_auth_data_path" | while IFS=$'\t' read -r client_id campaign_id features_json; do
+  jq -c '.clients | to_entries[].value' "$static_auth_data_path" \
+  | while IFS= read -r client_json; do
 
-  param_path="${ssm_client_prefix}/${client_id}"
+    client_id=$(jq -r '.id' <<<"$client_json")
+    campaign_id=$(jq -r '.campaignId' <<<"$client_json")
+    features_json=$(jq -c '.features' <<<"$client_json")
 
-  value=$(jq -n \
-    --arg c_id "$campaign_id" --argjson feat "$features_json" \
-    '{ campaignId: $c_id, features: $feat }'
-  )
+    param_path="${ssm_client_prefix}/${client_id}"
 
-  aws ssm put-parameter --name "$param_path" --value "$value" --type String --overwrite
+    value=$(jq -n \
+      --arg c_id "$campaign_id" \
+      --argjson feat "$features_json" \
+      '{ campaignId: $c_id, features: $feat }'
+    )
 
-  echo "Created client SSM param: $param_path"
-done
+    aws ssm put-parameter \
+      --name "$param_path" \
+      --value "$value" \
+      --type String \
+      --overwrite
+
+    echo "Created client SSM param: ${param_path}"
+  done
+}
+
+increase_sftp_polling_frequency
+seed_client_configuration

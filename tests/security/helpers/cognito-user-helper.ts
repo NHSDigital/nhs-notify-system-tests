@@ -8,12 +8,12 @@ import {
   CreateGroupCommand,
   DeleteGroupCommand,
   ListUserPoolsCommand,
-} from "@aws-sdk/client-cognito-identity-provider";
+} from '@aws-sdk/client-cognito-identity-provider';
 import {
   DeleteParameterCommand,
   PutParameterCommand,
   SSMClient,
-} from "@aws-sdk/client-ssm";
+} from '@aws-sdk/client-ssm';
 
 export type User = {
   email: string;
@@ -36,11 +36,11 @@ export class CognitoUserHelper {
   private static environment: string;
 
   private readonly cognito = new CognitoIdentityProviderClient({
-    region: "eu-west-2",
+    region: 'eu-west-2',
   });
 
   private readonly ssm = new SSMClient({
-    region: "eu-west-2",
+    region: 'eu-west-2',
   });
 
   private constructor(userPoolId: string) {
@@ -51,7 +51,7 @@ export class CognitoUserHelper {
 
   static async init(environment: string): Promise<CognitoUserHelper> {
     this.environment = environment;
-    const cognito = new CognitoIdentityProviderClient({ region: "eu-west-2" });
+    const cognito = new CognitoIdentityProviderClient({ region: 'eu-west-2' });
     const poolName = `nhs-notify-${environment}-app`;
 
     let nextToken: string | undefined = undefined;
@@ -86,20 +86,20 @@ export class CognitoUserHelper {
         Username: email,
         UserAttributes: [
           {
-            Name: "email",
+            Name: 'email',
             Value: email,
           },
           {
-            Name: "email_verified",
-            Value: "true",
+            Name: 'email_verified',
+            Value: 'true',
           },
         ],
-        MessageAction: "SUPPRESS",
+        MessageAction: 'SUPPRESS',
       })
     );
 
     if (!user?.User?.Username) {
-      throw new Error("Unable to generate cognito user");
+      throw new Error('Unable to generate cognito user');
     }
 
     await this.cognito.send(
@@ -114,12 +114,13 @@ export class CognitoUserHelper {
     if (!this.clientIds.has(client.id)) {
       this.clientIds.add(client.id);
 
-      await this.configureClient(client);
-
-      await this.createClientGroup(client.id);
-
-      await this.addUserToClientGroup(email, client.id);
+      await Promise.all([
+        this.configureClient(client),
+        this.createClientGroup(client.id),
+      ]);
     }
+
+    await this.addUserToClientGroup(email, client.id);
 
     return {
       clientId: client.id,
@@ -129,12 +130,13 @@ export class CognitoUserHelper {
   }
 
   async deleteUser(username: string, clientId: string) {
-    if (this.clientIds.has(clientId)) {
-      this.clientIds.delete(clientId);
+    if (!this.clientIds.has(clientId)) {
+      this.clientIds.add(clientId);
 
-      await this.deleteClientConfig(clientId);
-
-      await this.deleteClientGroup(clientId);
+      await Promise.all([
+        this.deleteClientConfig(clientId),
+        this.deleteClientGroup(clientId),
+      ]);
     }
 
     await this.cognito.send(
@@ -157,6 +159,7 @@ export class CognitoUserHelper {
       new CreateGroupCommand({
         GroupName: `client:${clientId}`,
         UserPoolId: this.userPoolId,
+        Description: 'Security Tests'
       })
     );
   }
@@ -187,8 +190,7 @@ export class CognitoUserHelper {
       new PutParameterCommand({
         Name: clientParameterPath,
         Value: JSON.stringify({ name: client.name }),
-        Type: "SecureString",
-        KeyId: process.env.KMS_KEY_ID,
+        Type: 'String', // Unencrypted, unlike the real parameters
         Overwrite: true,
       })
     );

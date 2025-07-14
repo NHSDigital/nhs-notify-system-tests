@@ -6,22 +6,37 @@ script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
 TARGET_ENVIRONMENT=$1
 
-echo "Running the product test templates teardown script..."
+echo "Running the security test templates teardown script..."
 echo "Target Environment: $TARGET_ENVIRONMENT"
 
-sftp_poll_rule_name="nhs-notify-$TARGET_ENVIRONMENT-app-api-sftp-poll-wtmmock"
+restore_sftp_polling_frequency() {
+  local sftp_poll_rule_name="nhs-notify-${TARGET_ENVIRONMENT}-app-api-sftp-poll-wtmmock"
+  local setup_file="$script_path/setup.json"
 
-sftp_poll_rule_initial_rate=$(cat $script_path/setup.json | jq -r .initialState.rules.[\"$sftp_poll_rule_name\"].ScheduleExpression)
+  [[ -f "$setup_file" ]] || return 0
 
-aws events put-rule --name $sftp_poll_rule_name --schedule-expression "$sftp_poll_rule_initial_rate"
+  local initial_rate
+  initial_rate=$(jq -r --arg name "$sftp_poll_rule_name" \
+    '.initialState.rules[$name].ScheduleExpression' \
+    "$setup_file")
 
-static_auth_data_path="$script_path/../../config/static-auth-data.json"
-ssm_client_prefix="/nhs-notify-${TARGET_ENVIRONMENT}-app/clients"
+  aws events put-rule --name "$sftp_poll_rule_name" --schedule-expression "$initial_rate"
+}
 
-jq -r '.clients | to_entries[] | .value.id' "$static_auth_data_path" | while IFS=$'\n' read -r client_id; do
-  param_path="${ssm_client_prefix}/${client_id}"
 
-  aws ssm delete-parameter --name "$param_path"
+delete_client_configuration() {
+  static_auth_data_path="$script_path/../../fixtures/clients.json"
+  ssm_client_prefix="/nhs-notify-${TARGET_ENVIRONMENT}-app/clients"
 
-  echo "Deleted client SSM param: $param_path"
-done
+  jq -r '.clients | to_entries[] | .value.id' "$static_auth_data_path" \
+  | while IFS=$'\n' read -r client_id; do
+    param_path="${ssm_client_prefix}/${client_id}"
+
+    aws ssm delete-parameter --name "$param_path"
+
+    echo "Deleted client SSM param: $param_path"
+  done
+}
+
+restore_sftp_polling_frequency
+delete_client_configuration

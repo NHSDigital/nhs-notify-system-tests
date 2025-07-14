@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test:security": "playwright test --project security -c config/playwright.config.ts"
+    "test:security:playwright": "playwright test --project security -c config/playwright.config.ts",
+    "test:security": "./run.sh",
+    "test:security:local": "$(git rev-parse --show-toplevel)/scripts/tests/local-lifecycle.sh $(pwd) test:security $TARGET_ENVIRONMENT auth"
   },
   "devDependencies": {
     "@aws-sdk/client-appsync": "^3.650.0",

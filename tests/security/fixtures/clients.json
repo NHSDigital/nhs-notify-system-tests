@@ -23,6 +23,14 @@
       "features": {
         "proofing": true
       }
+    },
+    "Client4": {
+      "id": "a4fb88ec-ccae-4670-9637-1c918b6ff6a1",
+      "name": "Client 4 Security ZAP Spider Scan",
+      "campaignId": "Client 4 Security Campaign",
+      "features": {
+        "proofing": true
+      }
     }
   }
 }

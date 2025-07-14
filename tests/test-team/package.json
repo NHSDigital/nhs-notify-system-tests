@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test:product": "playwright test --project product -c config/dev.config.ts"
+    "test:product": "playwright test --project product -c config/dev.config.ts",
+    "test:product:local": "$(git rev-parse --show-toplevel)/scripts/tests/local-lifecycle.sh $(pwd) test:product $TARGET_ENVIRONMENT auth"
   },
   "devDependencies": {
     "@aws-sdk/client-appsync": "3.777.0",
