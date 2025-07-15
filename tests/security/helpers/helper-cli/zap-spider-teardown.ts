@@ -1,29 +1,25 @@
-import { chromium, expect, Page } from "@playwright/test";
-import yargs from "yargs/yargs";
-import { hideBin } from "yargs/helpers";
+import { chromium, expect, Page } from '@playwright/test';
+import yargs from 'yargs/yargs';
+import { hideBin } from 'yargs/helpers';
 
 const argv = yargs(hideBin(process.argv))
   .options({
-    "web-gateway-environment": {
-      type: "string",
+    'web-gateway-environment': {
+      type: 'string',
       demandOption: true,
     },
-    "branch-segment": {
-      type: "string",
-      default: "",
-    },
-    "email-address": {
-      type: "string",
+    'email-address': {
+      type: 'string',
       demandOption: true,
     },
     password: {
-      type: "string",
+      type: 'string',
       demandOption: true,
     },
   })
   .parseSync();
 
-const startUrl = `https://${argv.webGatewayEnvironment}.web-gateway.dev.nhsnotify.national.nhs.uk/templates${argv.branchSegment}/message-templates`;
+const startUrl = `https://${argv.webGatewayEnvironment}.web-gateway.dev.nhsnotify.national.nhs.uk/templates/message-templates`;
 
 async function main() {
   const browser = await chromium.launch({ headless: true });
@@ -33,7 +29,7 @@ async function main() {
     const page = await context.newPage();
 
     await page.goto(startUrl, {
-      waitUntil: "load",
+      waitUntil: 'load',
     });
 
     const emailInput = page.locator('input[name="username"]');
@@ -45,7 +41,6 @@ async function main() {
     await emailInput.fill(argv.emailAddress);
     await passwordInput.fill(argv.password);
     await submitButton.click();
-
 
     await expect(
       page.locator('h1:has-text("Message templates")')

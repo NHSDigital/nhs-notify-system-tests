@@ -4,13 +4,13 @@ set -euo pipefail
 
 script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
-TARGET_ENVIRONMENT=$1
+TARGET_ENVIRONMENT="$1"
 
-echo "Running the product test templates setup script..."
-echo "Target Environment: $TARGET_ENVIRONMENT"
+echo "Running the security test templates setup script..."
+echo "Target Environment: ${TARGET_ENVIRONMENT}"
 
 increase_sftp_polling_frequency() {
-  sftp_poll_rule_name="nhs-notify-$TARGET_ENVIRONMENT-app-api-sftp-poll-wtmmock"
+  sftp_poll_rule_name="nhs-notify-${TARGET_ENVIRONMENT}-app-api-sftp-poll-wtmmock"
 
   sftp_poll_rule=$(aws events describe-rule \
     --name $sftp_poll_rule_name \
@@ -52,7 +52,7 @@ seed_client_configuration() {
       --type String \
       --overwrite
 
-    echo "Created client SSM param: $param_path"
+    echo "Created client SSM param: ${param_path}"
   done
 }
 

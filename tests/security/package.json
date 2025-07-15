@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test:security": "playwright test --project security -c config/playwright.config.ts"
+    "test:security:playwright": "playwright test --project security -c config/playwright.config.ts",
+    "test:security": "./run.sh",
+    "test:security:local": "$(git rev-parse --show-toplevel)/scripts/tests/local-lifecycle.sh $(pwd) test:security $TARGET_ENVIRONMENT auth"
   },
   "devDependencies": {
     "@aws-sdk/client-appsync": "^3.650.0",
@@ -18,6 +20,7 @@
     "aws-amplify": "^6.6.0",
     "dotenv": "^16.4.7",
     "generate-password": "^1.7.1",
+    "nhs-notify-system-tests-shared": "*",
     "playwright": "^1.50.1",
     "totp-generator": "^1.0.0",
     "ts-node": "^10.9.2",
