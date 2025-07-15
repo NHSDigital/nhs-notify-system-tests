@@ -1,9 +1,9 @@
 import fs from 'fs';
-import { CognitoUserHelper } from '../helpers/cognito-user-helper';
 import {
+  CognitoUserHelper,
   BrowserState,
   findCis2AccessTokens,
-} from '../helpers/cis2-credentials-provider';
+} from 'nhs-notify-system-tests-shared';
 
 function extractCis2Subject(): string {
   const browserStateData = fs.readFileSync('cis2.json', 'utf-8');
@@ -30,7 +30,10 @@ export default async function globalTeardown() {
     }
 
     const data = fs.readFileSync('createdUsers.json', 'utf-8');
-    const createdUsers = JSON.parse(data) as { userId: string }[];
+    const createdUsers = JSON.parse(data) as {
+      userId: string;
+      clientId: string;
+    }[];
 
     if (!createdUsers.length) {
       console.log('No users to delete.');
@@ -38,13 +41,13 @@ export default async function globalTeardown() {
     }
 
     const cognitoHelper = await CognitoUserHelper.init(
-      `nhs-notify-${process.env.TARGET_ENVIRONMENT}-app`
+      process.env.TARGET_ENVIRONMENT!
     );
 
     for (const user of createdUsers) {
       if (user?.userId) {
         try {
-          await cognitoHelper.deleteUser(user.userId);
+          await cognitoHelper.deleteUser(user.userId, user.clientId);
           console.log(`Deleted user ${user.userId}`);
         } catch (error) {
           console.error(`Failed to delete user ${user.userId}:`, error);

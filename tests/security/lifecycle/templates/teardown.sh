@@ -6,7 +6,7 @@ script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
 TARGET_ENVIRONMENT=$1
 
-echo "Running the product test templates teardown script..."
+echo "Running the security test templates teardown script..."
 echo "Target Environment: $TARGET_ENVIRONMENT"
 
 restore_sftp_polling_frequency() {

@@ -2,7 +2,7 @@
 
 import { test } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
-import { getRandomChannel } from '../helpers/random-channel-picker';
+import { getRandomChannel } from 'nhs-notify-system-tests-shared';
 import {
   startPage,
   chooseTemplate,
@@ -14,10 +14,7 @@ import {
 
 test.use({ storageState: 'copy.json' });
 
-test(`User copies a template`, async ({
-  page,
-  baseURL,
-}) => {
+test(`User copies a template`, async ({ page, baseURL }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
     baseURL,
@@ -32,7 +29,6 @@ test(`User copies a template`, async ({
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
-  await previewPage(props, channelPath,name);
+  await previewPage(props, channelPath, name);
   await copyTemplate(props, name);
-
 });

@@ -6,7 +6,7 @@ import { TemplateMgmtBasePage } from "../pages/template-mgmt-base-page";
 import {
   Cis2CredentialProvider,
   getCis2Credentials,
-} from "../helpers/cis2-credentials-provider";
+} from "nhs-notify-system-tests-shared";
 
 async function enterCis2TotpCode(
   page: Page,

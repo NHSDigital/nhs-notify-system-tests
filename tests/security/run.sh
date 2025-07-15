@@ -2,65 +2,64 @@
 set -euo pipefail
 cd $(dirname $BASH_SOURCE[0])
 source lib.sh
-source run_playwright_via_zap.sh
 
 web_gateway_environment="${1:-main}"
 iam_environment="${2:-main}"
-template_management_branch="${3:-}"
 
 export TARGET_ENVIRONMENT=$web_gateway_environment
 
 email_prefix="security-test-login"
-email="${email_prefix}-$(rnd 'a-zA-Z0-9' 8)@nhs.net"
-temp_password=$(password)
-final_password=$(password)
+client_id=$(jq -r '.clients.Client4.id' ./fixtures/clients.json)
+client_name=$(jq -r '.clients.Client4.name' ./fixtures/clients.json)
+pw=$(password)
 
-print "Test user email: $email"
+user_id=$(
+  npx ts-node -T ./helpers/helper-cli/create-user.ts \
+    --environment "$iam_environment" \
+    --email-prefix "$email_prefix" \
+    --password "$pw" \
+    --client-id "$client_id" \
+    --client-name "$client_name"
+)
 
-user_pool=$(get_user_pool_id $iam_environment)
-print "User pool id: $user_pool"
-
-cleanup_previously_created_users $user_pool $email_prefix
-
-user_id=$(create_user $user_pool $email $temp_password)
 print "Username (user id): $user_id"
 
-trap 'delete_user $user_pool $user_id || true' EXIT
+delete_user() {
+  npx ts-node -T ./helpers/helper-cli/delete-user.ts \
+    --environment "$iam_environment" \
+    --username "$user_id" \
+    --client-id "$client_id"
+}
+
+trap 'delete_user' SIGINT SIGTERM EXIT
 
 print "Fetching cookie"
 
-branch_segment=$(get_branch_segment "$template_management_branch")
-
 cookie=$(
-  npx ts-node ./src/automation-setup.ts \
+  npx ts-node -T ./helpers/helper-cli/zap-spider-setup.ts \
     --web-gateway-environment $web_gateway_environment \
-    --branch-segment $branch_segment \
-    --email-address $email \
-    --temp-password $temp_password \
-    --final-password $final_password
+    --email-address "${email_prefix}@nhs.net" \
+    --password $pw
 )
 
 cleanup() {
-  cd "$(git rev-parse --show-toplevel)"
-  cd $(dirname $BASH_SOURCE[0])
-
   print "Cleanup - deleting templates"
-  npx ts-node ./src/automation-teardown.ts \
+
+  npx ts-node -T ./helpers/helper-cli/zap-spider-teardown.ts \
     --web-gateway-environment $web_gateway_environment \
-    --branch-segment $branch_segment \
-    --email-address $email \
-    --password $final_password \
+    --email-address "${email_prefix}@nhs.net" \
+    --password $pw \
   || true
 
-  delete_user $user_pool $user_id || true
+  delete_user
 }
 
-trap cleanup EXIT
+trap cleanup SIGINT SIGTERM EXIT
 
 print "Got cookie"
 
 base="https://${web_gateway_environment}.web-gateway.dev.nhsnotify.national.nhs.uk"
-start_url="${base}/templates${branch_segment}/message-templates"
+start_url="${base}/templates/message-templates"
 
 image="ghcr.io/zaproxy/zaproxy:stable"
 container_volume="$(pwd):/zap/wrk/:rw"
@@ -108,6 +107,7 @@ with_login_exit=$?
 
 print "Scan 3 - starting ZAP scan at $start_url - via Playwright security tests"
 
+source run_playwright_via_zap.sh
 run_playwright_via_zap
 
 system_test_exit=$?

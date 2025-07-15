@@ -1,12 +1,9 @@
 {
-  "name": "nhs-notify-web-template-management-ui-tests",
+  "name": "nhs-notify-system-tests-shared",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "test:product": "playwright test --project product -c config/dev.config.ts",
-    "test:product:local": "$(git rev-parse --show-toplevel)/scripts/tests/local-lifecycle.sh $(pwd) test:product $TARGET_ENVIRONMENT auth",
-    "typecheck": "tsc --noEmit"
-  },
+  "scripts": {},
+  "main": "index.ts",
   "devDependencies": {
     "@aws-sdk/client-appsync": "3.777.0",
     "@aws-sdk/client-cognito-identity-provider": "3.777.0",
@@ -14,11 +11,9 @@
     "@aws-sdk/client-dynamodb": "3.777.0",
     "@aws-sdk/client-secrets-manager": "3.777.0",
     "@aws-sdk/lib-dynamodb": "3.777.0",
-    "@playwright/test": "^1.50.1",
     "@types/node": "^22.13.1",
     "aws-amplify": "^6.6.0",
     "generate-password": "^1.7.1",
-    "nhs-notify-system-tests-shared": "*",
     "playwright": "^1.50.0",
     "totp-generator": "^1.0.0",
     "zod": "^4.0.5"
