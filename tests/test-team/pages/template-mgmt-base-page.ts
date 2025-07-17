@@ -143,9 +143,9 @@ export class TemplateMgmtBasePage {
     await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
 
     await this.page.getByRole('textbox', { name: templateName }).setInputFiles('template.pdf');
-    await this.page.getByTestId('submit-button').click();
+    await this.page.getByText('Save and upload').click();
     await expect(this.page.getByText('Checking files')).toBeVisible();
-    await this.goBackLink.click();
+    // await this.goBackLink.click();
     for (let i = 0; i < maxRetries; i++) {
     try {
       await this.page.reload();

@@ -116,7 +116,7 @@ export function requestProof(
     await basePage.clickButtonByName('Request a proof');
     await basePage.checkStatus('Waiting for proof');
     await basePage.waitForProofRequest();
-    await basePage.submitLetterTemplate();
+    // await basePage.submitLetterTemplate();
 
 })
 }

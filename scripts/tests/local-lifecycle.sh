@@ -14,10 +14,8 @@ exit_code=0
 run_lifecycle_phase() {
   local phase="$1"
   local lifecycle_dir="${pkg_dir}/lifecycle"
-
-  for d in "${lifecycle_dir}/*/"; do
-    [[ -d "$d" ]] || continue
-
+  for d in "${lifecycle_dir}"/*/; do
+    [ -d "$d" ] || continue
     acct_key=$(basename "$d")
     profile_var="AWS_PROFILE_${acct_key}"
 

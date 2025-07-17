@@ -3,7 +3,7 @@
     "Client1": {
       "id": "2cfbbc35-95e2-447f-b94b-db479b8c5eab",
       "name": "Client 1 Product",
-      "campaignId": "Client 1 Product Campaign",
+      "campaignId": "Client-1-Product-Campaign",
       "features": {
         "proofing": true
       }
@@ -11,7 +11,7 @@
     "Client2": {
       "id": "3d2c44f3-03dc-4abd-999f-9d88873beec5",
       "name": "Client 2 Product",
-      "campaignId": "Client 2 Product Campaign",
+      "campaignId": "Client-2-Product-Campaign",
       "features": {
         "proofing": true
       }
@@ -19,7 +19,7 @@
     "Client3": {
       "id": "9a5ce2a0-bf15-4f2a-945b-c188d95d60a9",
       "name": "Client 3 Product",
-      "campaignId": "Client 3 Product Campaign",
+      "campaignId": "Client-3-Product-Campaign",
       "features": {
         "proofing": true
       }
