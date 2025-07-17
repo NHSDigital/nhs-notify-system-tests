@@ -20,6 +20,8 @@ export class TemplateMgmtBasePage {
 
   readonly submitButton: Locator;
 
+  readonly submitTemplateButton: Locator;
+
   readonly skipLink: Locator;
 
   readonly templateToDelete: Locator;
@@ -51,6 +53,8 @@ export class TemplateMgmtBasePage {
 
     this.submitButton = page.locator('button.nhsuk-button[type="submit"]');
 
+    this.submitTemplateButton = page.getByText("Submit template");
+
     this.templateToDelete = page.getByRole('link', { name: 'Test delete', exact: true });
 
     this.templateEdited = page.getByRole('link', { name: 'Test edit changed', exact: true })
@@ -59,6 +63,8 @@ export class TemplateMgmtBasePage {
       .locator('[id="skip-link"]')
       .and(page.getByText("Skip to main content"));
   }
+
+
 
   async navigateTo(url: string) {
     await this.page.goto(url);
@@ -100,6 +106,10 @@ export class TemplateMgmtBasePage {
     await this.page.reload({ waitUntil: 'networkidle' });
   }
 
+  async checkStatus(status: string) {
+    await expect(this.page.getByText(status)).toBeVisible();
+  }
+
   async fillTextBox(textBoxName: string, textBoxContent: string) {
     await this.page
       .getByRole("textbox", { name: textBoxName })
@@ -127,11 +137,59 @@ export class TemplateMgmtBasePage {
   }
 
   async uploadLetterTemplate(templateName: string) {
+    const maxRetries = 10;
+    const retryInterval = 2000;
     await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
     await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
 
     await this.page.getByRole('textbox', { name: templateName }).setInputFiles('template.pdf');
-    await this.page.getByTestId('submit-button').click();
+    await this.page.getByText('Save and upload').click();
+    await expect(this.page.getByText('Checking files')).toBeVisible();
+    // await this.goBackLink.click();
+    for (let i = 0; i < maxRetries; i++) {
+    try {
+      await this.page.reload();
+      await expect(this.page.getByText('Files uploaded')).toBeVisible({ timeout: 1000 });
+      console.log('Success: "Files uploaded" is visible.');
+      break;
+    } catch (e) {
+      console.log(`Attempt ${i + 1} failed, retrying in ${retryInterval}ms...`);
+      await this.page.waitForTimeout(retryInterval);
+      if (i === maxRetries - 1) {
+        throw new Error('"Files uploaded" was not visible after maximum retries.');
+      }
+    }
+  }
+  await expect(this.page.getByText('Request a proof')).toBeVisible({ timeout: 1000 });
+  }
+
+  async waitForProofRequest() {
+    const maxRetries = 50;
+    const retryInterval = 3000;
+
+    for (let i = 0; i < maxRetries; i++) {
+    try {
+      await this.page.reload({ waitUntil: 'domcontentloaded' });
+      await expect(this.page.getByText('Proof available')).toBeVisible({ timeout: 1000 });
+      console.log('Success: "Proof available" is visible.');
+      break;
+    } catch (e) {
+      console.log(`Attempt ${i + 1} failed, retrying in ${retryInterval}ms...`);
+      await this.page.waitForTimeout(retryInterval);
+      if (i === maxRetries - 1) {
+        throw new Error('"Proof available" was not visible after maximum retries.');
+      }
+    }
+  }
+  await expect(this.page.locator('a[data-testid^="proof-link_"]').first()).toBeVisible({ timeout: 1000 });
+  expect(this.submitTemplateButton.isVisible());
+  }
+
+  async submitLetterTemplate() {
+    await this.submitTemplateButton.click();
+    await this.page.getByText("Approve and submit").click();
+    expect(this.page.getByText("Approve and submit").isVisible());
+
   }
 
   async logOut() {

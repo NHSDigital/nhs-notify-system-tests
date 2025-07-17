@@ -94,6 +94,33 @@ export function createTemplate(
   });
 }
 
+export function requestProof(
+  { basePage, baseURL }: CommonStepsProps,
+  channel: string,
+  channelPath: string,
+) {
+  return test.step('Request Proof', async () => {
+    const maxRetries = 10;
+    const retryInterval = 2000;
+    await basePage.clickButtonByName('Request a proof');
+    await basePage.clickButtonByName('Go back');
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/preview-${channelPath}-template/(.*)`)
+    );
+    await basePage.clickButtonByName('Request a proof');
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/request-proof-of-template/(.*)`)
+    );
+    await basePage.clickButtonByName('Request a proof');
+    await basePage.checkStatus('Waiting for proof');
+    await basePage.waitForProofRequest();
+    // await basePage.submitLetterTemplate();
+
+})
+}
+
 export function previewPage(
   { basePage, baseURL }: CommonStepsProps,
   channelPath: string,
