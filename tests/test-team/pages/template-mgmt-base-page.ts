@@ -185,6 +185,15 @@ export class TemplateMgmtBasePage {
   expect(this.submitTemplateButton.isVisible());
   }
 
+  async verifyFiles() {
+    const page1Promise = this.page.waitForEvent('popup');
+    const downloadPromise = this.page.waitForEvent('download');
+    await this.page.locator('a[data-testid^="proof-link_"]').nth(2).click();
+    const page1 = await page1Promise;
+    const download = await downloadPromise;
+
+  }
+
   async submitLetterTemplate() {
     await this.submitTemplateButton.click();
     await this.page.getByText("Approve and submit").click();
