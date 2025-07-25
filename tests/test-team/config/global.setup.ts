@@ -59,7 +59,6 @@ async function createStorageStateFile(
 
     await page.getByRole('link', { name: 'Sign in' }).click();
     console.log('Login button clicked');
-    console.log('use this one ', password as string, user.email);
 
     await page.fill('input[name="username"]', user.email as string);
     await page.fill('input[name="password"]', password as string);
