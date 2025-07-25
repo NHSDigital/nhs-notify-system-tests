@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
 import { assert } from 'console';
 
 type CommonStepsProps = {
   basePage: TemplateMgmtBasePage;
+  letterPage: TemplateMgmtLetterPage;
   baseURL?: string;
 };
 
@@ -48,7 +50,7 @@ export function chooseTemplate(
 }
 
 export function createTemplate(
-  { basePage, baseURL }: CommonStepsProps,
+  { basePage, baseURL, letterPage }: CommonStepsProps,
   channel: string,
   channelPath: string,
   name: string
@@ -85,9 +87,9 @@ export function createTemplate(
     }
 
     if (channel === 'Letter') {
-      await basePage.selectLetterOption('Letter type','x1');
-      await basePage.selectLetterOption('Letter language','fr');
-      await basePage.uploadLetterTemplate('Letter template PDF');
+      await letterPage.selectLetterOption('Letter type','x1');
+      await letterPage.selectLetterOption('Letter language','fr');
+      await letterPage.uploadLetterTemplate('Letter template PDF');
     }
 
 
@@ -95,7 +97,7 @@ export function createTemplate(
 }
 
 export function requestProof(
-  { basePage, baseURL }: CommonStepsProps,
+  { basePage, baseURL, letterPage }: CommonStepsProps,
   channel: string,
   channelPath: string,
 ) {
@@ -115,8 +117,8 @@ export function requestProof(
     );
     await basePage.clickButtonByName('Request a proof');
     await basePage.checkStatus('Waiting for proof');
-    await basePage.waitForProofRequest();
-    await basePage.verifyFiles();
+    await letterPage.waitForProofRequest();
+    await letterPage.verifyFiles();
     // await basePage.submitLetterTemplate();
 
 })
