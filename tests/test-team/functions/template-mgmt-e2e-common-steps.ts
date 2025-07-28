@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
-import { assert } from 'console';
 
 type CommonStepsProps = {
   basePage: TemplateMgmtBasePage;
@@ -119,7 +118,7 @@ export function requestProof(
     await basePage.checkStatus('Waiting for proof');
     await letterPage.waitForProofRequest();
     await letterPage.verifyFiles();
-    // await basePage.submitLetterTemplate();
+    await letterPage.submitLetterTemplate();
 
 })
 }

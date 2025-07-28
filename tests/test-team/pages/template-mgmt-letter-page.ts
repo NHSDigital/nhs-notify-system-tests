@@ -1,4 +1,4 @@
-import { Locator, type Page, expect } from "@playwright/test";
+import { Download, type Page, expect } from "@playwright/test";
 import { TemplateMgmtBasePage } from './template-mgmt-base-page';
 import fs from 'fs';
 import path from 'path';
@@ -66,46 +66,61 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
   }
 
   async verifyFiles() {
-    const page1Promise = this.page.waitForEvent('popup');
-    const downloadPromise = this.page.waitForEvent('download');
-    //Trigger download
-    await this.page.locator('a[data-testid^="proof-link_"]').nth(2).click();
+  const downloadDir = path.join(__dirname, 'downloads');
+  if (!fs.existsSync(downloadDir)) {
+    fs.mkdirSync(downloadDir, { recursive: true });
+  }
 
-    const page1 = await page1Promise;
-    const download = await downloadPromise;
+  // Open popup and wait for download events
+  const popupPromise = this.page.waitForEvent('popup');
+  await this.page.locator('a[data-testid^="proof-link_"]').nth(2).click();
 
-    // Save the file to the downloads directory
-    const downloadDir = path.join(__dirname, 'downloads');
+  const popup = await popupPromise;
+
+  const downloads: Download[] = [];
+
+  // Capture downloads
+  popup.on('download', (download) => {
+    console.log(`Download started: ${download.suggestedFilename()}`);
+    downloads.push(download);
+  });
+
+  // Wait for popup to close after triggering downloads
+  await popup.waitForEvent('close');
+
+  // Save and verify all downloaded files
+  const savedFiles: string[] = [];
+
+  for (const download of downloads) {
     const filename = download.suggestedFilename();
     const filePath = path.join(downloadDir, filename);
-
-    // Create directory if it does not exist
-    if (!fs.existsSync(downloadDir)) {
-      fs.mkdirSync(downloadDir, { recursive: true });
-    }
-
     await download.saveAs(filePath);
 
-    // Validate the file exists
     if (!fs.existsSync(filePath)) {
       throw new Error(`Download failed: file not found at ${filePath}`);
     }
 
-    // Validate that the downloaded file is a PDF by looking at the file signature
     const fileBuffer = fs.readFileSync(filePath);
     const isPDF = fileBuffer.toString('utf8', 0, 4) === '%PDF';
     if (!isPDF) {
       throw new Error(`Downloaded file is not a valid PDF: ${filePath}`);
     }
 
-    console.log(`PDF downloaded and verified: ${filePath}`);
-
+    savedFiles.push(filename);
+    console.log(`Verified PDF: ${filename}`);
   }
 
+  // Wait for all 3 files to appear
+  const fileListLocator = this.page.locator('a[data-testid^="proof-link_"] div');
+  await expect(fileListLocator).toHaveCount(3, { timeout: 10000 });
+
+  console.log('All 3 files downloaded and listed in the UI');
+}
+
   async submitLetterTemplate() {
-    await this.submitTemplateButton.click();
-    await this.page.getByText("Approve and submit").click();
-    expect(this.page.getByText("Approve and submit").isVisible());
+    await this.page.getByTestId('preview-letter-template-cta').click();
+    await this.page.getByRole('button', { name: 'Approve and submit' }).click();
+    await expect(this.page.locator("#template-submitted")).toBeVisible();
 
   }
 
