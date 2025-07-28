@@ -34,7 +34,7 @@ export default defineConfig({
           slowMo: 0,
         },
         video: 'on',
-        headless: false
+        headless: true
       },
     },
   ],
