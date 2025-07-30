@@ -18,7 +18,8 @@ export default defineConfig({
     trace: 'off', // Warning: this leaks secrets into the trace logs
     ...(process.env.PLAYWRIGHT_ZAP_PROXY && {
       ignoreHTTPSErrors: true,
-      proxy: { server: process.env.PLAYWRIGHT_ZAP_PROXY }
+      proxy: { server: process.env.PLAYWRIGHT_ZAP_PROXY },
+      acceptDownloads: true
     })
   },
 
