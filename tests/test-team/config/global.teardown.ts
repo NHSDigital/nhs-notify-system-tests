@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'node:path'
 import {
   CognitoUserHelper,
   BrowserState,
@@ -75,7 +76,7 @@ export default async function globalTeardown() {
     );
 
     // Delete storage state files and createdUsers.json
-    const path = require('path');
+    // const path = require('path');
 
     const filesToDelete = [
       'auth.json',

@@ -36,7 +36,7 @@ createdUsers.json
 cis2.json
 test-data-cleanup.json
 tests/*/lifecycle/*/setup.json
-pages/downloads/
+tests/test-team/pages/downloads/
 
 # security tests
 full-zap-config.prop

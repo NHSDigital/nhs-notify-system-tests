@@ -81,9 +81,7 @@ async verifyFiles() {
     const filePath = path.join(downloadDir, filename);
 
     // Create directory if it does not exist
-    if (!fs.existsSync(downloadDir)) {
-      fs.mkdirSync(downloadDir, { recursive: true });
-    }
+    fs.mkdirSync(downloadDir, { recursive: true });
 
     await download.saveAs(filePath);
 
