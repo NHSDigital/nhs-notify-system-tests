@@ -1,11 +1,18 @@
 import fs from 'fs';
+import path from 'node:path'
 import {
   CognitoUserHelper,
   BrowserState,
   findCis2AccessTokens,
 } from 'nhs-notify-system-tests-shared';
 
+
 function extractCis2Subject(): string {
+  const filePath = 'cis2.json';
+  if (!fs.existsSync(filePath)) {
+    console.warn(`File not found: ${filePath}. Skipping CIS2 subject extraction.`);
+    return 'No file';
+  }
   const browserStateData = fs.readFileSync('cis2.json', 'utf-8');
   const browserState = JSON.parse(browserStateData) as BrowserState;
   const accessTokenCookies = findCis2AccessTokens(browserState);
@@ -69,6 +76,8 @@ export default async function globalTeardown() {
     );
 
     // Delete storage state files and createdUsers.json
+    // const path = require('path');
+
     const filesToDelete = [
       'auth.json',
       'copy.json',
@@ -78,11 +87,19 @@ export default async function globalTeardown() {
     ];
 
     for (const file of filesToDelete) {
-      if (fs.existsSync(file)) {
-        fs.unlinkSync(file);
-        console.log(`Deleted file ${file}`);
+      const fullPath = path.resolve(file);
+      try {
+        if (fs.existsSync(fullPath)) {
+          fs.unlinkSync(fullPath);
+          console.log(`Deleted file ${file}`);
+        } else {
+          console.log(`File not found: ${file}`);
+        }
+      } catch (err) {
+        console.error(`Failed to delete ${file}: ${err.message}`);
       }
     }
+
 
     console.log('Global teardown complete.');
   } catch (error) {

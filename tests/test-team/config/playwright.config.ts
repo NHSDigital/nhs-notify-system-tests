@@ -25,7 +25,8 @@ export default defineConfig({
     trace: 'on-first-retry',
     ...(process.env.PLAYWRIGHT_ZAP_PROXY && {
       ignoreHTTPSErrors: true,
-      proxy: { server: process.env.PLAYWRIGHT_ZAP_PROXY }
+      proxy: { server: process.env.PLAYWRIGHT_ZAP_PROXY },
+      acceptDownloads: true
     })
   },
 });
