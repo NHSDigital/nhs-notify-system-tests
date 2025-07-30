@@ -17,7 +17,7 @@ test(`User creates and submits a new letter template successfully`, async ({
   page,
   baseURL,
 }) => {
-  test.setTimeout(360_000); // override just for this test
+  test.setTimeout(240_000); // override just for this test
   const props = {
     basePage: new TemplateMgmtBasePage(page),
     letterPage: new TemplateMgmtLetterPage(page),

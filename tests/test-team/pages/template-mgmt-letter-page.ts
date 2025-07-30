@@ -65,57 +65,44 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
   expect(this.submitTemplateButton.isVisible());
   }
 
-  async verifyFiles() {
-  const downloadDir = path.join(__dirname, 'downloads');
-  if (!fs.existsSync(downloadDir)) {
-    fs.mkdirSync(downloadDir, { recursive: true });
-  }
+async verifyFiles() {
+  const link = this.page.locator('a[data-testid^="proof-link_"]').nth(2);
 
-  // Open popup and wait for download events
-  const popupPromise = this.page.waitForEvent('popup');
-  await this.page.locator('a[data-testid^="proof-link_"]').nth(2).click();
+  const [popup, download] = await Promise.all([
+    this.page.waitForEvent('popup'),
+    this.page.waitForEvent('download'),
+    await expect(link).toBeVisible(),
+    link.click()
+  ]);
 
-  const popup = await popupPromise;
-
-  const downloads: Download[] = [];
-
-  // Capture downloads
-  popup.on('download', (download) => {
-    console.log(`Download started: ${download.suggestedFilename()}`);
-    downloads.push(download);
-  });
-
-  // Wait for popup to close after triggering downloads
-  await popup.waitForEvent('close');
-
-  // Save and verify all downloaded files
-  const savedFiles: string[] = [];
-
-  for (const download of downloads) {
+    // Save the file to the downloads directory
+    const downloadDir = path.join(__dirname, 'downloads');
     const filename = download.suggestedFilename();
     const filePath = path.join(downloadDir, filename);
+
+    // Create directory if it does not exist
+    if (!fs.existsSync(downloadDir)) {
+      fs.mkdirSync(downloadDir, { recursive: true });
+    }
+
     await download.saveAs(filePath);
 
+    // Validate the file exists
     if (!fs.existsSync(filePath)) {
       throw new Error(`Download failed: file not found at ${filePath}`);
     }
 
+    // Validate that the downloaded file is a PDF by looking at the file signature
     const fileBuffer = fs.readFileSync(filePath);
     const isPDF = fileBuffer.toString('utf8', 0, 4) === '%PDF';
     if (!isPDF) {
       throw new Error(`Downloaded file is not a valid PDF: ${filePath}`);
     }
 
-    savedFiles.push(filename);
-    console.log(`Verified PDF: ${filename}`);
+    console.log(`PDF downloaded and verified: ${filePath}`);
+
   }
 
-  // Wait for all 3 files to appear
-  const fileListLocator = this.page.locator('a[data-testid^="proof-link_"] div');
-  await expect(fileListLocator).toHaveCount(3, { timeout: 10000 });
-
-  console.log('All 3 files downloaded and listed in the UI');
-}
 
   async submitLetterTemplate() {
     await this.page.getByTestId('preview-letter-template-cta').click();

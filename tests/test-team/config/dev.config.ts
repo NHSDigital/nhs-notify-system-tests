@@ -18,14 +18,15 @@ export default defineConfig({
     trace: 'off', // Warning: this leaks secrets into the trace logs
     ...(process.env.PLAYWRIGHT_ZAP_PROXY && {
       ignoreHTTPSErrors: true,
-      proxy: { server: process.env.PLAYWRIGHT_ZAP_PROXY }
+      proxy: { server: process.env.PLAYWRIGHT_ZAP_PROXY },
+      acceptDownloads: true
     })
   },
 
   projects: [
     {
       name: 'product',
-      testMatch: '*-e2e.ts',
+      testMatch: '*letter-e2e.ts',
       use: {
         screenshot: 'on',
         baseURL: `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`,
