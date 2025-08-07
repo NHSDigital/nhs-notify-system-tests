@@ -53,8 +53,11 @@ export function createTemplate(
   name: string
 ) {
   return test.step('Create template', async () => {
+
+    const pageSlug = `${channel === 'Letter' ? 'upload' : 'create'}-${channelPath}-template`
+
     await expect(basePage.page).toHaveURL(
-      `${baseURL}/templates/create-${channelPath}-template`
+      `${baseURL}/templates/${pageSlug}`
     );
     if (channel === 'Email') {
       await expect(basePage.pageHeader).toHaveText(`Create email template`);
