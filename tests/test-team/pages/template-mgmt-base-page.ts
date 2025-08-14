@@ -63,8 +63,6 @@ export class TemplateMgmtBasePage {
       .and(page.getByText("Skip to main content"));
   }
 
-
-
   async navigateTo(url: string) {
     await this.page.goto(url);
   }

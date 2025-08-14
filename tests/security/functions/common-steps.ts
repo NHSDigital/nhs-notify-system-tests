@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
 
 type CommonStepsProps = {
   basePage: TemplateMgmtBasePage;
+  letterPage: TemplateMgmtLetterPage;
   baseURL?: string;
 };
 
@@ -47,7 +49,7 @@ export function chooseTemplate(
 }
 
 export function createTemplate(
-  { basePage, baseURL }: CommonStepsProps,
+  { basePage, baseURL, letterPage }: CommonStepsProps,
   channel: string,
   channelPath: string,
   name: string
@@ -87,13 +89,41 @@ export function createTemplate(
     }
 
     if (channel === 'Letter') {
-      await basePage.selectLetterOption('Letter type','x1');
-      await basePage.selectLetterOption('Letter language','fr');
-      await basePage.uploadLetterTemplate('Letter template PDF');
+      await letterPage.selectLetterOption('Letter type','x1');
+      await letterPage.selectLetterOption('Letter language','fr');
+      await letterPage.uploadLetterTemplate('Letter template PDF');
     }
 
 
   });
+}
+
+export function requestProof(
+  { basePage, baseURL, letterPage }: CommonStepsProps,
+  channel: string,
+  channelPath: string,
+) {
+  return test.step('Request Proof', async () => {
+    const maxRetries = 10;
+    const retryInterval = 2000;
+    await basePage.clickButtonByName('Request a proof');
+    await basePage.clickButtonByName('Go back');
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/preview-${channelPath}-template/(.*)`)
+    );
+    await basePage.clickButtonByName('Request a proof');
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/templates/request-proof-of-template/(.*)`)
+    );
+    await basePage.clickButtonByName('Request a proof');
+    await basePage.checkStatus('Waiting for proof');
+    await letterPage.waitForProofRequest();
+    await letterPage.verifyFiles();
+    await letterPage.submitLetterTemplate();
+
+})
 }
 
 export function previewPage(
@@ -179,8 +209,8 @@ export function copyTemplate(
       new RegExp(`${baseURL}/templates/copy-template/(.*)`)
     );
 
-    await basePage.checkRadio("Email");
-    await basePage.clickButtonByName("Continue");
+    await basePage.checkRadio('Email');
+    await basePage.clickButtonByName('Continue');
 
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp

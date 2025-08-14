@@ -47,7 +47,8 @@ async function createStorageStateFile(
 
     user = await cognitoHelper.createUser(username, password, testClientConfig);
     const browser = await chromium.launch({ headless: true, slowMo: 0 });
-    const context = await browser.newContext();
+    const context = await browser.newContext({
+    acceptDownloads: true});
     const page = await context.newPage();
 
     try {
