@@ -74,14 +74,12 @@ async function loginWithCis2(
   }
 }
 
-async function logOut(page: TemplateMgmtBasePage) {
+async function logOut(page: TemplateMgmtBasePage, baseURL:string) {
   await page.logOut();
-  await page.page.waitForURL("https://main.web-gateway.dev.nhsnotify.national.nhs.uk/auth/signout");
+  await expect(page.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`${baseURL}/auth/signout`));
   await page.page.waitForLoadState('networkidle');
-  // await page.page.waitForTimeout(1000); // Wait for the page to settle
-  // await expect(page.page.getByTestId('auth-link__link')).toHaveText('Sign in');
-  // await expect(page.page.getByTestId('auth-link__link')).toBeVisible();
-  //await page.page.waitForSelector('text=You have signed out');
   await page.loginLink.waitFor();
 }
 
