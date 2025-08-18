@@ -74,7 +74,9 @@ async function loginWithCis2(
   }
 }
 
-async function logOut(page: TemplateMgmtBasePage, baseURL:string) {
+const baseURL = process.env.BASE_URL;
+
+async function logOut(page: TemplateMgmtBasePage) {
   await page.logOut();
   await expect(page.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
