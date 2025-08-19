@@ -74,7 +74,7 @@ async function loginWithCis2(
   }
 }
 
-const baseURL = process.env.BASE_URL;
+const baseURL = `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`;
 
 async function logOut(page: TemplateMgmtBasePage) {
   await page.logOut();
