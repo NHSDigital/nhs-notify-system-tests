@@ -78,6 +78,7 @@ const baseURL = `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsno
 
 async function logOut(page: TemplateMgmtBasePage) {
   await page.logOut();
+  await page.page.waitForTimeout(2000);
   await expect(page.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
       new RegExp(`${baseURL}/auth/signout`));
