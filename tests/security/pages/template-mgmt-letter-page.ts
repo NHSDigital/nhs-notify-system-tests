@@ -1,4 +1,4 @@
-import { Download, type Page, expect } from "@playwright/test";
+import { Download, Locator, type Page, expect } from '@playwright/test';
 import { TemplateMgmtBasePage } from './template-mgmt-base-page';
 import fs from 'fs';
 import path from 'path';
@@ -9,7 +9,6 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
   constructor(page: Page) {
     super(page);
     this.page = page;
-
   }
 
   async selectLetterOption(labelName: string, optionName: string) {
@@ -22,25 +21,35 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
     await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
     await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
 
-    await this.page.getByRole('textbox', { name: templateName }).setInputFiles('template.pdf');
+    await this.page
+      .getByRole('textbox', { name: templateName })
+      .setInputFiles('template.pdf');
     await this.page.getByText('Save and upload').click();
     await expect(this.page.getByText('Checking files')).toBeVisible();
 
     for (let i = 0; i < maxRetries; i++) {
-    try {
-      await this.page.reload();
-      await expect(this.page.getByText('Files uploaded')).toBeVisible({ timeout: 1000 });
-      console.log('Success: "Files uploaded" is visible.');
-      break;
-    } catch (e) {
-      console.log(`Attempt ${i + 1} failed, retrying in ${retryInterval}ms...`);
-      await this.page.waitForTimeout(retryInterval);
-      if (i === maxRetries - 1) {
-        throw new Error('"Files uploaded" was not visible after maximum retries.');
+      try {
+        await this.page.reload();
+        await expect(this.page.getByText('Files uploaded')).toBeVisible({
+          timeout: 1000,
+        });
+        console.log('Success: "Files uploaded" is visible.');
+        break;
+      } catch (e) {
+        console.log(
+          `Attempt ${i + 1} failed, retrying in ${retryInterval}ms...`
+        );
+        await this.page.waitForTimeout(retryInterval);
+        if (i === maxRetries - 1) {
+          throw new Error(
+            '"Files uploaded" was not visible after maximum retries.'
+          );
+        }
       }
     }
-  }
-  await expect(this.page.getByText('Request a proof')).toBeVisible({ timeout: 1000 });
+    await expect(this.page.getByText('Request a proof')).toBeVisible({
+      timeout: 1000,
+    });
   }
 
   async waitForProofRequest() {
@@ -48,32 +57,53 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
     const retryInterval = 3000;
 
     for (let i = 0; i < maxRetries; i++) {
-    try {
-      await this.page.reload({ waitUntil: 'domcontentloaded' });
-      await expect(this.page.getByText('Proof available')).toBeVisible({ timeout: 1000 });
-      console.log('Success: "Proof available" is visible.');
-      break;
-    } catch (e) {
-      console.log(`Attempt ${i + 1} failed, retrying in ${retryInterval}ms...`);
-      await this.page.waitForTimeout(retryInterval);
-      if (i === maxRetries - 1) {
-        throw new Error('"Proof available" was not visible after maximum retries.');
+      try {
+        await this.page.reload({ waitUntil: 'domcontentloaded' });
+        await expect(this.page.getByText('Proof available')).toBeVisible({
+          timeout: 1000,
+        });
+        console.log('Success: "Proof available" is visible.');
+        break;
+      } catch (e) {
+        console.log(
+          `Attempt ${i + 1} failed, retrying in ${retryInterval}ms...`
+        );
+        await this.page.waitForTimeout(retryInterval);
+        if (i === maxRetries - 1) {
+          throw new Error(
+            '"Proof available" was not visible after maximum retries.'
+          );
+        }
       }
     }
-  }
-  await expect(this.page.locator('a[data-testid^="proof-link_"]').first()).toBeVisible({ timeout: 1000 });
-  expect(this.submitTemplateButton.isVisible());
+    await expect(
+      this.page.locator('a[data-testid^="proof-link_"]').first()
+    ).toBeVisible({ timeout: 1000 });
+    expect(this.submitTemplateButton.isVisible());
   }
 
-async verifyFiles() {
-  const link = this.page.locator('a[data-testid^="proof-link_"]').nth(2);
+  async verifyFiles() {
+    // Wait loop for the link to appear
+    const maxRetries = 30;
+    const retryInterval = 1000;
+    let link: Locator;
+    link = this.page.locator('a[data-testid^="proof-link_"]').nth(2);
+    for (let i = 0; i < maxRetries; i++) {
+      if (await link.isVisible()) {
+        break;
+      }
+      await this.page.waitForTimeout(retryInterval);
+      if (i === maxRetries - 1) {
+        throw new Error('Proof link did not appear after maximum retries.');
+      }
+    }
 
-  const [popup, download] = await Promise.all([
-    this.page.waitForEvent('popup'),
-    this.page.waitForEvent('download'),
-    await expect(link).toBeVisible(),
-    link.click()
-  ]);
+    const [popup, download] = await Promise.all([
+      this.page.waitForEvent('popup'),
+      this.page.waitForEvent('download'),
+      await expect(link).toBeVisible(),
+      link.click(),
+    ]);
 
     // Save the file to the downloads directory
     const downloadDir = path.join(__dirname, 'downloads');
@@ -98,15 +128,11 @@ async verifyFiles() {
     }
 
     console.log(`PDF downloaded and verified: ${filePath}`);
-
   }
-
 
   async submitLetterTemplate() {
     await this.page.getByTestId('preview-letter-template-cta').click();
     await this.page.getByRole('button', { name: 'Approve and submit' }).click();
-    await expect(this.page.locator("#template-submitted")).toBeVisible();
-
+    await expect(this.page.locator('#template-submitted')).toBeVisible();
   }
-
 }
