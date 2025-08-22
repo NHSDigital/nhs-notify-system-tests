@@ -76,7 +76,6 @@ export default async function globalTeardown() {
     );
 
     // Delete storage state files and createdUsers.json
-    // const path = require('path');
 
     const filesToDelete = [
       'auth.json',

@@ -206,7 +206,12 @@ export function copyTemplate(
     const rowCount = await basePage.tableRows();
     console.log(rowCount);
 
-    await basePage.clickLinkByName('Copy ' + name);
+    const copyLink = await basePage.page.$('#copy-template-link-0');
+    if (copyLink) {
+      await copyLink.click();
+    } else {
+      throw new Error(`No element with id 'copy-template-link-0' found`);
+    }
 
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
@@ -226,13 +231,15 @@ export function copyTemplate(
     await basePage.clickFirstTableRowLink();
     await basePage.checkRadio('Edit template');
     await basePage.clickButtonByName('Continue');
-    await basePage.fillTextBox('Template name', 'Test edit changed');
+    const timestamp = Date.now();
+    const editedTemplateName = `Test edit changed ${timestamp}`;
+    await basePage.fillTextBox('Template name', editedTemplateName);
     await basePage.clickButtonByName('Save and preview');
-    await expect(basePage.pageHeader).toHaveText('Test edit changed');
+    await expect(basePage.pageHeader).toHaveText(editedTemplateName);
     await basePage.clickBackLink();
     await basePage.page.waitForSelector('text=Message templates', { timeout: 10_000 });
     await basePage.waitForLoad();
-    await expect(basePage.templateEdited).toBeVisible();
+    await expect(basePage.templateEdited(editedTemplateName)).toBeVisible();
 
     const rowCountCheck = await basePage.tableRows();
     console.log(rowCountCheck)
