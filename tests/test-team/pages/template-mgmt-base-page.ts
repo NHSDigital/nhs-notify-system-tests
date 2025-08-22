@@ -25,7 +25,7 @@ export class TemplateMgmtBasePage {
 
   readonly templateToDelete: Locator;
 
-  readonly templateEdited: Locator;
+  readonly templateEdited: (templateName: string) => Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -56,14 +56,13 @@ export class TemplateMgmtBasePage {
 
     this.templateToDelete = page.getByRole('link', { name: 'Test delete', exact: true });
 
-    this.templateEdited = page.getByRole('link', { name: 'Test edit changed', exact: true })
+    this.templateEdited = (templateName: string) =>
+      page.getByRole('link', { name: templateName, exact: true });
 
     this.skipLink = page
       .locator('[id="skip-link"]')
       .and(page.getByText("Skip to main content"));
   }
-
-
 
   async navigateTo(url: string) {
     await this.page.goto(url);

@@ -19,11 +19,13 @@ export class TemplateMgmtBasePage {
 
   readonly submitButton: Locator;
 
+  readonly submitTemplateButton: Locator;
+
   readonly skipLink: Locator;
 
   readonly templateToDelete: Locator;
 
-  readonly templateEdited: Locator;
+  readonly templateEdited: (templateName: string) => Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -50,9 +52,12 @@ export class TemplateMgmtBasePage {
 
     this.submitButton = page.locator('button.nhsuk-button[type="submit"]');
 
+    this.submitTemplateButton = page.getByText("Submit template");
+
     this.templateToDelete = page.getByRole('link', { name: 'Test delete', exact: true });
 
-    this.templateEdited = page.getByRole('link', { name: 'Test edit changed', exact: true })
+    this.templateEdited = (templateName: string) =>
+      page.getByRole('link', { name: templateName, exact: true });
 
     this.skipLink = page
       .locator('[id="skip-link"]')
@@ -99,6 +104,10 @@ export class TemplateMgmtBasePage {
     await this.page.reload({ waitUntil: 'networkidle' });
   }
 
+  async checkStatus(status: string) {
+    await expect(this.page.getByText(status)).toBeVisible();
+  }
+
   async fillTextBox(textBoxName: string, textBoxContent: string) {
     await this.page
       .getByRole("textbox", { name: textBoxName })
@@ -119,18 +128,6 @@ export class TemplateMgmtBasePage {
     const link = this.page.locator('table:nth-of-type(1) tr:nth-of-type(1) td:nth-of-type(1) a');
     await expect(link).toContainText("COPY");
     await link.click();
-  }
-
-  async selectLetterOption(labelName: string, optionName: string) {
-    await this.page.getByLabel(labelName).selectOption(optionName);
-  }
-
-  async uploadLetterTemplate(templateName: string) {
-    await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
-    await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
-
-    await this.page.getByRole('textbox', { name: templateName }).setInputFiles('template.pdf');
-    await this.page.getByTestId('submit-button').click();
   }
 
   async logOut() {
