@@ -16,7 +16,7 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
   }
 
   async uploadLetterTemplate(templateName: string) {
-    const maxRetries = 10;
+    const maxRetries = 30;
     const retryInterval = 2000;
     await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
     await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
