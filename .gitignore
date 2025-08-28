@@ -40,10 +40,9 @@ tests/test-team/pages/downloads/
 
 # security tests
 full-zap-config.prop
-zap-out-product-tests.html
-
-# security tests
-tests/security/full-zap-config.prop
+zap-out*.html
+zap.yaml
+tests/security/pages/downloads/
 
 # DOTENV
 .env
