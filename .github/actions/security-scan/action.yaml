@@ -6,10 +6,6 @@ inputs:
     description: "Web gateway subdomain to test"
     required: false
     default: main
-  iam_environment:
-    description: "IAM dev environment owning the user pool used in the test"
-    required: false
-    default: main
 
 runs:
   using: "composite"
@@ -28,7 +24,6 @@ runs:
       shell: bash
       run: |
         set +e
-        echo ${{ inputs.environment }}
         ./tests/security/run.sh ${{ inputs.environment }}
         echo "exit_code=$?" >> $GITHUB_OUTPUT
 
