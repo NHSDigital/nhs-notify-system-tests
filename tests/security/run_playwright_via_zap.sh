@@ -58,6 +58,8 @@ cleanup_zap() {
 
 
 run_playwright_via_zap() {
+  local environment="$1"
+
   print "Generating config with ignore rules"
   config_file="full-zap-config.prop"
 
@@ -120,7 +122,7 @@ run_playwright_via_zap() {
 
   print "Running security playwright tests via ZAP proxy"
 
-  npm run test:security:playwright
+  TARGET_ENVIRONMENT="$environment" npm run test:security:playwright
 
   playwright_status_code=$?
 

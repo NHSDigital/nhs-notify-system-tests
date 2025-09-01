@@ -3,11 +3,7 @@ set -euo pipefail
 cd $(dirname $BASH_SOURCE[0])
 source lib.sh
 
-web_gateway_environment="${1:-main}"
-iam_environment="${2:-main}"
-
-export TARGET_ENVIRONMENT=$web_gateway_environment
-
+environment="${1:-main}"
 email_prefix="security-test-login"
 client_id=$(jq -r '.clients.Client4.id' ./fixtures/clients.json)
 client_name=$(jq -r '.clients.Client4.name' ./fixtures/clients.json)
@@ -15,7 +11,7 @@ pw=$(password)
 
 user_id=$(
   npx ts-node -T ./helpers/helper-cli/create-user.ts \
-    --environment "$iam_environment" \
+    --environment "$environment" \
     --email-prefix "$email_prefix" \
     --password "$pw" \
     --client-id "$client_id" \
@@ -26,7 +22,7 @@ print "Username (user id): $user_id"
 
 delete_user() {
   npx ts-node -T ./helpers/helper-cli/delete-user.ts \
-    --environment "$iam_environment" \
+    --environment "$environment" \
     --username "$user_id" \
     --client-id "$client_id"
 }
@@ -37,7 +33,7 @@ print "Fetching cookie"
 
 cookie=$(
   npx ts-node -T ./helpers/helper-cli/zap-spider-setup.ts \
-    --web-gateway-environment $web_gateway_environment \
+    --web-gateway-environment $environment \
     --email-address "${email_prefix}@nhs.net" \
     --password $pw
 )
@@ -46,7 +42,7 @@ cleanup() {
   print "Cleanup - deleting templates"
 
   npx ts-node -T ./helpers/helper-cli/zap-spider-teardown.ts \
-    --web-gateway-environment $web_gateway_environment \
+    --web-gateway-environment $environment \
     --email-address "${email_prefix}@nhs.net" \
     --password $pw \
   || true
@@ -58,7 +54,7 @@ trap cleanup SIGINT SIGTERM EXIT
 
 print "Got cookie"
 
-base="https://${web_gateway_environment}.web-gateway.dev.nhsnotify.national.nhs.uk"
+base="https://${environment}.web-gateway.dev.nhsnotify.national.nhs.uk"
 start_url="${base}/templates/message-templates"
 
 image="ghcr.io/zaproxy/zaproxy:stable"
@@ -108,7 +104,7 @@ with_login_exit=$?
 print "Scan 3 - starting ZAP scan at $start_url - via Playwright security tests"
 
 source run_playwright_via_zap.sh
-run_playwright_via_zap
+run_playwright_via_zap "$environment"
 
 system_test_exit=$?
 

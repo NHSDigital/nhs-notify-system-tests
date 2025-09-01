@@ -17,7 +17,7 @@ on:
 
 jobs:
   security-test:
-    name: Security Test
+    name: Security Test ${{ inputs.targetEnvironment || 'main'  }}:${{ github.head_ref || github.ref_name }}
 
     permissions:
       id-token: write
