@@ -57,7 +57,7 @@ if [[ "$exit_code" -eq 0 ]]; then
 
   pushd "$pkg_dir" >/dev/null
 
-  if ! npm run "$test_cmd" -- "${target_environment}" "${extra_args[@]}"; then
+  if ! npm run "$test_cmd" -- "${extra_args[@]}"; then
     echo "✖ ${test_cmd} failed" >&2
     exit_code=1
   fi
