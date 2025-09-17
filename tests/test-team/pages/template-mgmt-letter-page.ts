@@ -22,7 +22,7 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
     await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
 
     await this.page
-      .getByRole('textbox', { name: templateName })
+      .getByRole('button', { name: templateName })
       .setInputFiles('template.pdf');
     await this.page.getByText('Save and upload').click();
     await expect(this.page.getByText('Checking files')).toBeVisible();
