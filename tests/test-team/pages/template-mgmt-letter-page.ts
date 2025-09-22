@@ -20,6 +20,10 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
     const retryInterval = 2000;
     await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
     await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
+    for (let i = 0; i < 4; i++) {
+    await this.page.keyboard.press('Tab');
+  }
+
 
     await this.page
       .getByRole('button', { name: templateName })
