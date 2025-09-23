@@ -23,9 +23,15 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
 
     await this.page.getByRole('button', { name: templateName }).waitFor({ state: 'visible' });
 
-    await this.page
-      .getByRole('button', { name: templateName })
-      .setInputFiles('template.pdf');
+    // await this.page
+      // .getByRole('textbox', { name: templateName })
+      // .setInputFiles('template.pdf');
+    const [fileChooser] = await Promise.all([
+    this.page.waitForEvent('filechooser'),
+    this.page.getByRole('button', { name: templateName }).click(),
+  ]);
+    await fileChooser.setFiles('template.pdf');
+
     await this.page.getByText('Save and upload').click();
     await expect(this.page.getByText('Checking files')).toBeVisible();
 
