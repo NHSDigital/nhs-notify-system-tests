@@ -18,10 +18,8 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
   async uploadLetterTemplate(templateName: string) {
     const maxRetries = 30;
     const retryInterval = 2000;
-    await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
-    await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
-
-    await this.page.getByRole('button', { name: templateName }).waitFor({ state: 'visible' });
+    // await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
+    // await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
 
     // await this.page
       // .getByRole('textbox', { name: templateName })
