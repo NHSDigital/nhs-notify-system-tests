@@ -16,19 +16,16 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
   }
 
   async uploadLetterTemplate(templateName: string) {
-    const maxRetries = 30;
+    const maxRetries = 40;
     const retryInterval = 2000;
     // await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
     // await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
 
     // await this.page
-      // .getByRole('textbox', { name: templateName })
-      // .setInputFiles('template.pdf');
-    const [fileChooser] = await Promise.all([
-    this.page.waitForEvent('filechooser'),
-    this.page.getByRole('button', { name: templateName }).click(),
-  ]);
-    await fileChooser.setFiles('template.pdf');
+    //   .getByRole('textbox', { name: templateName })
+    //   .setInputFiles('template.pdf');
+
+    await this.page.locator('#letterTemplatePdf').setInputFiles('template.pdf');
 
     await this.page.getByText('Save and upload').click();
     await expect(this.page.getByText('Checking files')).toBeVisible();
