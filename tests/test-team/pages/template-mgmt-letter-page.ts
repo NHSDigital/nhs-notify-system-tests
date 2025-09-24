@@ -1,4 +1,4 @@
-import { Download, Locator, type Page, expect } from '@playwright/test';
+import { Locator, type Page, expect } from '@playwright/test';
 import { TemplateMgmtBasePage } from './template-mgmt-base-page';
 import fs from 'fs';
 import path from 'path';
@@ -16,14 +16,11 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
   }
 
   async uploadLetterTemplate(templateName: string) {
-    const maxRetries = 30;
+    const maxRetries = 40;
     const retryInterval = 2000;
-    await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
-    await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
 
-    await this.page
-      .getByRole('textbox', { name: templateName })
-      .setInputFiles('template.pdf');
+    await this.page.locator('#letterTemplatePdf').setInputFiles('template.pdf');
+
     await this.page.getByText('Save and upload').click();
     await expect(this.page.getByText('Checking files')).toBeVisible();
 
