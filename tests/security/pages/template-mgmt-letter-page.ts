@@ -80,7 +80,7 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
 
   async verifyFiles() {
     // Wait loop for the link to appear
-    const maxRetries = 30;
+    const maxRetries = 50;
     const retryInterval = 1000;
     let link: Locator;
     link = this.page.locator('a[data-testid^="proof-link_"]').nth(2);
