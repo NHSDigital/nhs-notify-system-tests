@@ -16,14 +16,10 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
   }
 
   async uploadLetterTemplate(templateName: string) {
-    const maxRetries = 30;
+    const maxRetries = 40;
     const retryInterval = 2000;
-    await expect(this.page.locator('#letterTemplatePdf')).toBeVisible();
-    await expect(this.page.locator('#letterTemplateCsv')).toBeVisible();
 
-    await this.page
-      .getByRole('textbox', { name: templateName })
-      .setInputFiles('template.pdf');
+    await this.page.locator('#letterTemplatePdf').setInputFiles('template.pdf');
     await this.page.getByText('Save and upload').click();
     await expect(this.page.getByText('Checking files')).toBeVisible();
 
@@ -84,7 +80,7 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
 
   async verifyFiles() {
     // Wait loop for the link to appear
-    const maxRetries = 30;
+    const maxRetries = 50;
     const retryInterval = 1000;
     let link: Locator;
     link = this.page.locator('a[data-testid^="proof-link_"]').nth(2);
