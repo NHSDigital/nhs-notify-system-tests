@@ -85,6 +85,7 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
     let link: Locator;
     link = this.page.locator('a[data-testid^="proof-link_"]').nth(2);
     for (let i = 0; i < maxRetries; i++) {
+      await this.page.reload({ waitUntil: 'domcontentloaded' });
       if (await link.isVisible()) {
         break;
       }

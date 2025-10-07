@@ -84,6 +84,7 @@ async function logOut(page: TemplateMgmtBasePage) {
       new RegExp(`${baseURL}/auth/signout`));
   await page.page.waitForLoadState('networkidle');
   await page.loginLink.waitFor();
+  await expect(page.pageHeader).toHaveText('Sign in');
 }
 
 export { loginWithCis2, expect, logOut };
