@@ -44,7 +44,7 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   const channelPath = 'email';
   const name = 'E2E Name';
 
-  await startPage({ basePage, baseURL, letterPage });
+  await startPage({ basePage, baseURL });
   await loginWithCis2(basePage, 'Message templates');
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
@@ -53,6 +53,6 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   await context.storageState({ path: 'cis2.json' });
   await logOut(basePage);
   await page.waitForLoadState('networkidle');
-  await startPage({ basePage, baseURL, letterPage });
+  await startPage({ basePage, baseURL });
   await loginWithCis2(basePage, 'Message templates');
 });

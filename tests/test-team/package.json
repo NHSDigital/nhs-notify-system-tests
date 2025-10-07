@@ -8,12 +8,12 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@aws-sdk/client-appsync": "3.777.0",
-    "@aws-sdk/client-cognito-identity-provider": "3.777.0",
-    "@aws-sdk/client-ssm": "3.777.0",
-    "@aws-sdk/client-dynamodb": "3.777.0",
-    "@aws-sdk/client-secrets-manager": "3.777.0",
-    "@aws-sdk/lib-dynamodb": "3.777.0",
+    "@aws-sdk/client-appsync": "^3.806.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.806.0",
+    "@aws-sdk/client-ssm": "^3.806.0",
+    "@aws-sdk/client-dynamodb": "^3.806.0",
+    "@aws-sdk/client-secrets-manager": "^3.806.0",
+    "@aws-sdk/lib-dynamodb": "^3.806.0",
     "@playwright/test": "^1.50.1",
     "@types/node": "^22.13.1",
     "aws-amplify": "^6.6.0",
@@ -21,6 +21,7 @@
     "nhs-notify-system-tests-shared": "*",
     "playwright": "^1.50.0",
     "totp-generator": "^1.0.0",
+    "typescript": "^5.8.2",
     "zod": "^4.0.5"
   }
 }

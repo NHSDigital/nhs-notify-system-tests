@@ -8,6 +8,7 @@ import {
   CreateGroupCommand,
   DeleteGroupCommand,
   ListUserPoolsCommand,
+  ListUserPoolsCommandOutput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
   DeleteParameterCommand,
@@ -57,7 +58,7 @@ export class CognitoUserHelper {
     let nextToken: string | undefined = undefined;
 
     do {
-      const response = await cognito.send(
+      const response: ListUserPoolsCommandOutput = await cognito.send(
         new ListUserPoolsCommand({
           MaxResults: 60,
           NextToken: nextToken,
