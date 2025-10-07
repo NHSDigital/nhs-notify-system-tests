@@ -6,7 +6,7 @@ import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
 import {
   startPage,
   chooseTemplate,
-  createTemplate,
+  createLetterTemplate,
   startNewTemplate,
   requestProof,
 } from '../functions/template-mgmt-e2e-common-steps';
@@ -30,6 +30,6 @@ test(`User creates and submits a new letter template successfully`, async ({
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath, name);
+  await createLetterTemplate(props, name);
   await requestProof(props, channel, channelPath);
 });

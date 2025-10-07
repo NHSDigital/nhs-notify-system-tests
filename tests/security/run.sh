@@ -4,6 +4,7 @@ cd $(dirname $BASH_SOURCE[0])
 source lib.sh
 
 environment="${1:-main}"
+iam_environment="${2:-main}"
 email_prefix="security-test-login"
 client_id=$(jq -r '.clients.Client4.id' ./fixtures/clients.json)
 client_name=$(jq -r '.clients.Client4.name' ./fixtures/clients.json)
@@ -11,7 +12,7 @@ pw=$(password)
 
 user_id=$(
   npx ts-node -T ./helpers/helper-cli/create-user.ts \
-    --environment "$environment" \
+    --environment "$iam_environment" \
     --email-prefix "$email_prefix" \
     --password "$pw" \
     --client-id "$client_id" \
@@ -22,7 +23,7 @@ print "Username (user id): $user_id"
 
 delete_user() {
   npx ts-node -T ./helpers/helper-cli/delete-user.ts \
-    --environment "$environment" \
+    --environment "$iam_environment" \
     --username "$user_id" \
     --client-id "$client_id"
 }

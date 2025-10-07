@@ -7,13 +7,10 @@ tfsec 1.28.10
 vale 3.6.0
 poetry 1.8.3
 python 3.11.6
-nodejs 20.13.1
+nodejs 20.18.2
 jq 1.6
-
 # ==============================================================================
 # The section below is reserved for Docker image versions
-
-
 # TODO: Move this section - consider using a different file for the repository template dependencies.
 # docker/ghcr.io/gitleaks/gitleaks v8.18.0@sha256:fd2b5cab12b563d2cc538b14631764a1c25577780e3b7dba71657d58da45d9d9 # SEE: https://github.com/gitleaks/gitleaks/pkgs/container/gitleaks
 # docker/ghcr.io/igorshubovych/markdownlint-cli v0.37.0@sha256:fb3e79946fce78e1cde84d6798c6c2a55f2de11fc16606a40d49411e281d950d # SEE: https://github.com/igorshubovych/markdownlint-cli/pkgs/container/markdownlint-cli

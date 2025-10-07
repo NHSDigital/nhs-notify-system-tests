@@ -94,8 +94,8 @@ export default async function globalTeardown() {
         } else {
           console.log(`File not found: ${file}`);
         }
-      } catch (err) {
-        console.error(`Failed to delete ${file}: ${err.message}`);
+      } catch (err: unknown) {
+        console.error(`Failed to delete ${file}: ${(err as Error).message}`);
       }
     }
 
