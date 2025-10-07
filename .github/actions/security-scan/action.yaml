@@ -29,7 +29,7 @@ runs:
       shell: bash
       run: |
         set +e
-        ./tests/security/run.sh ${{ inputs.environment }} ${{ inputs.iamEnvironment }}
+        ./tests/security/run.sh ${{ inputs.environment }}
         echo "exit_code=$?" >> $GITHUB_OUTPUT
 
     - name: Archive security test results

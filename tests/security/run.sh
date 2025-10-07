@@ -19,6 +19,8 @@ user_id=$(
     --client-name "$client_name"
 )
 
+print "DEBUG $client_id $client_name $email_prefix $environment $iam_environment"
+
 print "Username (user id): $user_id"
 
 delete_user() {
