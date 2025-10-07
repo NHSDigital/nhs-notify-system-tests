@@ -4,8 +4,11 @@ import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
 
 type CommonStepsProps = {
   basePage: TemplateMgmtBasePage;
-  letterPage: TemplateMgmtLetterPage;
   baseURL?: string;
+};
+
+type CommonLetterStepsProps = CommonStepsProps & {
+  letterPage: TemplateMgmtLetterPage;
 };
 
 export function startPage({ basePage, baseURL }: CommonStepsProps) {
@@ -48,15 +51,39 @@ export function chooseTemplate(
   });
 }
 
+export function createLetterTemplate(
+  { basePage, baseURL, letterPage }: CommonLetterStepsProps,
+  name: string
+) {
+  return test.step('Create template', async () => {
+    const pageSlug = 'upload-letter-template';
+
+    await expect(basePage.page).toHaveURL(
+      `${baseURL}/templates/${pageSlug}`
+    );
+
+    await expect(basePage.pageHeader).toHaveText(
+      `Upload a letter template`
+    );
+
+    await basePage.fillTextBox('Template name', name);
+
+    await letterPage.selectLetterOption('Letter type','x1');
+    await letterPage.selectLetterOption('Letter language','fr');
+    await letterPage.uploadLetterTemplate('Letter template PDF');
+  });
+}
+
+
 export function createTemplate(
-  { basePage, baseURL, letterPage }: CommonStepsProps,
+  { basePage, baseURL }: CommonStepsProps,
   channel: string,
   channelPath: string,
   name: string
 ) {
   return test.step('Create template', async () => {
 
-    const pageSlug = `${channel === 'Letter' ? 'upload' : 'create'}-${channelPath}-template`
+    const pageSlug = `create-${channelPath}-template`
 
     await expect(basePage.page).toHaveURL(
       `${baseURL}/templates/${pageSlug}`
@@ -67,10 +94,6 @@ export function createTemplate(
       await expect(basePage.pageHeader).toHaveText(
         `Create text message template`
       );
-    } else if (channel === 'Letter') {
-        await expect(basePage.pageHeader).toHaveText(
-          `Upload a letter template`
-        );
     } else {
       await expect(basePage.pageHeader).toHaveText(
         `Create ${channel} template`
@@ -83,23 +106,14 @@ export function createTemplate(
       await basePage.fillTextBox('Subject line', 'E2E subject');
     }
 
-    if (channel != 'Letter') {
-      await basePage.fillTextBox('Message', 'E2E Message');
-      await basePage.clickButtonByName('Save and preview');
-    }
-
-    if (channel === 'Letter') {
-      await letterPage.selectLetterOption('Letter type','x1');
-      await letterPage.selectLetterOption('Letter language','fr');
-      await letterPage.uploadLetterTemplate('Letter template PDF');
-    }
-
+    await basePage.fillTextBox('Message', 'E2E Message');
+    await basePage.clickButtonByName('Save and preview');
 
   });
 }
 
 export function requestProof(
-  { basePage, baseURL, letterPage }: CommonStepsProps,
+  { basePage, baseURL, letterPage }: CommonLetterStepsProps,
   channel: string,
   channelPath: string,
 ) {
