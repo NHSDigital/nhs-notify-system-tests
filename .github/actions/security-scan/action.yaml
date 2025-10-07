@@ -6,6 +6,11 @@ inputs:
     description: "Web gateway subdomain to test"
     required: false
     default: main
+    
+  iamEnvironment:
+    description: "IAM subdomain to test"
+    required: false
+    default: main
 
 runs:
   using: "composite"
@@ -24,7 +29,7 @@ runs:
       shell: bash
       run: |
         set +e
-        ./tests/security/run.sh ${{ inputs.environment }}
+        ./tests/security/run.sh ${{ inputs.environment }} ${{ inputs.iamEnvironment }}
         echo "exit_code=$?" >> $GITHUB_OUTPUT
 
     - name: Archive security test results
