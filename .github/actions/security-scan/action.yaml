@@ -6,7 +6,7 @@ inputs:
     description: "Web gateway subdomain to test"
     required: false
     default: main
-    
+
   iamEnvironment:
     description: "IAM subdomain to test"
     required: false
