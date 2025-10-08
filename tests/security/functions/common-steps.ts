@@ -74,7 +74,6 @@ export function createLetterTemplate(
   });
 }
 
-
 export function createTemplate(
   { basePage, baseURL }: CommonStepsProps,
   channel: string,
