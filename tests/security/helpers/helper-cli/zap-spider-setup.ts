@@ -58,7 +58,7 @@ async function main() {
 
     expect(page).toHaveURL(loggedInUrl);
 
-    await createTemplate(page, 'sms');
+    await createTemplate(page, 'sms', 'Text message (SMS)');
 
     return headers.cookie;
   } catch (err) {
@@ -68,17 +68,14 @@ async function main() {
   }
 }
 
-async function createTemplate(page: Page, commType: string) {
+async function createTemplate(page: Page, commType: string, commTypeLabel: string) {
   const createTemplateButton = page.locator('a[role="button"]');
 
   await createTemplateButton.click();
 
   await page.waitForLoadState('networkidle');
 
-  const commTypeRadio = page.locator(
-    `input[id="templateType-${commType.toUpperCase()}"]`
-  );
-  await commTypeRadio.click();
+  await page.getByLabel(commTypeLabel).check();
 
   const continueButton = page.locator('button[data-testid="submit-button"]');
   await continueButton.click();

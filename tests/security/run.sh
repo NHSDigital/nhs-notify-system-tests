@@ -4,7 +4,7 @@ cd $(dirname $BASH_SOURCE[0])
 source lib.sh
 
 environment="${1:-main}"
-iam_environment="${2:-main}"
+iam_environment="${2:-${1:-main}}"
 email_prefix="security-test-login"
 client_id=$(jq -r '.clients.Client4.id' ./fixtures/clients.json)
 client_name=$(jq -r '.clients.Client4.name' ./fixtures/clients.json)

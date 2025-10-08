@@ -7,6 +7,11 @@ inputs:
     required: false
     default: main
 
+  iamEnvironment:
+    description: "IAM subdomain to test"
+    required: false
+    default: main
+
 runs:
   using: "composite"
 

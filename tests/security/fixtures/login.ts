@@ -13,9 +13,7 @@ async function enterCis2TotpCode(
   cis2Credentials: Cis2CredentialProvider,
   targetHeadingText: string
 ) {
-  await page
-    .locator(`//input[@data-vv-as='Enter verification code']`)
-    .fill(cis2Credentials.totp());
+  await page.getByLabel('Enter verification code').fill(cis2Credentials.totp());
   await page.getByText(/\W+Submit\W+/).click();
 
   const happyPathSelector = page.getByText(targetHeadingText);
@@ -62,9 +60,7 @@ async function loginWithCis2(
     await page.fill('input[name="email"]', cis2Credentials.username);
     await page.fill('input[name="password"]', cis2Credentials.password);
     await page.getByText(/\W+Continue\W+/).click();
-    await page.waitForSelector(
-      `//input[@data-vv-as='Enter verification code']`
-    );
+    await expect(page.getByText('Enter verification code')).toBeVisible();
 
     // CIS2 - TOTP form
     await enterCis2TotpCodeWithRetry(page, cis2Credentials, targetHeadingText);
