@@ -114,6 +114,10 @@ export class TemplateMgmtBasePage {
       .fill(textBoxContent);
   }
 
+  async checkRadioByLabel(label: string) {
+    await this.page.getByLabel(label).check();
+  }
+
   async checkRadio(radioName: string) {
     await this.page.getByRole("radio", { name: radioName }).check();
   }
