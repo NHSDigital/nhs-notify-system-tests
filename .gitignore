@@ -18,11 +18,13 @@ node_modules
 */node_modules
 /.pnp
 .pnp.js
+.tool-versions
 
 # locust with playwright
 *.pyc
 results_*.csv
 .DS_Store
+venv/
 
 # Playwright e2e
 test-results/
@@ -46,3 +48,4 @@ tests/security/pages/downloads/
 
 # DOTENV
 .env
+.envrc
