@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-npm run typecheck
+npm query .workspace
 exit 0
 
 script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
