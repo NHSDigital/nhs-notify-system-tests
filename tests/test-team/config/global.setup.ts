@@ -1,6 +1,6 @@
 import { chromium } from '@playwright/test';
-import fs from 'fs';
-import generate from 'generate-password';
+import fs from 'node:fs';
+import { generate as generatePassword } from 'generate-password';
 import {
   CognitoUserHelper,
   TestClientConfig,
@@ -37,7 +37,7 @@ async function createStorageStateFile(
   let user;
 
   try {
-    const password = generate.generate({
+    const password = generatePassword({
       length: 12,
       numbers: true,
       uppercase: true,
@@ -48,15 +48,16 @@ async function createStorageStateFile(
     user = await cognitoHelper.createUser(username, password, testClientConfig);
     const browser = await chromium.launch({ headless: true, slowMo: 0 });
     const context = await browser.newContext({
-    acceptDownloads: true});
+      acceptDownloads: true,
+    });
     const page = await context.newPage();
 
-      try {
-        await page.goto(loginUrl);
-        console.log('Page loaded successfully');
-      } catch (error) {
-        console.error('Failed to load page:', error);
-      }
+    try {
+      await page.goto(loginUrl);
+      console.log('Page loaded successfully');
+    } catch (error) {
+      console.error('Failed to load page:', error);
+    }
 
     await page.getByRole('link', { name: 'Sign in' }).click();
     console.log('Login button clicked');

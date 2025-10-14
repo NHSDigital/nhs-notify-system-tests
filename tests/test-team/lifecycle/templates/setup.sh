@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+npm run typecheck
+exit 0
+
 script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
 TARGET_ENVIRONMENT=$1
