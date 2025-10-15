@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-echo "seed: $SEED"
+echo "seed: $RUN_ID_SEED"
+npm query .workspace
 exit 0
 
 script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
