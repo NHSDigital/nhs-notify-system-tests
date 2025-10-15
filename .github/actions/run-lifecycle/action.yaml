@@ -60,6 +60,11 @@ runs:
         fi
       shell: bash
 
+    - name: "Repo setup"
+      shell: bash
+      run: |
+        npm ci
+
     - name: Pre-teardown - attempt to download setup JSON artifact
       if: inputs.phase == 'teardown' && steps.check-script.outputs.script_exists == 'true'
       env:
@@ -77,6 +82,8 @@ runs:
 
     - name: Run ${{ inputs.suite }} test suite ${{ inputs.phase }} lifecycle script for {{ inputs.service }} service
       if: steps.check-script.outputs.script_exists == 'true'
+      env:
+        SEED: ${{ inputs.github_run_id }}
       run: |
         echo "Running ${{ steps.check-script.outputs.script_file }} with environment '${{ inputs.environment }}'..."
         bash "${{ steps.check-script.outputs.script_file }}" "${{ inputs.environment }}"

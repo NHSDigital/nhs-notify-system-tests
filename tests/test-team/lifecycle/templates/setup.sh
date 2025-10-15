@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-npm query .workspace
+echo "seed: $SEED"
 exit 0
 
 script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";

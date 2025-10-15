@@ -6,6 +6,9 @@ inputs:
     description: Name of the environment under test
     required: true
     default: main
+  github_run_id:
+    description: GitHub Run ID the action is being run from
+    required: true
 
 outputs:
   test_users:
@@ -24,6 +27,7 @@ runs:
       shell: bash
       env:
         TARGET_ENVIRONMENT: ${{ inputs.targetEnvironment }}
+        SEED: ${{ inputs.github_run_id }}
       run: |
         make test-product
     - name: Archive product test results
