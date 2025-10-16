@@ -12,7 +12,7 @@ let cognitoHelper: CognitoUserHelper;
 const $TestClientConfig = z.object({
   id: z.string(),
   name: z.string(),
-  campaignId: z.string().optional(),
+  campaignIds: z.array(z.string()).optional(),
   features: z.object({
     proofing: z.boolean(),
   }),
