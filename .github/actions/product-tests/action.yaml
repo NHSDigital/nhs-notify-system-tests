@@ -29,6 +29,7 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.github_token }}
       run: |
+        gh run view "${{ inputs.github_run_id }}" --repo "$${{ inputs.github_repository }}" --json artifacts
         ARTIFACT_NAME="auth-state.json"
         DEST_PATH="./tests/test-team/lifecycle/auth"
         echo "Downloading artifact '$ARTIFACT_NAME' to $DEST_PATH ..."
