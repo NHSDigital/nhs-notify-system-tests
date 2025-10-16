@@ -4,8 +4,6 @@
   "private": true,
   "scripts": {
     "test:product": "playwright test --project product -c config/dev.config.ts",
-    "test:product:setup:templates": "tsx ./lifecycle/templates/setup.ts",
-    "test:product:teardown:templates": "tsx ./lifecycle/templates/teardown.ts",
     "test:product:local": "$(git rev-parse --show-toplevel)/scripts/tests/local-lifecycle.sh $(pwd) test:product auth",
     "typecheck": "tsc --noEmit"
   },

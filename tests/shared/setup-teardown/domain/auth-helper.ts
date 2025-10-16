@@ -15,23 +15,15 @@ import {
   PutParameterCommand,
   SSMClient,
 } from '@aws-sdk/client-ssm';
+import type { StaticClientConfig } from '../../types';
+import { generate as generatePassword } from 'generate-password';
 
 export type User = {
-  email: string;
-  userId: string;
-  clientId: string;
+  password: string;
+  username: string;
 };
 
-export type TestClientConfig = {
-  id: string;
-  name: string;
-  campaignId?: string;
-  features: {
-    proofing: boolean;
-  };
-};
-
-export class CognitoUserHelper {
+export class AuthHelper {
   private readonly userPoolId: string;
 
   private static environment: string;
@@ -50,7 +42,7 @@ export class CognitoUserHelper {
 
   private clientIds = new Set<string>();
 
-  static async init(environment: string): Promise<CognitoUserHelper> {
+  static async init(environment: string): Promise<AuthHelper> {
     this.environment = environment;
     const cognito = new CognitoIdentityProviderClient({ region: 'eu-west-2' });
     const poolName = `nhs-notify-${environment}-app`;
@@ -66,7 +58,7 @@ export class CognitoUserHelper {
       );
 
       const pool = response.UserPools?.find((p) => p.Name === poolName);
-      if (pool) return new CognitoUserHelper(pool.Id!);
+      if (pool) return new AuthHelper(pool.Id!);
 
       nextToken = response.NextToken;
     } while (nextToken);
@@ -75,12 +67,10 @@ export class CognitoUserHelper {
   }
 
   async createUser(
-    username: string,
-    password: string,
-    client: TestClientConfig
+    email: string,
+    clientId: string,
+    clientConfig: StaticClientConfig['auth']
   ): Promise<User> {
-    const email = `${username}@nhs.net`;
-
     const user = await this.cognito.send(
       new AdminCreateUserCommand({
         UserPoolId: this.userPoolId,
@@ -103,6 +93,14 @@ export class CognitoUserHelper {
       throw new Error('Unable to generate cognito user');
     }
 
+    const password = generatePassword({
+      length: 12,
+      numbers: true,
+      uppercase: true,
+      symbols: true,
+      strict: true,
+    });
+
     await this.cognito.send(
       new AdminSetUserPasswordCommand({
         UserPoolId: this.userPoolId,
@@ -112,21 +110,20 @@ export class CognitoUserHelper {
       })
     );
 
-    if (!this.clientIds.has(client.id)) {
-      this.clientIds.add(client.id);
+    if (!this.clientIds.has(clientId)) {
+      this.clientIds.add(clientId);
 
       await Promise.all([
-        this.configureClient(client),
-        this.createClientGroup(client.id),
+        this.configureClient(clientId, clientConfig),
+        this.createClientGroup(clientId),
       ]);
     }
 
-    await this.addUserToClientGroup(email, client.id);
+    await this.addUserToClientGroup(email, clientId);
 
     return {
-      clientId: client.id,
-      email,
-      userId: user.User.Username,
+      password,
+      username: user.User.Username,
     };
   }
 
@@ -160,7 +157,7 @@ export class CognitoUserHelper {
       new CreateGroupCommand({
         GroupName: `client:${clientId}`,
         UserPoolId: this.userPoolId,
-        Description: 'Playwright'
+        Description: 'Playwright',
       })
     );
   }
@@ -184,13 +181,16 @@ export class CognitoUserHelper {
     );
   }
 
-  private async configureClient(client: TestClientConfig) {
-    const clientParameterPath = `/nhs-notify-${CognitoUserHelper.environment}-app/clients/${client.id}`;
+  private async configureClient(
+    clientId: string,
+    config: StaticClientConfig['auth']
+  ) {
+    const clientParameterPath = `/nhs-notify-${AuthHelper.environment}-app/clients/${clientId}`;
 
     await this.ssm.send(
       new PutParameterCommand({
         Name: clientParameterPath,
-        Value: JSON.stringify({ name: client.name }),
+        Value: JSON.stringify({ name: config.name }),
         Type: 'String', // unencrypted, unlike the real parameters
         Overwrite: true,
       })
@@ -198,7 +198,7 @@ export class CognitoUserHelper {
   }
 
   private async deleteClientConfig(clientId: string) {
-    const clientParameterPath = `/nhs-notify-${CognitoUserHelper.environment}-app/clients/${clientId}`;
+    const clientParameterPath = `/nhs-notify-${AuthHelper.environment}-app/clients/${clientId}`;
 
     await this.ssm.send(
       new DeleteParameterCommand({

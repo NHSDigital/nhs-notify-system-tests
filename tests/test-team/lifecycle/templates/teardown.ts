@@ -4,6 +4,7 @@ import {
   StateFile,
   deleteClientConfigs,
 } from 'nhs-notify-system-tests-shared';
+import z from 'zod';
 
 async function main() {
   const { lifecycleServiceDir, targetEnvrionment, runId } =
@@ -12,24 +13,36 @@ async function main() {
   const stateFile = new StateFile(lifecycleServiceDir, runId);
   await stateFile.readFromDisk();
 
+  let exit = 0;
+
   try {
     const initialSftpPollingFrequency = stateFile.getValue(
       'initialState',
-      'sftpPollingFrequency'
+      'sftpPollingFrequency',
+      z.string()
     );
 
     await restoreSftpPollingFrequency(
       targetEnvrionment,
       initialSftpPollingFrequency
     );
+  } catch (error) {
+    exit = 1;
+    console.error(error);
+  }
 
-    const clientIds = Object.values(stateFile.getValues('clients'));
+  try {
+    const clientIds = Object.values(
+      stateFile.getValues('clientIds', z.record(z.string(), z.string()))
+    );
 
     await deleteClientConfigs(targetEnvrionment, clientIds);
   } catch (error) {
+    exit = 1;
     console.error(error);
-    throw error;
   }
+
+  process.exit(exit);
 }
 
 main();

@@ -61,6 +61,8 @@ if [[ "$exit_code" -eq 0 ]]; then
 
   pushd "$pkg_dir" >/dev/null
 
+  export RUN_ID="$run_id"
+
   if ! npm run "$test_cmd" -- ${extra_args+"${extra_args[@]}"}; then
     echo "✖ ${test_cmd} failed" >&2
     exit_code=1

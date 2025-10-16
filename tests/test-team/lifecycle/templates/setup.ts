@@ -1,8 +1,11 @@
 import {
+  createClientConfig,
   increaseSftpPollingFrequency,
+  type StaticClientConfig,
   parseSetupTeardownArgs,
   StateFile,
 } from 'nhs-notify-system-tests-shared';
+import { clients } from '../../fixtures/clients';
 
 async function main() {
   const { lifecycleServiceDir, targetEnvrionment, runId } =
@@ -14,7 +17,30 @@ async function main() {
     targetEnvrionment
   );
 
-  stateFile.add('initialState', 'sftpPollingFrequency', sftpPollingFrequency);
+  stateFile.setValue(
+    'initialState',
+    'sftpPollingFrequency',
+    sftpPollingFrequency
+  );
+
+  const clientEntries: [
+    string,
+    { config: StaticClientConfig['templates']; id: string }
+  ][] = Object.entries(clients).map(([key, config]) => [
+    key,
+    { config, id: `${key}${runId}` },
+  ]);
+
+  await Promise.all(
+    clientEntries.map(([, { id, config }]) =>
+      createClientConfig(targetEnvrionment, id, config)
+    )
+  );
+
+  stateFile.setValues(
+    'clientsIds',
+    Object.fromEntries(clientEntries.map(([key, { id }]) => [key, id]))
+  );
 
   await stateFile.persist();
 }

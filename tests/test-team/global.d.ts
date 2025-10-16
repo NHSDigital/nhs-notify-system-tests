@@ -1,6 +1,7 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      RUN_ID: string;
       TARGET_ENVIRONMENT: string;
       TEMPLATE_STORAGE_TABLE_NAME: string;
     }

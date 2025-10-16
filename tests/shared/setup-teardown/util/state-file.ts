@@ -1,8 +1,9 @@
 import { writeFile, readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { ZodSafeParseResult, ZodType } from 'zod';
 
 export class StateFile {
-  private state: Record<string, Record<string, string>> = {};
+  private state: Record<string, Record<string, unknown>> = {};
 
   private readonly path: string;
 
@@ -17,29 +18,25 @@ export class StateFile {
     this.path = path.join(this.directory, 'state.json');
   }
 
-  add(categoryKey: string, key: string, value: string) {
+  setValue(categoryKey: string, key: string, value: unknown) {
     this.state[categoryKey] ??= {};
     this.state[categoryKey][key] = value;
   }
 
-  getValue(categoryKey: string, key: string): string {
-    const value = this.state[categoryKey]?.[key];
-
-    if (value === undefined) {
-      throw new Error(`${categoryKey}.${key} is undefined`);
-    }
-
-    return value;
+  setValues(categoryKey: string, values: Record<string, unknown>) {
+    this.state[categoryKey] = values;
   }
 
-  getValues(categoryKey: string): Record<string, string> {
+  getValue<T>(categoryKey: string, key: string, schema: ZodType<T>): T {
+    const value = this.state[categoryKey]?.[key];
+    const parsed = schema.safeParse(value);
+    return this.wrapError(parsed, `Failed to retrieve ${categoryKey}.${key}`);
+  }
+
+  getValues<T>(categoryKey: string, schema: ZodType<T>): T {
     const category = this.state[categoryKey];
-
-    if (category === undefined) {
-      throw new Error(`${categoryKey} is undefined`);
-    }
-
-    return category;
+    const parsed = schema.safeParse(category);
+    return this.wrapError(parsed, `Failed to retrieve ${categoryKey}`);
   }
 
   async readFromDisk() {
@@ -58,5 +55,12 @@ export class StateFile {
 
   async persist() {
     await writeFile(this.path, JSON.stringify(this.state, null, 2));
+  }
+
+  private wrapError<T>(res: ZodSafeParseResult<T>, message: string): T {
+    if (!res.success) {
+      throw new Error(message, { cause: res.error });
+    }
+    return res.data;
   }
 }
