@@ -70,7 +70,7 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.github_token }}
       run: |
-        ARTIFACT_NAME="${{ inputs.service }}-state.json"
+        ARTIFACT_NAME="${{ inputs.service }}-state"
         DEST_PATH="${{ steps.check-script.outputs.script_dir }}"
         echo "Attempting to download artifact '$ARTIFACT_NAME' to $DEST_PATH ..."
         if gh run download "${{ inputs.github_run_id }}" --repo "${{ inputs.github_repository }}" --name "$ARTIFACT_NAME" --dir "$DEST_PATH"; then
@@ -78,7 +78,6 @@ runs:
         else
           echo "Artifact '$ARTIFACT_NAME' not found. Continuing without it."
         fi
-        mv "${DEST_PATH}/auth-state.json" "${DEST_PATH}/state.json"
       shell: bash
 
     - name: Run ${{ inputs.suite }} test suite ${{ inputs.phase }} lifecycle script for {{ inputs.service }} service
@@ -93,6 +92,6 @@ runs:
       if: inputs.phase == 'setup' && steps.check-script.outputs.script_exists == 'true'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.service }}-state.json
+        name: ${{ inputs.service }}-state
         path: ${{ steps.check-script.outputs.script_dir }}/state.json
         if-no-files-found: ignore
