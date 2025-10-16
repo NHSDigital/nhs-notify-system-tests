@@ -6,7 +6,6 @@ import {
   deleteClientTemplates,
 } from 'nhs-notify-system-tests-shared';
 import z from 'zod';
-import { cis2ClientId } from '../../fixtures/clients';
 
 async function main() {
   const { lifecycleServiceDir, targetEnvrionment, runId } =
@@ -17,30 +16,37 @@ async function main() {
 
   let exit = 0;
 
-  try {
-    const initialSftpPollingFrequency = stateFile.getValue(
-      'initialState',
-      'sftpPollingFrequency',
-      z.string()
-    );
+  const initialSftpPollingFrequency = stateFile.getValue(
+    'initialState',
+    'sftpPollingFrequency',
+    z.string().default('')
+  );
 
-    await restoreSftpPollingFrequency(
-      targetEnvrionment,
-      initialSftpPollingFrequency
-    );
-  } catch (error) {
+  await restoreSftpPollingFrequency(
+    targetEnvrionment,
+    initialSftpPollingFrequency
+  ).catch((error) => {
     exit = 1;
     console.error(error);
-  }
+  });
 
   const clientIds = Object.values(
-    stateFile.getValues('clientIds', z.record(z.string(), z.string()))
+    stateFile.getValues(
+      'clientIds',
+      z.record(z.string(), z.string()).default({})
+    )
   );
 
   await deleteClientConfigs(targetEnvrionment, clientIds).catch((error) => {
     exit = 1;
     console.error(error);
   });
+
+  const cis2ClientId = stateFile.getValue(
+    'cis2',
+    'notify-client-id',
+    z.string().default('')
+  );
 
   const deleted = await Promise.allSettled(
     [...clientIds, cis2ClientId].map((id) =>

@@ -1,13 +1,10 @@
 import { StaticClientConfig } from '../../types';
-import { TemplatesClientConfig } from '../types';
 import { deleteParameters, putParameter } from '../util/ssm';
 
 export async function deleteClientConfigs(
   environment: string,
   clientIds: string[]
 ) {
-  if (!clientIds.length) return
-
   await deleteParameters(
     clientIds.map((id) => `/nhs-notify-${environment}-app/clients/${id}`)
   );

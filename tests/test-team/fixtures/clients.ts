@@ -35,5 +35,3 @@ export const clients: Record<string, StaticClientConfig> = {
     },
   },
 };
-
-export const cis2ClientId = '11a686aa-3e06-46a4-8250-bd0ee61f19e1';

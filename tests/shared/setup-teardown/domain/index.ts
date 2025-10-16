@@ -1,4 +1,5 @@
 export * from './auth-helper'
 export * from './delete-client-templates'
+export * from './get-cis2-client-id'
 export * from './templates-client-config'
 export * from './sftp-polling-frequency'

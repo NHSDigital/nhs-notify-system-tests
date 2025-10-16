@@ -4,6 +4,7 @@ import {
   type StaticClientConfig,
   parseSetupTeardownArgs,
   StateFile,
+  getCis2ClientId,
 } from 'nhs-notify-system-tests-shared';
 import { clients } from '../../fixtures/clients';
 
@@ -41,6 +42,10 @@ async function main() {
     'clientIds',
     Object.fromEntries(clientEntries.map(([key, { id }]) => [key, id]))
   );
+
+  const cis2ClientId = await getCis2ClientId();
+
+  stateFile.setValue('cis2', 'notify-client-id', cis2ClientId);
 
   await stateFile.persist();
 }
