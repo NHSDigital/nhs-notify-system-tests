@@ -1,6 +1,7 @@
-import { chromium } from '@playwright/test';
+import { chromium, type FullConfig } from '@playwright/test';
 import { StateFile } from 'nhs-notify-system-tests-shared';
 import { mkdir, rm } from 'node:fs/promises';
+import path, { dirname } from 'node:path';
 import z from 'zod';
 
 async function login(userKey: string, username: string, password: string) {
@@ -40,11 +41,13 @@ async function cleanupLoginState() {
   await mkdir('login-state');
 }
 
-async function globalSetup() {
+async function globalSetup(config: FullConfig) {
   await cleanupLoginState();
 
+  const projectRoot = path.resolve(dirname(config.configFile ?? ''), '..');
+
   const authSetupStateFile = new StateFile(
-    './lifecycle/auth',
+    path.join(projectRoot, 'lifecycle', 'auth'),
     process.env.RUN_ID
   );
 
