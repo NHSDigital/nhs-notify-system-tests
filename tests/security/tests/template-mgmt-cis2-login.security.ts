@@ -1,6 +1,6 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
-import { loginWithCis2, logOut } from '../fixtures/login';
+import { loginWithCis2, logOut } from '../functions/login';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
   chooseTemplate,

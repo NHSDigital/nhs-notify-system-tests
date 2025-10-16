@@ -1,11 +1,14 @@
 name: Product tests
-description: "Run NHS Notify product tests"
+description: 'Run NHS Notify product tests'
 
 inputs:
   targetEnvironment:
     description: Name of the environment under test
     required: true
     default: main
+  github_token:
+    description: GitHub access token
+    required: true
   github_run_id:
     description: GitHub Run ID the action is being run from
     required: true
@@ -16,13 +19,24 @@ outputs:
     value: ${{ steps.generate-output.outputs.test_users }}
 
 runs:
-  using: "composite"
+  using: 'composite'
 
   steps:
-    - name: "Repo setup"
+    - name: 'Repo setup'
       shell: bash
       run: |
         npm ci
+
+    - name: Download setup JSON artifact (auth service)
+      env:
+        GH_TOKEN: ${{ inputs.github_token }}
+      run: |
+        ARTIFACT_NAME="auth-state.json"
+        DEST_PATH="./tests/test-team/lifecycle/auth/state.json"
+        echo "Downloading artifact '$ARTIFACT_NAME' to $DEST_PATH ..."
+        gh run download "${{ inputs.github_run_id }}" --repo "${{ inputs.github_repository }}" --name "$ARTIFACT_NAME" --dir "$DEST_PATH"
+      shell: bash
+
     - name: Run product tests
       shell: bash
       env:
@@ -34,7 +48,7 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: Product test report
-        path: "tests/test-team/playwright-report"
+        path: 'tests/test-team/playwright-report'
     - name: Output test user IDs for cleanup
       id: generate-output
       shell: bash
