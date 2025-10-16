@@ -13,7 +13,13 @@ export async function deleteParameters(names: string[]) {
 }
 
 export async function getParameter(name: string) {
-  return client.send(new GetParameterCommand({ Name: name }));
+  const result = await client.send(new GetParameterCommand({ Name: name }));
+
+  if (result.Parameter?.Value === undefined) {
+    throw new Error(`Undefined result when fetching ${name}`)
+  }
+
+  return result.Parameter.Value
 }
 
 export async function putParameter(name: string, value: unknown) {

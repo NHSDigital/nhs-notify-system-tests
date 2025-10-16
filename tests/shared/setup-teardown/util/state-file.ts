@@ -43,6 +43,7 @@ export class StateFile {
   }
 
   async loadFromDisk() {
+    console.log('this.path', this.path);
     const storedState = JSON.parse(await readFile(this.path, 'utf8'));
 
     const storedRunId = storedState['run']['runId'];
