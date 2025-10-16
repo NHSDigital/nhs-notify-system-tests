@@ -7,7 +7,7 @@ script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 TARGET_ENVIRONMENT="$1"
 run_id="$2"
 
-echo "Running the security test templates setup script..."
+echo "Running the security test auth setup script..."
 echo "Target Environment: $TARGET_ENVIRONMENT"
 echo "Run ID: $run_id"
 

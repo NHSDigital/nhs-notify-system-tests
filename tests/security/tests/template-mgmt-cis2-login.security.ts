@@ -27,7 +27,6 @@ test.use({ storageState: { cookies: [], origins: [] } });
 test('User logs in via CIS2, saves data in templates, logs out and logs back in again', async ({
   baseURL,
   page,
-  context,
 }) => {
   if (!baseURL) {
     throw new Error(`Missing baseURL ${baseURL}`);
@@ -38,7 +37,7 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   const props = {
     basePage,
     baseURL,
-    letterPage
+    letterPage,
   };
   const channel = 'Email';
   const channelPath = 'email';
@@ -50,7 +49,6 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath, name);
-  await context.storageState({ path: 'cis2.json' });
   await logOut(basePage);
   await page.waitForLoadState('networkidle');
   await startPage({ basePage, baseURL });

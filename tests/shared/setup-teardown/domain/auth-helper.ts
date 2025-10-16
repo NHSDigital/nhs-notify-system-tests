@@ -19,6 +19,7 @@ import type { StaticClientConfig } from '../../types';
 import { generate as generatePassword } from 'generate-password';
 
 export type User = {
+  email: string;
   password: string;
   username: string;
 };
@@ -122,6 +123,7 @@ export class AuthHelper {
     await this.addUserToClientGroup(email, clientId);
 
     return {
+      email,
       password,
       username: user.User.Username,
     };

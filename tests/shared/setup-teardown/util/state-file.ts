@@ -43,7 +43,6 @@ export class StateFile {
   }
 
   async loadFromDisk() {
-    console.log('this.path', this.path);
     const storedState = JSON.parse(await readFile(this.path, 'utf8'));
 
     const storedRunId = storedState['run']['runId'];
@@ -58,6 +57,7 @@ export class StateFile {
   }
 
   async persist() {
+    console.log('path', this.path);
     await writeFile(this.path, JSON.stringify(this.state, null, 2));
   }
 

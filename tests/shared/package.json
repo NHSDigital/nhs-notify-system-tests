@@ -10,6 +10,7 @@
     "@aws-sdk/client-appsync": "3.806.0",
     "@aws-sdk/client-cognito-identity-provider": "3.806.0",
     "@aws-sdk/client-dynamodb": "3.806.0",
+    "@aws-sdk/client-eventbridge": "^3.910.0",
     "@aws-sdk/client-secrets-manager": "3.806.0",
     "@aws-sdk/client-ssm": "3.806.0",
     "@aws-sdk/lib-dynamodb": "3.806.0",
@@ -19,8 +20,5 @@
     "playwright": "^1.50.0",
     "totp-generator": "^1.0.0",
     "zod": "^4.0.5"
-  },
-  "dependencies": {
-    "@aws-sdk/client-eventbridge": "^3.910.0"
   }
 }

@@ -11,7 +11,7 @@ import {
   requestProof,
 } from '../functions/common-steps';
 
-test.use({ storageState: 'auth.json' });
+test.use({ storageState: 'login-state/primary.security.json' });
 
 test(`User creates and submits a new letter template successfully`, async ({
   page,

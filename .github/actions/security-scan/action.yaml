@@ -6,11 +6,19 @@ inputs:
     description: "Web gateway subdomain to test"
     required: false
     default: main
-
   iamEnvironment:
     description: "IAM subdomain to test"
     required: false
     default: main
+  github_token:
+    description: GitHub access token
+    required: true
+  github_run_id:
+    description: GitHub Run ID the action is being run from
+    required: true
+  github_repository:
+    description: GitHub Repository the action is being run from (owner/repo-name format)
+    required: true
 
 runs:
   using: "composite"
@@ -20,9 +28,16 @@ runs:
       shell: bash
       run: |
         npm ci
-    - name: Install Playwright Browsers
+
+    - name: Download setup JSON artifact (auth service)
+      env:
+        GH_TOKEN: ${{ inputs.github_token }}
+      run: |
+        ARTIFACT_NAME="auth-state"
+        DEST_PATH="./tests/security/lifecycle/auth"
+        echo "Downloading artifact '$ARTIFACT_NAME' to $DEST_PATH ..."
+        gh run download "${{ inputs.github_run_id }}" --repo "${{ inputs.github_repository }}" --name "$ARTIFACT_NAME" --dir "$DEST_PATH"
       shell: bash
-      run: npx -w=tests/security playwright install --with-deps
 
     - name: Run test - security scan
       id: test

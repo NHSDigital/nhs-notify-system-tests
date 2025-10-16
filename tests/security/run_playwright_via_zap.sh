@@ -101,9 +101,6 @@ run_playwright_via_zap() {
     return 1
   fi
 
-  # also register 'cleanup' from run.sh
-  trap "cleanup_zap '$zap_proxy_url' '$zap_container_id'; cleanup" SIGINT SIGTERM EXIT
-
   wait_for_zap $zap_proxy_url || {
     echo "ZAP health check failed."
     exit 1
