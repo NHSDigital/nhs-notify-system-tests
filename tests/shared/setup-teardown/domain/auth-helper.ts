@@ -46,7 +46,7 @@ export class AuthHelper {
     this.environment = environment;
     const cognito = new CognitoIdentityProviderClient({ region: 'eu-west-2' });
     const poolName = `nhs-notify-${environment}-app`;
-    
+
     let nextToken: string | undefined = undefined;
 
     do {
