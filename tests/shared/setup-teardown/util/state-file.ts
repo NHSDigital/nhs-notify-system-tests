@@ -30,16 +30,22 @@ export class StateFile {
   getValue<T>(categoryKey: string, key: string, schema: ZodType<T>): T {
     const value = this.state[categoryKey]?.[key];
     const parsed = schema.safeParse(value);
-    return this.wrapError(parsed, `Failed to retrieve ${categoryKey}.${key}`);
+    return this.wrapError(
+      parsed,
+      `Failed to retrieve ${categoryKey}.${key} in state file`
+    );
   }
 
   getValues<T>(categoryKey: string, schema: ZodType<T>): T {
     const category = this.state[categoryKey];
     const parsed = schema.safeParse(category);
-    return this.wrapError(parsed, `Failed to retrieve ${categoryKey}`);
+    return this.wrapError(
+      parsed,
+      `Failed to retrieve ${categoryKey} in state file`
+    );
   }
 
-  async readFromDisk() {
+  async loadFromDisk() {
     const storedState = JSON.parse(await readFile(this.path, 'utf8'));
 
     const storedRunId = storedState['run']['runId'];

@@ -28,7 +28,7 @@ async function main() {
     { config: StaticClientConfig['templates']; id: string }
   ][] = Object.entries(clients).map(([key, config]) => [
     key,
-    { config, id: `${key}${runId}` },
+    { config: config.templates, id: `${key}${runId}` },
   ]);
 
   await Promise.all(
@@ -38,7 +38,7 @@ async function main() {
   );
 
   stateFile.setValues(
-    'clientsIds',
+    'clientIds',
     Object.fromEntries(clientEntries.map(([key, { id }]) => [key, id]))
   );
 

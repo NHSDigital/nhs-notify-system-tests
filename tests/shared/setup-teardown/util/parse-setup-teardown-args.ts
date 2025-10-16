@@ -1,4 +1,4 @@
-import { basename } from 'node:path';
+import { dirname } from 'node:path';
 import z from 'zod';
 
 export function parseSetupTeardownArgs(argv: string[]): {
@@ -8,7 +8,7 @@ export function parseSetupTeardownArgs(argv: string[]): {
 } {
   const [, scriptPath, targetEnvrionment, runId] = argv;
 
-  const lifecycleServiceDir = basename(scriptPath);
+  const lifecycleServiceDir = dirname(scriptPath);
 
   const parseResult = z
     .object({

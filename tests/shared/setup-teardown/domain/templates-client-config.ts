@@ -6,8 +6,10 @@ export async function deleteClientConfigs(
   environment: string,
   clientIds: string[]
 ) {
+  if (!clientIds.length) return
+
   await deleteParameters(
-    clientIds.map((id) => `nhs-notify-${environment}-app/clients/${id}`)
+    clientIds.map((id) => `/nhs-notify-${environment}-app/clients/${id}`)
   );
 }
 
@@ -16,5 +18,5 @@ export async function createClientConfig(
   clientId: string,
   config: StaticClientConfig['templates']
 ) {
-  await putParameter(`nhs-notify-${environment}-app/clients/${clientId}`, config);
+  await putParameter(`/nhs-notify-${environment}-app/clients/${clientId}`, config);
 }

@@ -11,4 +11,4 @@ echo "Running the product test auth setup script..."
 echo "Target Environment: $TARGET_ENVIRONMENT"
 echo "Run ID: $run_id"
 
-tsx "${script_path}/setup.ts" -- "$TARGET_ENVIRONMENT" "$run_id"
+tsx "${script_path}/setup.ts" "$TARGET_ENVIRONMENT" "$run_id"

@@ -29,13 +29,8 @@ test-results/
 playwright-report/
 blob-report/
 playwright/.cache/
-auth.json
-copy.json
-delete.json
-createdUsers.json
-cis2.json
-test-data-cleanup.json
-tests/*/lifecycle/*/setup.json
+login-state/
+tests/*/lifecycle/*/state.json
 tests/test-team/pages/downloads/
 
 # security tests

@@ -11,7 +11,7 @@ async function main() {
     parseSetupTeardownArgs(process.argv);
 
   const stateFile = new StateFile(lifecycleServiceDir, runId);
-  await stateFile.readFromDisk();
+  await stateFile.loadFromDisk();
 
   let exit = 0;
 

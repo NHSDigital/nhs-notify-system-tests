@@ -12,7 +12,7 @@ import {
   previewPageChooseSubmit,
 } from '../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'auth.json' });
+test.use({ storageState: 'login-state/product.json' });
 
 test(`User creates and submits a new sms template successfully`, async ({
   page,

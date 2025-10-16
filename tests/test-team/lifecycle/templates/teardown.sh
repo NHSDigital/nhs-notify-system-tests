@@ -11,4 +11,4 @@ echo "Running the product test templates teardown script..."
 echo "Target Environment: $TARGET_ENVIRONMENT"
 echo "Run ID: $run_id"
 
-tsx "${script_path}/teardown.ts" -- "$TARGET_ENVIRONMENT" "$run_id"
+tsx "${script_path}/teardown.ts" "$TARGET_ENVIRONMENT" "$run_id"

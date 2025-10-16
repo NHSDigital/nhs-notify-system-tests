@@ -14,5 +14,7 @@ export async function deleteParameters(names: string[]) {
 export async function putParameter(name: string, value: unknown) {
   const str = typeof value === 'string' ? value : JSON.stringify(value);
 
-  return client.send(new PutParameterCommand({ Name: name, Value: str }));
+  return client.send(
+    new PutParameterCommand({ Name: name, Value: str, Type: 'String' })
+  );
 }

@@ -1,5 +1,7 @@
 import { chromium } from '@playwright/test';
 import { StateFile } from 'nhs-notify-system-tests-shared';
+import path from 'node:path';
+import { mkdir, readdir, rm, unlink } from 'node:fs/promises';
 import z from 'zod';
 
 async function login(userKey: string, username: string, password: string) {
@@ -28,17 +30,26 @@ async function login(userKey: string, username: string, password: string) {
   await page.waitForSelector('text=Message templates', { timeout: 30000 });
   console.log('login complete');
 
-  await context.storageState({ path: `${userKey}-login-state.json` });
+  await context.storageState({ path: `login-state/${userKey}.json` });
   console.log('Storage state saved successfully.');
 
   await browser.close();
 }
 
+async function cleanupLoginState() {
+  await rm('login-state', { recursive: true, force: true });
+  await mkdir('login-state');
+}
+
 async function globalSetup() {
+  await cleanupLoginState();
+
   const authSetupStateFile = new StateFile(
     './lifecycle/auth',
     process.env.RUN_ID
   );
+
+  await authSetupStateFile.loadFromDisk();
 
   const createdUsers = Object.entries(
     authSetupStateFile.getValues(
@@ -57,6 +68,4 @@ async function globalSetup() {
   );
 }
 
-export default async function globalSetupAndTeardown() {
-  await globalSetup();
-}
+export default globalSetup;

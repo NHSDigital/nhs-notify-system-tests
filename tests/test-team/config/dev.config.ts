@@ -9,8 +9,7 @@ export default defineConfig({
   expect: {
     timeout: 30_000,
   },
-  // globalSetup: './global.setup',
-  // globalTeardown: './global.teardown',
+  globalSetup: './global.setup',
 
   workers: 7,
 
