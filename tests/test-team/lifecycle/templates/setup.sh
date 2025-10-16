@@ -35,15 +35,15 @@ seed_client_configuration() {
   | while IFS= read -r client_json; do
 
     client_id=$(jq -r '.id' <<<"$client_json")
-    campaign_id=$(jq -r '.campaignId' <<<"$client_json")
+    campaign_ids=$(jq -r '.campaignIds' <<<"$client_json")
     features_json=$(jq -c '.features' <<<"$client_json")
 
     param_path="${ssm_client_prefix}/${client_id}"
 
     value=$(jq -n \
-      --arg c_id "$campaign_id" \
+      --argjson c_ids "$campaign_ids" \
       --argjson feat "$features_json" \
-      '{ campaignId: $c_id, features: $feat }'
+      '{ campaignIds: $c_ids, features: $feat }'
     )
 
     aws ssm put-parameter \
