@@ -4,12 +4,16 @@ set -eu
 
 pkg_dir="$1"
 test_cmd="$2"
-target_environment="$3"
-primary_test_profile_key="$4"
-shift 4
+primary_test_profile_key="$3"
+shift 3
 extra_args=("$@")
 
+target_environment="$TARGET_ENVIRONMENT"
+
 exit_code=0
+
+run_id="local$(date +%Y%m%d%H%M%S)"
+echo "Running $test_cmd with run ID $run_id"
 
 run_lifecycle_phase() {
   local phase="$1"
@@ -34,7 +38,7 @@ run_lifecycle_phase() {
       continue
     fi
 
-    if ! bash "$script" "$target_environment"; then
+    if ! bash "$script" "$target_environment" "$run_id"; then
       echo "✖ ${phase} lifecycle failed for ${acct_key}" >&2
       exit_code=1
       [[ $phase = setup ]] && return
@@ -57,7 +61,7 @@ if [[ "$exit_code" -eq 0 ]]; then
 
   pushd "$pkg_dir" >/dev/null
 
-  if ! npm run "$test_cmd" -- "${extra_args[@]}"; then
+  if ! npm run "$test_cmd" -- ${extra_args+"${extra_args[@]}"}; then
     echo "✖ ${test_cmd} failed" >&2
     exit_code=1
   fi

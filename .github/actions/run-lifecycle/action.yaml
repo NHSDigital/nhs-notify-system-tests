@@ -82,11 +82,10 @@ runs:
 
     - name: Run ${{ inputs.suite }} test suite ${{ inputs.phase }} lifecycle script for {{ inputs.service }} service
       if: steps.check-script.outputs.script_exists == 'true'
-      env:
-        RUN_ID_SEED: ${{ inputs.github_run_id }}
       run: |
-        echo "Running ${{ steps.check-script.outputs.script_file }} with environment '${{ inputs.environment }}'..."
-        bash "${{ steps.check-script.outputs.script_file }}" "${{ inputs.environment }}"
+        run_id="ci${{ inputs.github_run_id }}"
+        echo "Running ${{ steps.check-script.outputs.script_file }} with environment '${{ inputs.environment }}' and run ID ${run_id}..."
+        bash "${{ steps.check-script.outputs.script_file }}" "${{ inputs.environment }}" "${run_id}"
       shell: bash
 
     - name: Post-setup - upload setup JSON file if it exists

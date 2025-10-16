@@ -4,15 +4,17 @@
   "private": true,
   "scripts": {
     "test:product": "playwright test --project product -c config/dev.config.ts",
-    "test:product:local": "$(git rev-parse --show-toplevel)/scripts/tests/local-lifecycle.sh $(pwd) test:product $TARGET_ENVIRONMENT auth",
+    "test:product:setup:templates": "tsx ./lifecycle/templates/setup.ts",
+    "test:product:teardown:templates": "tsx ./lifecycle/templates/teardown.ts",
+    "test:product:local": "$(git rev-parse --show-toplevel)/scripts/tests/local-lifecycle.sh $(pwd) test:product auth",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@aws-sdk/client-appsync": "^3.806.0",
     "@aws-sdk/client-cognito-identity-provider": "^3.806.0",
-    "@aws-sdk/client-ssm": "^3.806.0",
     "@aws-sdk/client-dynamodb": "^3.806.0",
     "@aws-sdk/client-secrets-manager": "^3.806.0",
+    "@aws-sdk/client-ssm": "^3.806.0",
     "@aws-sdk/lib-dynamodb": "^3.806.0",
     "@playwright/test": "^1.50.1",
     "@types/node": "^22.13.1",

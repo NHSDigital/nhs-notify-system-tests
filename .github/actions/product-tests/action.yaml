@@ -27,7 +27,6 @@ runs:
       shell: bash
       env:
         TARGET_ENVIRONMENT: ${{ inputs.targetEnvironment }}
-        RUN_ID_SEED: ${{ inputs.github_run_id }}
       run: |
         make test-product
     - name: Archive product test results

@@ -2,63 +2,63 @@
 
 set -euo pipefail
 
-echo "seed: $RUN_ID_SEED"
-npm query .workspace
-exit 0
-
 script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
 TARGET_ENVIRONMENT=$1
+run_id=$2
 
 echo "Running the product test templates setup script..."
 echo "Target Environment: $TARGET_ENVIRONMENT"
+echo "Run ID: $run_id"
 
-increase_sftp_polling_frequency() {
-  sftp_poll_rule_name="nhs-notify-$TARGET_ENVIRONMENT-app-api-sftp-poll-wtmmock"
+npm run test:product:setup:templates -- ${TARGET_ENVIRONMENT} ${run_id}
 
-  sftp_poll_rule=$(aws events describe-rule \
-    --name $sftp_poll_rule_name \
-    --output json)
+# increase_sftp_polling_frequency() {
+#   sftp_poll_rule_name="nhs-notify-$TARGET_ENVIRONMENT-app-api-sftp-poll-wtmmock"
 
-  echo "{
-    \"initialState\": {
-      \"rules\": {
-        \"$sftp_poll_rule_name\": $sftp_poll_rule
-      }
-    }
-  }" > $script_path/setup.json
+#   sftp_poll_rule=$(aws events describe-rule \
+#     --name $sftp_poll_rule_name \
+#     --output json)
 
-  aws events put-rule --name $sftp_poll_rule_name --schedule-expression "rate(1 minute)"
-}
+#   echo "{
+#     \"initialState\": {
+#       \"rules\": {
+#         \"$sftp_poll_rule_name\": $sftp_poll_rule
+#       }
+#     }
+#   }" > $script_path/setup.json
 
-seed_client_configuration() {
-  static_auth_data_path="${script_path}/../../fixtures/clients.json"
-  ssm_client_prefix="/nhs-notify-${TARGET_ENVIRONMENT}-app/clients"
+#   aws events put-rule --name $sftp_poll_rule_name --schedule-expression "rate(1 minute)"
+# }
 
-  jq -c '.clients | to_entries[].value' "$static_auth_data_path" \
-  | while IFS= read -r client_json; do
+# seed_client_configuration() {
+#   static_auth_data_path="${script_path}/../../fixtures/clients.json"
+#   ssm_client_prefix="/nhs-notify-${TARGET_ENVIRONMENT}-app/clients"
 
-    client_id=$(jq -r '.id' <<<"$client_json")
-    campaign_id=$(jq -r '.campaignId' <<<"$client_json")
-    features_json=$(jq -c '.features' <<<"$client_json")
+#   jq -c '.clients | to_entries[].value' "$static_auth_data_path" \
+#   | while IFS= read -r client_json; do
 
-    param_path="${ssm_client_prefix}/${client_id}"
+#     client_id=$(jq -r '.id' <<<"$client_json")
+#     campaign_id=$(jq -r '.campaignId' <<<"$client_json")
+#     features_json=$(jq -c '.features' <<<"$client_json")
 
-    value=$(jq -n \
-      --arg c_id "$campaign_id" \
-      --argjson feat "$features_json" \
-      '{ campaignId: $c_id, features: $feat }'
-    )
+#     param_path="${ssm_client_prefix}/${client_id}"
 
-    aws ssm put-parameter \
-      --name "$param_path" \
-      --value "$value" \
-      --type String \
-      --overwrite
+#     value=$(jq -n \
+#       --arg c_id "$campaign_id" \
+#       --argjson feat "$features_json" \
+#       '{ campaignId: $c_id, features: $feat }'
+#     )
 
-    echo "Created client SSM param: $param_path"
-  done
-}
+#     aws ssm put-parameter \
+#       --name "$param_path" \
+#       --value "$value" \
+#       --type String \
+#       --overwrite
 
-increase_sftp_polling_frequency
-seed_client_configuration
+#     echo "Created client SSM param: $param_path"
+#   done
+# }
+
+# increase_sftp_polling_frequency
+# seed_client_configuration
