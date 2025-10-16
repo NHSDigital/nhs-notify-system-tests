@@ -20,6 +20,8 @@ run_lifecycle_phase() {
   local lifecycle_dir="${pkg_dir}/lifecycle"
   for d in "${lifecycle_dir}"/*/; do
     [ -d "$d" ] || continue
+    rm "{$d}/state.json"
+
     acct_key=$(basename "$d")
     profile_var="AWS_PROFILE_${acct_key}"
 

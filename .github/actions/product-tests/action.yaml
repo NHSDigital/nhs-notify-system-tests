@@ -30,9 +30,9 @@ runs:
         GH_TOKEN: ${{ inputs.github_token }}
       run: |
         ARTIFACT_NAME="auth-state.json"
-        DEST_PATH="./tests/test-team/lifecycle/auth/state.json"
+        DEST_PATH="./tests/test-team/lifecycle/auth"
         echo "Downloading artifact '$ARTIFACT_NAME' to $DEST_PATH ..."
-        gh run download "${{ inputs.github_run_id }}" --repo "${{ inputs.github_repository }}" --name "$ARTIFACT_NAME" --dir "$DEST_PATH"
+        gh run download "${{ inputs.github_run_id }}" --repo "${{ inputs.github_repository }}" --name "state.json" --dir "$DEST_PATH"
       shell: bash
 
     - name: Run product tests
