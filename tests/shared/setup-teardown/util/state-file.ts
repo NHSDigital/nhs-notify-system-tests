@@ -11,10 +11,7 @@ export class StateFile {
     private readonly directory: string,
     private readonly runId: string
   ) {
-    this.state['run'] = {
-      runId,
-    };
-
+    this.setValue('run', 'runId', runId);
     this.path = path.join(this.directory, 'state.json');
   }
 

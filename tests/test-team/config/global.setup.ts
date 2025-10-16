@@ -1,7 +1,6 @@
 import { chromium } from '@playwright/test';
 import { StateFile } from 'nhs-notify-system-tests-shared';
-import path from 'node:path';
-import { mkdir, readdir, rm, unlink } from 'node:fs/promises';
+import { mkdir, rm } from 'node:fs/promises';
 import z from 'zod';
 
 async function login(userKey: string, username: string, password: string) {

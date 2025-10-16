@@ -12,11 +12,9 @@ inputs:
   github_run_id:
     description: GitHub Run ID the action is being run from
     required: true
-
-outputs:
-  test_users:
-    description: Test users
-    value: ${{ steps.generate-output.outputs.test_users }}
+  github_repository:
+    description: GitHub Repository the action is being run from (owner/repo-name format)
+    required: true
 
 runs:
   using: 'composite'
@@ -43,14 +41,10 @@ runs:
         TARGET_ENVIRONMENT: ${{ inputs.targetEnvironment }}
       run: |
         make test-product
+
     - name: Archive product test results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4s
       with:
         name: Product test report
         path: 'tests/test-team/playwright-report'
-    - name: Output test user IDs for cleanup
-      id: generate-output
-      shell: bash
-      run: |
-        echo test_users=$(cat tests/test-team/test-data-cleanup.json | jq -c) >> "$GITHUB_OUTPUT"
