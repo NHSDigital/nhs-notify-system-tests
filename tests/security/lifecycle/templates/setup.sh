@@ -8,7 +8,5 @@ TARGET_ENVIRONMENT="$1"
 run_id="$2"
 
 echo "Running the security test templates setup script..."
-echo "Target Environment: $TARGET_ENVIRONMENT"
-echo "Run ID: $run_id"
 
 npx tsx "${script_path}/setup.ts" "$TARGET_ENVIRONMENT" "$run_id"

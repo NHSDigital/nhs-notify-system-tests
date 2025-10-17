@@ -57,7 +57,6 @@ export class StateFile {
   }
 
   async persist() {
-    console.log('path', this.path);
     await writeFile(this.path, JSON.stringify(this.state, null, 2));
   }
 

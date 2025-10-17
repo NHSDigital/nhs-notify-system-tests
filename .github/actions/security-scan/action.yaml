@@ -42,9 +42,11 @@ runs:
     - name: Run test - security scan
       id: test
       shell: bash
+      env:
+        TARGET_ENVIRONMENT: ${{ inputs.environment }}
       run: |
         set +e
-        ./tests/security/run.sh ${{ inputs.environment }}
+        make test-security
         echo "exit_code=$?" >> $GITHUB_OUTPUT
 
     - name: Archive security test results

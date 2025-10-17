@@ -3,7 +3,7 @@ set -euo pipefail
 cd $(dirname $BASH_SOURCE[0])
 source lib.sh
 
-environment="${1:-main}"
+environment="${1:-${TARGET_ENVIRONMENT:-main}}"
 iam_environment="${2:-${1:-main}}"
 run_single_test="${3:-0}"
 
