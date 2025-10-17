@@ -12,7 +12,7 @@ import {
   previewPageChooseSubmit,
 } from '../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'login-state/primary.product.json' });
+test.use({ storageState: 'login-state/primary.json' });
 
 test(`User creates and submits a new email template successfully`, async ({
   page,

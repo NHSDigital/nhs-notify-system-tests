@@ -11,7 +11,7 @@ import {
   requestProof,
 } from '../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'login-state/primary.product.json' });
+test.use({ storageState: 'login-state/primary.json' });
 
 test(`User creates and submits a new letter template successfully`, async ({
   page,

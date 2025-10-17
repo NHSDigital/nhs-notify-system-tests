@@ -12,21 +12,34 @@ This package includes:
 
 Make sure the .env variable TARGET_ENVIRONMENT is correctly setup and sourced.  See .env.template for example.
 
-Login with AWS profile for iam-dev so that CIS2 test can connect to retrieve secrets.
+Ensure that AWS_PROFILE_templates and AWS_PROFILE_auth are setup and sourced. The values should match the profile
+names you have in your ~/.aws/config for the corresponding dev accounts for templates and auth/iam.
+
+Tests are run locally using a script which emulates the matrix of CI jobs which run setup, test and teardown phases 
+in different accounts.
+
+Login with any AWS profile. The test-runner script will select the required profile.
 
 ```shell
 export AWS_PROFILE=iam-dev
 aws sso login
 ```
 
-From the root folder, run the following command:
+From the tests/test-team folder, run the following command:
 
 ```shell
-make test-product
+npm run test:product:local
 ```
 
-Or from the tests/test-team folder, run the following command:
+Extra arguments can be passed to playwright. e.g:
 
 ```shell
-npm run test:product
+npm run test:product:local -- --grep "just this test"
+```
+
+The Playwright test result server does not run on failure, because this interferes with the test-runner script.
+You can run it on demand with
+
+```shell
+npx playwright show-report
 ```

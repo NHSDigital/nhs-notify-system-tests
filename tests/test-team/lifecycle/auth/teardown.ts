@@ -13,16 +13,14 @@ async function main() {
   const stateFile = new StateFile(lifecycleServiceDir, runId);
   await stateFile.loadFromDisk();
 
-  let exit = 0;
-
-  const authHelper = await AuthHelper.init(targetEnvrionment);
+  const authHelper = await AuthHelper.init(targetEnvrionment, 'product');
 
   const usersState = stateFile.getValues(
     'users',
     z.record(z.string(), z.object({ username: z.string() }))
   );
 
-  await Promise.all(
+  await Promise.allSettled(
     Object.entries(usersState).map(([key, userState]) =>
       authHelper.deleteUser(
         userState.username,
@@ -30,8 +28,6 @@ async function main() {
       )
     )
   );
-
-  process.exit(exit);
 }
 
 main();

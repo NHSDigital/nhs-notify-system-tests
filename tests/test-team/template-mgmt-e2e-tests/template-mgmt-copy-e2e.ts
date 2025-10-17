@@ -12,7 +12,7 @@ import {
   copyTemplate,
 } from '../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'login-state/copy.product.json' });
+test.use({ storageState: 'login-state/copy.json' });
 
 test(`User copies a template`, async ({ page, baseURL }) => {
   const props = {

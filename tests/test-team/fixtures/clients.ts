@@ -1,9 +1,9 @@
 import type { StaticClientConfig } from 'nhs-notify-system-tests-shared';
 
 export const clients: Record<string, StaticClientConfig> = {
-  Client1: {
+  ProductPrimary: {
     templates: {
-      campaignIds: ['Client-1-Product-Campaign'],
+      campaignIds: ['ProductPrimary-Campaign'],
       features: {
         proofing: true,
       },

@@ -24,17 +24,14 @@ async function main() {
     sftpPollingFrequency
   );
 
-  const clientEntries: [
-    string,
-    { config: StaticClientConfig['templates']; id: string }
-  ][] = Object.entries(clients).map(([key, config]) => [
-    key,
-    { config: config.templates, id: `${key}${runId}` },
-  ]);
+  const clientEntries = Object.entries(clients).map(
+    ([key, config]) =>
+      [key, { config: config.templates, id: `${key}${runId}` }] as const
+  );
 
   await Promise.all(
     clientEntries.map(([, { id, config }]) =>
-      createClientConfig(targetEnvrionment, id, config)
+      createClientConfig(targetEnvrionment, id, config, 'product')
     )
   );
 
