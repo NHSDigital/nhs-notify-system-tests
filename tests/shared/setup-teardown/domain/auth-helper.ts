@@ -202,7 +202,6 @@ export class AuthHelper {
         Name: clientParameterPath,
         Value: JSON.stringify({ name: config.name }),
         Type: 'String', // unencrypted, unlike the real parameters
-        Overwrite: true,
         Tags: [{ Key: 'test-suite', Value: this.suite }],
       })
     );
