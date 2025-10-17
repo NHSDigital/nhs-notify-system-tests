@@ -3,13 +3,14 @@ set -euo pipefail
 cd $(dirname $BASH_SOURCE[0])
 source lib.sh
 
-environment="${1:-${TARGET_ENVIRONMENT:-main}}"
-iam_environment="${2:-${1:-main}}"
-run_single_test="${3:-0}"
+environment="${TARGET_ENVIRONMENT:-main}"
+
+iam_environment="${1:-${environment}}"
+run_single_test="${2:-0}"
 
 auth_setup_state_file="./lifecycle/auth/state.json"
-email=$(jq -r '.users["zap-spider.security"].email' $auth_setup_state_file)
-password=$(jq -r '.users["zap-spider.security"].password' $auth_setup_state_file)
+email=$(jq -r '.users["zap-spider"].email' $auth_setup_state_file)
+password=$(jq -r '.users["zap-spider"].password' $auth_setup_state_file)
 
 base="https://${environment}.web-gateway.dev.nhsnotify.national.nhs.uk"
 start_url="${base}/templates/message-templates"

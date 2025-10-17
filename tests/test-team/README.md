@@ -15,7 +15,7 @@ Make sure the .env variable TARGET_ENVIRONMENT is correctly setup and sourced.  
 Ensure that AWS_PROFILE_templates and AWS_PROFILE_auth are setup and sourced. The values should match the profile
 names you have in your ~/.aws/config for the corresponding dev accounts for templates and auth/iam.
 
-Tests are run locally using a script which emulates the matrix of CI jobs which run setup, test and teardown phases 
+Tests are run locally using a script which emulates the matrix of CI jobs which run setup, test and teardown phases
 in different accounts.
 
 Login with any AWS profile. The test-runner script will select the required profile.

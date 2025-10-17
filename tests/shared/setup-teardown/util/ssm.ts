@@ -16,16 +16,25 @@ export async function getParameter(name: string) {
   const result = await client.send(new GetParameterCommand({ Name: name }));
 
   if (result.Parameter?.Value === undefined) {
-    throw new Error(`Undefined result when fetching ${name}`)
+    throw new Error(`Undefined result when fetching ${name}`);
   }
 
-  return result.Parameter.Value
+  return result.Parameter.Value;
 }
 
-export async function putParameter(name: string, value: unknown) {
+export async function putParameter(
+  name: string,
+  value: unknown,
+  suite: string
+) {
   const str = typeof value === 'string' ? value : JSON.stringify(value);
 
   return client.send(
-    new PutParameterCommand({ Name: name, Value: str, Type: 'String' })
+    new PutParameterCommand({
+      Name: name,
+      Value: str,
+      Type: 'String',
+      Tags: [{ Key: 'test-suite', Value: suite }],
+    })
   );
 }

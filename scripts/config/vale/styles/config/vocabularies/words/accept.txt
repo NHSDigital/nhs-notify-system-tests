@@ -4,6 +4,7 @@ bot
 Cognito
 Cyber
 Dependabot
+dev
 draw.io
 drawio
 endcapture
@@ -22,6 +23,7 @@ Python
 rawContent
 sed
 Syft
+teardown
 Terraform
 toolchain
 Trufflehog

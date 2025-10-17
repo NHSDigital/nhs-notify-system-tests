@@ -10,7 +10,7 @@ import {
   previewPageChooseSubmit,
 } from '../functions/common-steps';
 
-test.use({ storageState: 'login-state/primary.security.json' });
+test.use({ storageState: 'login-state/primary.json' });
 
 test(`User creates and submits a new nhsapp template successfully`, async ({
   page,

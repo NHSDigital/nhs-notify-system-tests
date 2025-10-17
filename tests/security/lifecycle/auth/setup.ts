@@ -12,17 +12,19 @@ async function main() {
 
   const stateFile = new StateFile(lifecycleServiceDir, runId);
 
-  const authHelper = await AuthHelper.init(targetEnvrionment);
+  const authHelper = await AuthHelper.init(targetEnvrionment, 'security');
 
   const createdUserEntries: [string, User][] = await Promise.all(
-    Object.entries(users).map(async ([key, config]) => {
+    Object.entries(users).map(async ([userKey, config]) => {
       const createdUser = await authHelper.createUser(
-        `${key}${runId}@nhs.net`,
-        `${config.clientKey}${runId}`,
+        userKey,
+        config.clientKey,
+        runId,
+        'security',
         config.clientConfig
       );
 
-      return [key, createdUser];
+      return [userKey, createdUser];
     })
   );
 

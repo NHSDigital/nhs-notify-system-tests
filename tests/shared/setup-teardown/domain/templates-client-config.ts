@@ -13,7 +13,12 @@ export async function deleteClientConfigs(
 export async function createClientConfig(
   environment: string,
   clientId: string,
-  config: StaticClientConfig['templates']
+  config: StaticClientConfig['templates'],
+  suite: string
 ) {
-  await putParameter(`/nhs-notify-${environment}-app/clients/${clientId}`, config);
+  await putParameter(
+    `/nhs-notify-${environment}-app/clients/${clientId}`,
+    config,
+    suite
+  );
 }

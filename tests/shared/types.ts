@@ -7,3 +7,8 @@ export type StaticClientConfig = {
     name: string;
   };
 };
+
+export type StaticUserConfig = {
+  clientKey: string;
+  clientConfig: StaticClientConfig['auth'];
+};

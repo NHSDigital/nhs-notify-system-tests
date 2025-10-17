@@ -13,9 +13,7 @@ async function main() {
   const stateFile = new StateFile(lifecycleServiceDir, runId);
   await stateFile.loadFromDisk();
 
-  let exit = 0;
-
-  const authHelper = await AuthHelper.init(targetEnvrionment);
+  const authHelper = await AuthHelper.init(targetEnvrionment, 'security');
 
   const usersState = stateFile.getValues(
     'users',
@@ -30,8 +28,6 @@ async function main() {
       )
     )
   );
-
-  process.exit(exit);
 }
 
 main();

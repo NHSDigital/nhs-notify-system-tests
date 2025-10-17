@@ -27,6 +27,8 @@ export type User = {
 export class AuthHelper {
   private readonly userPoolId: string;
 
+  private readonly suite: string;
+
   private static environment: string;
 
   private readonly cognito = new CognitoIdentityProviderClient({
@@ -37,13 +39,14 @@ export class AuthHelper {
     region: 'eu-west-2',
   });
 
-  private constructor(userPoolId: string) {
+  private constructor(userPoolId: string, suite: string) {
     this.userPoolId = userPoolId;
+    this.suite = suite;
   }
 
   private clientIds = new Set<string>();
 
-  static async init(environment: string): Promise<AuthHelper> {
+  static async init(environment: string, suite: string): Promise<AuthHelper> {
     this.environment = environment;
     const cognito = new CognitoIdentityProviderClient({ region: 'eu-west-2' });
     const poolName = `nhs-notify-${environment}-app`;
@@ -59,7 +62,7 @@ export class AuthHelper {
       );
 
       const pool = response.UserPools?.find((p) => p.Name === poolName);
-      if (pool) return new AuthHelper(pool.Id!);
+      if (pool) return new AuthHelper(pool.Id!, suite);
 
       nextToken = response.NextToken;
     } while (nextToken);
@@ -68,10 +71,15 @@ export class AuthHelper {
   }
 
   async createUser(
-    email: string,
-    clientId: string,
+    userKey: string,
+    clientKey: string,
+    runId: string,
+    suite: string,
     clientConfig: StaticClientConfig['auth']
   ): Promise<User> {
+    const email = `${userKey}.${suite}.${runId}@nhs.net`;
+    const clientId = `${clientKey}${runId}`;
+
     const user = await this.cognito.send(
       new AdminCreateUserCommand({
         UserPoolId: this.userPoolId,
@@ -159,7 +167,7 @@ export class AuthHelper {
       new CreateGroupCommand({
         GroupName: `client:${clientId}`,
         UserPoolId: this.userPoolId,
-        Description: 'Playwright',
+        Description: this.suite,
       })
     );
   }
@@ -195,6 +203,7 @@ export class AuthHelper {
         Value: JSON.stringify({ name: config.name }),
         Type: 'String', // unencrypted, unlike the real parameters
         Overwrite: true,
+        Tags: [{ Key: 'test-suite', Value: this.suite }],
       })
     );
   }
