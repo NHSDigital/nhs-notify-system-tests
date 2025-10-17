@@ -54,6 +54,9 @@ test-ui-performance: # Run UI render tests from scripts/test/ui-performance @Tes
 test-product:
 	make _test name="product"
 
+test-zap-security:
+	make _test name="zap-security"
+
 test: # Run all the test tasks @Testing
 	make \
 		test-unit \
