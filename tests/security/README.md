@@ -1,6 +1,7 @@
 # NHS Notify Template Management (WebUI) Security Tests
 
 Tests consist of:
+
 1. ZAP Spider test without login
 2. ZAP spider test with login
 3. Playwright user-journey tests proxied through ZAP
