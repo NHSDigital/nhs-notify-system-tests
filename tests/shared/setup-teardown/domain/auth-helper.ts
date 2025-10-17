@@ -29,6 +29,8 @@ export class AuthHelper {
 
   private readonly suite: string;
 
+  private readonly runId: string;
+
   private static environment: string;
 
   private readonly cognito = new CognitoIdentityProviderClient({
@@ -39,14 +41,19 @@ export class AuthHelper {
     region: 'eu-west-2',
   });
 
-  private constructor(userPoolId: string, suite: string) {
+  private constructor(userPoolId: string, suite: string, runId: string) {
     this.userPoolId = userPoolId;
     this.suite = suite;
+    this.runId = runId;
   }
 
   private clientIds = new Set<string>();
 
-  static async init(environment: string, suite: string): Promise<AuthHelper> {
+  static async init(
+    environment: string,
+    suite: string,
+    runId: string
+  ): Promise<AuthHelper> {
     this.environment = environment;
     const cognito = new CognitoIdentityProviderClient({ region: 'eu-west-2' });
     const poolName = `nhs-notify-${environment}-app`;
@@ -62,7 +69,7 @@ export class AuthHelper {
       );
 
       const pool = response.UserPools?.find((p) => p.Name === poolName);
-      if (pool) return new AuthHelper(pool.Id!, suite);
+      if (pool) return new AuthHelper(pool.Id!, suite, runId);
 
       nextToken = response.NextToken;
     } while (nextToken);
@@ -73,12 +80,10 @@ export class AuthHelper {
   async createUser(
     userKey: string,
     clientKey: string,
-    runId: string,
-    suite: string,
     clientConfig: StaticClientConfig['auth']
   ): Promise<User> {
-    const email = `${userKey}.${suite}.${runId}@nhs.net`;
-    const clientId = `${clientKey}${runId}`;
+    const email = `${userKey}.${this.suite}.${this.runId}@nhs.net`;
+    const clientId = `${clientKey}${this.runId}`;
 
     const user = await this.cognito.send(
       new AdminCreateUserCommand({
@@ -137,7 +142,9 @@ export class AuthHelper {
     };
   }
 
-  async deleteUser(username: string, clientId: string) {
+  async deleteUser(username: string, clientKey: string) {
+    const clientId = `${clientKey}${this.runId}`;
+
     if (!this.clientIds.has(clientId)) {
       this.clientIds.add(clientId);
 

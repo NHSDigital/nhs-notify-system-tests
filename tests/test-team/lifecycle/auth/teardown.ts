@@ -13,7 +13,7 @@ async function main() {
   const stateFile = new StateFile(lifecycleServiceDir, runId);
   await stateFile.loadFromDisk();
 
-  const authHelper = await AuthHelper.init(targetEnvrionment, 'product');
+  const authHelper = await AuthHelper.init(targetEnvrionment, 'product', runId);
 
   const usersState = stateFile.getValues(
     'users',
@@ -22,10 +22,7 @@ async function main() {
 
   await Promise.allSettled(
     Object.entries(usersState).map(([key, userState]) =>
-      authHelper.deleteUser(
-        userState.username,
-        `${users[key].clientKey}${runId}`
-      )
+      authHelper.deleteUser(userState.username, users[key].clientKey)
     )
   );
 }

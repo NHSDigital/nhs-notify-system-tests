@@ -12,15 +12,17 @@ async function main() {
 
   const stateFile = new StateFile(lifecycleServiceDir, runId);
 
-  const authHelper = await AuthHelper.init(targetEnvrionment, 'security');
+  const authHelper = await AuthHelper.init(
+    targetEnvrionment,
+    'security',
+    runId
+  );
 
   const createdUserEntries: [string, User][] = await Promise.all(
     Object.entries(users).map(async ([userKey, config]) => {
       const createdUser = await authHelper.createUser(
         userKey,
         config.clientKey,
-        runId,
-        'security',
         config.clientConfig
       );
 
