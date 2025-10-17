@@ -39,6 +39,7 @@ runs:
       shell: bash
       env:
         TARGET_ENVIRONMENT: ${{ inputs.targetEnvironment }}
+        RUN_ID: "ci${{ inputs.github_run_id }}"
       run: |
         make test-product
 
