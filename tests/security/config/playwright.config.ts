@@ -25,7 +25,6 @@ export default defineConfig({
     timeout: 30_000,
   },
   globalSetup: './global.setup',
-  globalTeardown: './global.teardown',
 
   use: {
     trace: 'off', // Warning: this leaks secrets into the trace logs

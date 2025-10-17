@@ -10,7 +10,6 @@ export default defineConfig({
     timeout: 30_000,
   },
   globalSetup: './global.setup',
-  globalTeardown: './global.teardown',
 
   workers: 7,
 

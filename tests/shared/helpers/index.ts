@@ -1,5 +1,4 @@
 export * from './cis2-credentials-provider'
-export * from './cognito-user-helper'
 export * from './database-tablename-helper'
 export * from './random-channel-picker'
 export * from './secret-client'
