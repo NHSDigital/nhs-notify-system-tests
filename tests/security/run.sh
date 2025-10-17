@@ -18,63 +18,61 @@ no_login_exit=0
 with_login_exit=0
 system_test_exit=0
 
-if [[ $run_single_test -eq 0 || $run_single_test -eq 1 || $run_single_test -eq 2 ]]; then
-  print "Fetching cookie"
+print "Fetching cookie"
 
-  cookie=$(
-    npx ts-node -T ./helpers/helper-cli/zap-spider-setup.ts \
-      --web-gateway-environment $environment \
-      --email-address $email \
-      --password $password
-  )
+cookie=$(
+  npx ts-node -T ./helpers/helper-cli/zap-spider-setup.ts \
+    --web-gateway-environment $environment \
+    --email-address $email \
+    --password $password
+)
 
-  print "Got cookie"
+print "Got cookie"
 
-  # https://www.zaproxy.org/docs/docker/baseline-scan/
-  image="ghcr.io/zaproxy/zaproxy:stable"
-  container_volume="$(pwd):/zap/wrk/:rw"
-  zap_config="/zap/wrk/zap-config.prop"
-  rules_config="/zap/wrk/rules.conf"
+# https://www.zaproxy.org/docs/docker/baseline-scan/
+image="ghcr.io/zaproxy/zaproxy:stable"
+container_volume="$(pwd):/zap/wrk/:rw"
+zap_config="/zap/wrk/zap-config.prop"
+rules_config="/zap/wrk/rules.conf"
 
-  set +e
+set +e
 
-  if [[ $run_single_test -eq 0 || $run_single_test -eq 1 ]]; then
-    print "Scan 1 - starting ZAP scan at $start_url - without login"
+if [[ $run_single_test -eq 0 || $run_single_test -eq 1 ]]; then
+  print "Scan 1 - starting ZAP scan at $start_url - without login"
 
-    docker run \
-      --user root \
-      --volume $container_volume \
-      --network="host" \
-      --tty "$image" zap-baseline.py \
-        -z "-configfile $zap_config" \
-        -t $start_url \
-        -r zap-out-no-auth.html \
-        -c $rules_config \
-        -j \
-        -d
+  docker run \
+    --user root \
+    --volume $container_volume \
+    --network="host" \
+    --tty "$image" zap-baseline.py \
+      -z "-configfile $zap_config" \
+      -t $start_url \
+      -r zap-out-no-auth.html \
+      -c $rules_config \
+      -j \
+      -d
 
-    no_login_exit="$?"
-  fi
+  no_login_exit="$?"
+fi
 
-  if [[ $run_single_test -eq 0 || $run_single_test -eq 2 ]]; then
-    print "Scan 2 - starting ZAP scan at $start_url - with login"
+if [[ $run_single_test -eq 0 || $run_single_test -eq 2 ]]; then
+  print "Scan 2 - starting ZAP scan at $start_url - with login"
 
-    docker run \
-      --user root \
-      --volume $container_volume \
-      --env ZAP_AUTH_HEADER=Cookie \
-      --env ZAP_AUTH_HEADER_VALUE="$cookie" \
-      --network="host" \
-      --tty "$image" zap-baseline.py \
-        -z "-configfile $zap_config" \
-        -t $start_url \
-        -r zap-out-auth.html \
-        -c $rules_config \
-        -j \
-        -d
+  docker run \
+    --user root \
+    --volume $container_volume \
+    --env ZAP_AUTH_HEADER=Cookie \
+    --env ZAP_AUTH_HEADER_VALUE="$cookie" \
+    --network="host" \
+    --tty "$image" zap-baseline.py \
+      -z "-configfile $zap_config" \
+      -t $start_url \
+      -r zap-out-auth.html \
+      -c $rules_config \
+      -j \
+      -d
 
-    with_login_exit=$?
-  fi
+  with_login_exit=$?
 fi
 
 if [[ $run_single_test -eq 0 || $run_single_test -eq 3 ]]; then

@@ -5,8 +5,11 @@ import {
   parseSetupTeardownArgs,
   StateFile,
   getCis2ClientId,
+  TemplateFactory,
+  TemplateStorageHelper,
 } from 'nhs-notify-system-tests-shared';
 import { clients } from '../../fixtures/clients';
+import { randomUUID } from 'node:crypto';
 
 async function main() {
   const { lifecycleServiceDir, targetEnvrionment, runId } =
@@ -38,14 +41,25 @@ async function main() {
     )
   );
 
-  stateFile.setValues(
-    'clientIds',
-    Object.fromEntries(clientEntries.map(([key, { id }]) => [key, id]))
+  const clientIds = Object.fromEntries(
+    clientEntries.map(([key, { id }]) => [key, id])
   );
+
+  stateFile.setValues('clientIds', clientIds);
 
   const cis2ClientId = await getCis2ClientId();
 
   stateFile.setValue('cis2', 'notify-client-id', cis2ClientId);
+
+  const smsTemplate = TemplateFactory.createSmsTemplate(
+    randomUUID(),
+    clientIds['Client4']
+  );
+
+  await new TemplateStorageHelper(
+    `nhs-notify-${targetEnvrionment}-app-api-templates`,
+    [smsTemplate]
+  ).seedTemplateData();
 
   await stateFile.persist();
 }

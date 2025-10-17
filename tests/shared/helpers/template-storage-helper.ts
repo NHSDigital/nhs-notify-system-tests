@@ -9,7 +9,10 @@ import { Template } from './types';
 export class TemplateStorageHelper {
   private readonly ddbDocClient: DynamoDBDocumentClient;
 
-  constructor(private readonly templateData: Template[]) {
+  constructor(
+    private readonly tableName: string,
+    private readonly templateData: Template[]
+  ) {
     const dynamoClient = new DynamoDBClient({ region: 'eu-west-2' });
     this.ddbDocClient = DynamoDBDocumentClient.from(dynamoClient);
   }
@@ -18,7 +21,7 @@ export class TemplateStorageHelper {
     const promises = this.templateData.map((template) =>
       this.ddbDocClient.send(
         new PutCommand({
-          TableName: process.env.TEMPLATE_STORAGE_TABLE_NAME,
+          TableName: this.tableName,
           Item: template,
         })
       )
@@ -31,7 +34,7 @@ export class TemplateStorageHelper {
     const promises = this.templateData.map((template) =>
       this.ddbDocClient.send(
         new DeleteCommand({
-          TableName: process.env.TEMPLATE_STORAGE_TABLE_NAME,
+          TableName: this.tableName,
           Key: {
             id: template.id,
           },

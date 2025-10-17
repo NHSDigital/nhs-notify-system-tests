@@ -11,14 +11,15 @@ export enum TemplateStatus {
 }
 
 export type Template = {
-  __typename: string;
+  clientId: string;
   createdAt: string;
-  updatedAt: string;
   id: string;
-  version: number;
-  name: string;
   message: string;
+  name: string;
+  owner: string;
   subject?: string;
-  templateType: TemplateType;
   templateStatus: TemplateStatus;
+  templateType: TemplateType;
+  updatedAt: string;
+  version: number;
 };

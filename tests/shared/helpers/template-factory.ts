@@ -1,36 +1,38 @@
 import { Template, TemplateStatus, TemplateType } from './types';
 
 export const TemplateFactory = {
-  createEmailTemplate: (id: string): Template => {
-    return TemplateFactory.create({
+  createEmailTemplate: (id: string, clientId: string): Template => {
+    return TemplateFactory.create(id, clientId, TemplateType.EMAIL, {
       id,
       templateType: TemplateType.EMAIL,
       subject: '',
     });
   },
 
-  createSmsTemplate: (id: string): Template => {
-    return TemplateFactory.create({
+  createSmsTemplate: (id: string, clientId: string): Template => {
+    return TemplateFactory.create(id, clientId, TemplateType.SMS, {
       id,
       templateType: TemplateType.SMS,
     });
   },
 
-  createNhsAppTemplate: (id: string): Template => {
-    return TemplateFactory.create({
-      id,
+  createNhsAppTemplate: (id: string, clientId: string): Template => {
+    return TemplateFactory.create(id, clientId, TemplateType.NHS_APP, {
       templateType: TemplateType.NHS_APP,
     });
   },
 
   create: (
-    template: Partial<Template> & {
-      id: string;
-      templateType: string;
-    }
+    id: string,
+    clientId: string,
+    templateType: TemplateType,
+    template: Partial<Template>
   ): Template => {
     return {
-      __typename: 'TemplateStorage',
+      id,
+      owner: `CLIENT#${clientId}`,
+      templateType,
+      clientId,
       templateStatus: TemplateStatus.NOT_YET_SUBMITTED,
       version: 1,
       createdAt: new Date().toISOString(),

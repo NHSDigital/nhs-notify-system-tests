@@ -34,5 +34,3 @@ async function main() {
 }
 
 main();
-
-// await createTemplate(page, 'sms', 'Text message (SMS)');
