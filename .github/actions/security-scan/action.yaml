@@ -46,7 +46,7 @@ runs:
         TARGET_ENVIRONMENT: ${{ inputs.environment }}
       run: |
         set +e
-        make test-security
+        make test-zap-security
         echo "exit_code=$?" >> $GITHUB_OUTPUT
 
     - name: Archive security test results
