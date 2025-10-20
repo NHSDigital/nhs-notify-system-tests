@@ -4,25 +4,21 @@ import {
   DynamoDBDocumentClient,
   PutCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { Template } from './types';
 
-export class TemplateStorageHelper {
+export class StorageHelper<T extends { id: string; owner: string }> {
   private readonly ddbDocClient: DynamoDBDocumentClient;
 
-  constructor(
-    private readonly tableName: string,
-    private readonly templateData: Template[]
-  ) {
+  constructor(private readonly tableName: string, private readonly data: T[]) {
     const dynamoClient = new DynamoDBClient({ region: 'eu-west-2' });
     this.ddbDocClient = DynamoDBDocumentClient.from(dynamoClient);
   }
 
-  async seedTemplateData() {
-    const promises = this.templateData.map((template) =>
+  async seedData() {
+    const promises = this.data.map((item) =>
       this.ddbDocClient.send(
         new PutCommand({
           TableName: this.tableName,
-          Item: template,
+          Item: item,
         })
       )
     );
@@ -30,13 +26,13 @@ export class TemplateStorageHelper {
     await Promise.all(promises);
   }
 
-  async deleteTemplateData() {
-    const promises = this.templateData.map((template) =>
+  async deleteData() {
+    const promises = this.data.map((item) =>
       this.ddbDocClient.send(
         new DeleteCommand({
           TableName: this.tableName,
           Key: {
-            id: template.id,
+            id: item.id,
           },
         })
       )

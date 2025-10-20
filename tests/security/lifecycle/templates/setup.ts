@@ -1,12 +1,11 @@
 import {
   createClientConfig,
   increaseSftpPollingFrequency,
-  type StaticClientConfig,
   parseSetupTeardownArgs,
   StateFile,
   getCis2ClientId,
   TemplateFactory,
-  TemplateStorageHelper,
+  StorageHelper,
 } from 'nhs-notify-system-tests-shared';
 import { clients } from '../../fixtures/clients';
 import { randomUUID } from 'node:crypto';
@@ -53,10 +52,9 @@ async function main() {
     clientIds['SecSpider']
   );
 
-  await new TemplateStorageHelper(
-    `nhs-notify-${targetEnvrionment}-app-api-templates`,
-    [smsTemplate]
-  ).seedTemplateData();
+  await new StorageHelper(`nhs-notify-${targetEnvrionment}-app-api-templates`, [
+    smsTemplate,
+  ]).seedData();
 
   await stateFile.persist();
 }

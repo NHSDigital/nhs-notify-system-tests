@@ -7,7 +7,6 @@
   },
   "main": "index.ts",
   "devDependencies": {
-    "@aws-sdk/client-appsync": "3.806.0",
     "@aws-sdk/client-cognito-identity-provider": "3.806.0",
     "@aws-sdk/client-dynamodb": "3.806.0",
     "@aws-sdk/client-eventbridge": "^3.910.0",

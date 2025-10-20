@@ -1,7 +1,4 @@
 export * from './cis2-credentials-provider'
-export * from './database-tablename-helper'
 export * from './random-channel-picker'
 export * from './secret-client'
-export * from './template-factory'
-export * from './template-storage-helper'
 export * from './types'
