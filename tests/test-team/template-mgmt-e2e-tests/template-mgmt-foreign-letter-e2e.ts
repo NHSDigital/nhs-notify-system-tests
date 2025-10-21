@@ -15,12 +15,12 @@ test.use({ storageState: 'auth.json' });
 const testConfigs = [
   {
     language: 'bn',
-    inputFileName: 'AW25 flu-only letter (65+) v1 Bengali.pdf',
+    inputFileName: 'Bengali.pdf',
   },
-  { language: 'ar', inputFileName: 'AW25 flu-only letter (65+) v1 Arabic.pdf' },
+  { language: 'ar', inputFileName: 'Arabic.pdf' },
   {
     language: 'tr',
-    inputFileName: 'AW25 flu-only letter (65+) v1 Turkish.pdf',
+    inputFileName: 'Turkish.pdf',
   },
 ];
 
