@@ -15,7 +15,8 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
     await this.page.getByLabel(labelName).selectOption(optionName);
   }
 
-  async uploadLetterTemplate(templateName: string,
+  async uploadLetterTemplate(
+    templateName: string,
     inputFileName: string,
     language: string
   ) {
@@ -32,28 +33,26 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
       try {
         await this.page.reload();
         if (['ur', 'ar', 'fa'].includes(language)) {
-          
           await expect(this.page.getByText('Not yet submitted')).toBeVisible({
             timeout: 1000,
           });
           await expect(this.page.getByText('Submit template')).toBeVisible({
             timeout: 1000,
           });
-          console.log('Success: "Not yet submitted" and "Submit template button" are visible.');
+          console.log(
+            'Success: "Not yet submitted" and "Submit template button" are visible.'
+          );
           break;
-          
         } else {
-          // await this.page.reload();
           await expect(this.page.getByText('Files uploaded')).toBeVisible({
             timeout: 1000,
           });
-          console.log('Success: "Files uploaded" is visible.'); 
+          console.log('Success: "Files uploaded" is visible.');
           await expect(this.page.getByText('Request a proof')).toBeVisible({
-        timeout: 1000,
-      });         
+            timeout: 1000,
+          });
           break;
         }
-        
       } catch (e) {
         console.log(
           `Attempt ${i + 1} failed, retrying in ${retryInterval}ms...`
@@ -66,7 +65,6 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
         }
       }
     }
-    
   }
 
   async waitForProofRequest() {

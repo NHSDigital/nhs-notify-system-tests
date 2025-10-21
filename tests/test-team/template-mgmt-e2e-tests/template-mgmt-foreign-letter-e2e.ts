@@ -12,46 +12,37 @@ import {
 
 test.use({ storageState: 'auth.json' });
 
-// test(`User creates and submits a new letter template successfully`, async ({
-//   page,
-//   baseURL,
-// }) => {
-//   test.setTimeout(240_000); // override just for this test
-//   const props = {
-//     basePage: new TemplateMgmtBasePage(page),
-//     letterPage: new TemplateMgmtLetterPage(page),
-//     baseURL,
-//   };
-//   const channel = 'Letter';
-//   const channelPath = 'letter';
-//   const name = 'E2E Name';
-
-  const testConfigs = [
-  { language: 'bn', inputFileName: 'AW25 flu-only letter (65+) v1 Bengali.pdf' },
+const testConfigs = [
+  {
+    language: 'bn',
+    inputFileName: 'AW25 flu-only letter (65+) v1 Bengali.pdf',
+  },
   { language: 'ar', inputFileName: 'AW25 flu-only letter (65+) v1 Arabic.pdf' },
-  { language: 'tr', inputFileName: 'AW25 flu-only letter (65+) v1 Turkish.pdf' },
+  {
+    language: 'tr',
+    inputFileName: 'AW25 flu-only letter (65+) v1 Turkish.pdf',
+  },
 ];
 
+for (const { language, inputFileName } of testConfigs) {
+  test(`User creates and submits a new letter template successfully - ${language})`, async ({
+    page,
+    baseURL,
+  }) => {
+    test.setTimeout(240_000); // override just for this test
 
-  for (const { language, inputFileName } of testConfigs) {
-    test(`User creates and submits a new letter template successfully - ${language})`, async ({
-      page,
+    const props = {
+      basePage: new TemplateMgmtBasePage(page),
+      letterPage: new TemplateMgmtLetterPage(page),
       baseURL,
-    }) => {
-      test.setTimeout(240_000); // override just for this test
+    };
 
-      const props = {
-        basePage: new TemplateMgmtBasePage(page),
-        letterPage: new TemplateMgmtLetterPage(page),
-        baseURL,
-      };
+    const channel = 'Letter';
+    const name = `E2E Name ${language}`;
 
-      const channel = 'Letter';
-      const name = `E2E Name ${language}`;
-
-      await startPage(props);
-      await startNewTemplate(props);
-      await chooseTemplate(props, channel);
-      await createLetterTemplate(props, name, language, inputFileName);
-    })
-  }
+    await startPage(props);
+    await startNewTemplate(props);
+    await chooseTemplate(props, channel);
+    await createLetterTemplate(props, name, language, inputFileName);
+  });
+}
