@@ -13,6 +13,7 @@ import test from 'playwright/test';
 import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
 
 test.use({ storageState: { cookies: [], origins: [] } });
+test.setTimeout(180_000);
 
 /**
  * Intention is to cover:

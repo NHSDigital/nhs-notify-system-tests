@@ -20,7 +20,7 @@ async function main() {
     z.record(z.string(), z.object({ username: z.string() }))
   );
 
-  await Promise.allSettled(
+  await Promise.all(
     Object.entries(usersState).map(([key, userState]) =>
       authHelper.deleteUser(userState.username, users[key].clientKey)
     )
