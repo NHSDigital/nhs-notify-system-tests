@@ -174,7 +174,7 @@ export class AuthHelper {
       new CreateGroupCommand({
         GroupName: `client:${clientId}`,
         UserPoolId: this.userPoolId,
-        Description: this.suite,
+        Description: `test-suite:${this.suite}`,
       })
     );
   }
