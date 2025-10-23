@@ -135,7 +135,7 @@ export class CognitoUserHelper {
       this.clientIds.add(clientId);
 
       await Promise.all([
-        // this.deleteClientConfig(clientId),
+        this.deleteClientConfig(clientId),
         this.deleteClientGroup(clientId),
       ]);
     }
