@@ -25,7 +25,7 @@ export type User = {
 export type TestClientConfig = {
   id: string;
   name: string;
-  campaignId?: string;
+  campaignIds?: string[];
   features: {
     proofing: boolean;
   };

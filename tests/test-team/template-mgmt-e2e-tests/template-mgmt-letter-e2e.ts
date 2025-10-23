@@ -26,10 +26,12 @@ test(`User creates and submits a new letter template successfully`, async ({
   const channel = 'Letter';
   const channelPath = 'letter';
   const name = 'E2E Name';
+  const language = 'en';
+  const inputFileName = 'template.pdf';
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createLetterTemplate(props, name);
+  await createLetterTemplate(props, name, language, inputFileName);
   await requestProof(props, channel, channelPath);
 });
