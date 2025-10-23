@@ -12,7 +12,7 @@ let cognitoHelper: CognitoUserHelper;
 const $TestClientConfig = z.object({
   id: z.string(),
   name: z.string(),
-  campaignId: z.string().optional(),
+  campaignIds: z.array(z.string()).optional(),
   features: z.object({
     proofing: z.boolean(),
   }),
@@ -48,15 +48,16 @@ async function createStorageStateFile(
     user = await cognitoHelper.createUser(username, password, testClientConfig);
     const browser = await chromium.launch({ headless: true, slowMo: 0 });
     const context = await browser.newContext({
-    acceptDownloads: true});
+      acceptDownloads: true,
+    });
     const page = await context.newPage();
 
-      try {
-        await page.goto(loginUrl);
-        console.log('Page loaded successfully');
-      } catch (error) {
-        console.error('Failed to load page:', error);
-      }
+    try {
+      await page.goto(loginUrl);
+      console.log('Page loaded successfully');
+    } catch (error) {
+      console.error('Failed to load page:', error);
+    }
 
     await page.getByRole('link', { name: 'Sign in' }).click();
     console.log('Login button clicked');

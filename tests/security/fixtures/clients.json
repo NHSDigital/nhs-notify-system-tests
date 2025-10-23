@@ -3,7 +3,7 @@
     "Client1": {
       "id": "d48994cb-1b1e-46cd-a2f6-0aea3f4b65df",
       "name": "Client 1 Security",
-      "campaignId": "Client-1-Security-Campaign",
+      "campaignIds": ["Client-1-Security-Campaign"],
       "features": {
         "proofing": true
       }
@@ -11,7 +11,7 @@
     "Client2": {
       "id": "5d0f944e-1976-4324-b12a-2dc77b69c6bf",
       "name": "Client 2 Security",
-      "campaignId": "Client-2-Security-Campaign",
+      "campaignIds": ["Client-2-Security-Campaign"],
       "features": {
         "proofing": true
       }
@@ -19,7 +19,7 @@
     "Client3": {
       "id": "568088cf-9e12-48e6-8ac0-7936f913cf27",
       "name": "Client 3 Security",
-      "campaignId": "Client-3-Security-Campaign",
+      "campaignIds": ["Client-3-Security-Campaign"],
       "features": {
         "proofing": true
       }
@@ -27,7 +27,7 @@
     "Client4": {
       "id": "a4fb88ec-ccae-4670-9637-1c918b6ff6a1",
       "name": "Client 4 Security ZAP Spider Scan",
-      "campaignId": "Client-4-Security-Campaign",
+      "campaignIds": ["Client-4-Security-Campaign"],
       "features": {
         "proofing": true
       }

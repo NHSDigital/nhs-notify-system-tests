@@ -53,7 +53,10 @@ export function chooseTemplate(
 
 export function createLetterTemplate(
   { basePage, baseURL, letterPage }: CommonLetterStepsProps,
-  name: string
+  name: string,
+  language: string,
+  inputFileName: string
+
 ) {
   return test.step('Create template', async () => {
     const pageSlug = 'upload-letter-template';
@@ -69,8 +72,8 @@ export function createLetterTemplate(
     await basePage.fillTextBox('Template name', name);
 
     await letterPage.selectLetterOption('Letter type','x1');
-    await letterPage.selectLetterOption('Letter language','fr');
-    await letterPage.uploadLetterTemplate('Letter template PDF');
+    await letterPage.selectLetterOption('Letter language',language);
+    await letterPage.uploadLetterTemplate('Letter template PDF', inputFileName, language);
   });
 }
 
