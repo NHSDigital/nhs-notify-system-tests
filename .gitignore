@@ -49,3 +49,5 @@ tests/security/pages/downloads/
 # DOTENV
 .env
 .envrc
+
+.vscode/
