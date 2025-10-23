@@ -23,6 +23,8 @@ node_modules
 *.pyc
 results_*.csv
 .DS_Store
+venv/
+__pycache__/
 
 # Playwright e2e
 test-results/
@@ -46,3 +48,4 @@ tests/security/pages/downloads/
 
 # DOTENV
 .env
+.envrc
