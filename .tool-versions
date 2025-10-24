@@ -9,6 +9,7 @@ poetry 1.8.3
 python 3.11.6
 nodejs 20.18.2
 jq 1.6
+awscli 2.29.0
 # ==============================================================================
 # The section below is reserved for Docker image versions
 # TODO: Move this section - consider using a different file for the repository template dependencies.
