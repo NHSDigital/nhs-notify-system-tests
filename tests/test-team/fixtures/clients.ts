@@ -12,9 +12,9 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Client 1 Product',
     },
   },
-  Client2: {
+  Client2Product: {
     templates: {
-      campaignIds: ['Client-2-Product-Campaign'],
+      campaignIds: ['Client2Product-Campaign'],
       features: {
         proofing: true,
       },
@@ -23,9 +23,9 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Client 2 Product',
     },
   },
-  Client3: {
+  Client3Product: {
     templates: {
-      campaignIds: ['Client-3-Product-Campaign'],
+      campaignIds: ['Client3Product-Campaign'],
       features: {
         proofing: true,
       },

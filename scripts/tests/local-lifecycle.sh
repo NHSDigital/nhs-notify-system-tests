@@ -60,7 +60,7 @@ if [[ "$exit_code" -eq 0 ]]; then
   fi
 
   export AWS_PROFILE="${!primary_profile_var}"
-  echo -e "→ running npm run ${test_cmd} in ${pkg_dir} AWS_PROFILE=${AWS_PROFILE}\n"
+  echo -e "\033[0;36m→ running npm run ${test_cmd} in ${pkg_dir} AWS_PROFILE=${AWS_PROFILE}\033[0m\n"
 
   pushd "$pkg_dir" >/dev/null
 

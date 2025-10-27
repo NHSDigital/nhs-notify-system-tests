@@ -2,17 +2,17 @@ import type { StaticUserConfig } from 'nhs-notify-system-tests-shared';
 import { clients } from './clients';
 
 export const users: Record<string, StaticUserConfig> = {
-  'primary': {
+  primary: {
     clientKey: 'SecPrimary',
     clientConfig: clients['SecPrimary'].auth,
   },
-  'copy': {
-    clientKey: 'Client2',
-    clientConfig: clients['Client2'].auth,
+  copy: {
+    clientKey: 'Client2Sec',
+    clientConfig: clients['Client2Sec'].auth,
   },
-  'delete': {
-    clientKey: 'Client3',
-    clientConfig: clients['Client3'].auth,
+  delete: {
+    clientKey: 'Client3Sec',
+    clientConfig: clients['Client3Sec'].auth,
   },
   'zap-spider': {
     clientKey: 'SecSpider',

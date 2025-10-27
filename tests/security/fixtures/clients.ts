@@ -12,9 +12,9 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Client 1 Security',
     },
   },
-  Client2: {
+  Client2Sec: {
     templates: {
-      campaignIds: ['Client-2-Security-Campaign'],
+      campaignIds: ['Client2Sec-Campaign'],
       features: {
         proofing: true,
       },
@@ -23,9 +23,9 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Client 2 Security',
     },
   },
-  Client3: {
+  Client3Sec: {
     templates: {
-      campaignIds: ['Client-3-Security-Campaign'],
+      campaignIds: ['Client3Sec-Campaign'],
       features: {
         proofing: true,
       },
@@ -36,7 +36,7 @@ export const clients: Record<string, StaticClientConfig> = {
   },
   SecSpider: {
     templates: {
-      campaignIds: ['Client-4-Security-Campaign'],
+      campaignIds: ['SecSpider-Campaign'],
       features: {
         proofing: true,
       },
