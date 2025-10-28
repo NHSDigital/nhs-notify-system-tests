@@ -11,7 +11,7 @@ import {
   deleteTemplate,
 } from '../functions/common-steps';
 
-test.use({ storageState: 'delete.json' });
+test.use({ storageState: 'login-state/delete.json' });
 
 test(`User deletes a template`, async ({
   page,

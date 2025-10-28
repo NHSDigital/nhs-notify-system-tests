@@ -4,18 +4,24 @@ set -eu
 
 pkg_dir="$1"
 test_cmd="$2"
-target_environment="$3"
-primary_test_profile_key="$4"
-shift 4
+primary_test_profile_key="$3"
+shift 3
 extra_args=("$@")
 
+target_environment="$TARGET_ENVIRONMENT"
+
 exit_code=0
+
+run_id="local$(date +%Y%m%d%H%M%S)"
+echo -e "Running $test_cmd with target environment $target_environment and run ID $run_id\n"
 
 run_lifecycle_phase() {
   local phase="$1"
   local lifecycle_dir="${pkg_dir}/lifecycle"
   for d in "${lifecycle_dir}"/*/; do
     [ -d "$d" ] || continue
+    if [[ "$phase" == "setup" ]]; then rm -f "${d}state.json"; fi
+
     acct_key=$(basename "$d")
     profile_var="AWS_PROFILE_${acct_key}"
 
@@ -25,7 +31,7 @@ run_lifecycle_phase() {
     fi
 
     export AWS_PROFILE="${!profile_var}"
-    echo "→ ${phase} [${acct_key}] AWS_PROFILE=${AWS_PROFILE}"
+    echo -e "\033[0;36m→ ${phase} [${acct_key}] AWS_PROFILE=${AWS_PROFILE}\033[0m"
 
     script="${lifecycle_dir}/${acct_key}/${phase}.sh"
 
@@ -34,11 +40,12 @@ run_lifecycle_phase() {
       continue
     fi
 
-    if ! bash "$script" "$target_environment"; then
+    if ! bash "$script" "$target_environment" "$run_id"; then
       echo "✖ ${phase} lifecycle failed for ${acct_key}" >&2
       exit_code=1
       [[ $phase = setup ]] && return
     fi
+    echo
   done
 }
 
@@ -53,12 +60,14 @@ if [[ "$exit_code" -eq 0 ]]; then
   fi
 
   export AWS_PROFILE="${!primary_profile_var}"
-  echo "→ running npm run ${test_cmd} in ${pkg_dir} AWS_PROFILE=${AWS_PROFILE}"
+  echo -e "\033[0;36m→ running npm run ${test_cmd} in ${pkg_dir} AWS_PROFILE=${AWS_PROFILE}\033[0m\n"
 
   pushd "$pkg_dir" >/dev/null
 
-  if ! npm run "$test_cmd" -- "${extra_args[@]}"; then
-    echo "✖ ${test_cmd} failed" >&2
+  export RUN_ID="$run_id"
+
+  if ! npm run "$test_cmd" -- ${extra_args+"${extra_args[@]}"}; then
+    echo -e "✖ ${test_cmd} failed\n" >&2
     exit_code=1
   fi
 

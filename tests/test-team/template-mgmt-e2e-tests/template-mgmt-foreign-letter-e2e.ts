@@ -10,7 +10,7 @@ import {
   startNewTemplate,
 } from '../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'auth.json' });
+test.use({ storageState: 'login-state/primary.json' });
 
 const testConfigs = [
   {

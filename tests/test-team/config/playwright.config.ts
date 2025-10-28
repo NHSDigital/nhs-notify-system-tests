@@ -15,7 +15,7 @@ export default defineConfig({
       'html',
       {
         outputFolder: '../playwright-report',
-        open: process.env.CI ? 'never' : 'on-failure',
+        open: 'never',
       },
     ],
   ],
@@ -26,7 +26,7 @@ export default defineConfig({
     ...(process.env.PLAYWRIGHT_ZAP_PROXY && {
       ignoreHTTPSErrors: true,
       proxy: { server: process.env.PLAYWRIGHT_ZAP_PROXY },
-      acceptDownloads: true
-    })
+      acceptDownloads: true,
+    }),
   },
 });

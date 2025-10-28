@@ -60,12 +60,17 @@ runs:
         fi
       shell: bash
 
+    - name: "Repo setup"
+      shell: bash
+      run: |
+        npm ci
+
     - name: Pre-teardown - attempt to download setup JSON artifact
       if: inputs.phase == 'teardown' && steps.check-script.outputs.script_exists == 'true'
       env:
         GH_TOKEN: ${{ inputs.github_token }}
       run: |
-        ARTIFACT_NAME="${{ inputs.service }}-setup.json"
+        ARTIFACT_NAME="${{ inputs.service }}-state"
         DEST_PATH="${{ steps.check-script.outputs.script_dir }}"
         echo "Attempting to download artifact '$ARTIFACT_NAME' to $DEST_PATH ..."
         if gh run download "${{ inputs.github_run_id }}" --repo "${{ inputs.github_repository }}" --name "$ARTIFACT_NAME" --dir "$DEST_PATH"; then
@@ -78,14 +83,15 @@ runs:
     - name: Run ${{ inputs.suite }} test suite ${{ inputs.phase }} lifecycle script for {{ inputs.service }} service
       if: steps.check-script.outputs.script_exists == 'true'
       run: |
-        echo "Running ${{ steps.check-script.outputs.script_file }} with environment '${{ inputs.environment }}'..."
-        bash "${{ steps.check-script.outputs.script_file }}" "${{ inputs.environment }}"
+        run_id="ci${{ inputs.github_run_id }}"
+        echo "Running ${{ steps.check-script.outputs.script_file }} with environment '${{ inputs.environment }}' and run ID ${run_id}..."
+        bash "${{ steps.check-script.outputs.script_file }}" "${{ inputs.environment }}" "${run_id}"
       shell: bash
 
     - name: Post-setup - upload setup JSON file if it exists
       if: inputs.phase == 'setup' && steps.check-script.outputs.script_exists == 'true'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.service }}-setup.json
-        path: ${{ steps.check-script.outputs.script_dir }}/setup.json
+        name: ${{ inputs.service }}-state
+        path: ${{ steps.check-script.outputs.script_dir }}/state.json
         if-no-files-found: ignore
