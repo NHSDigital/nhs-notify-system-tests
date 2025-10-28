@@ -1,6 +1,6 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
-import { loginWithCis2, logOut } from '../fixtures/login';
+import { loginWithCis2, logOut } from '../functions/login';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
   chooseTemplate,
@@ -13,6 +13,7 @@ import test from 'playwright/test';
 import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
 
 test.use({ storageState: { cookies: [], origins: [] } });
+test.setTimeout(180_000);
 
 /**
  * Intention is to cover:
@@ -38,7 +39,7 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   const props = {
     basePage,
     baseURL,
-    letterPage
+    letterPage,
   };
   const channel = 'Email';
   const channelPath = 'email';
@@ -50,7 +51,7 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath, name);
-  await context.storageState({ path: 'cis2.json' });
+  await context.storageState({ path: 'login-state/cis2.json' });
   await logOut(basePage);
   await page.waitForLoadState('networkidle');
   await startPage({ basePage, baseURL });

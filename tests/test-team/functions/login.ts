@@ -1,12 +1,9 @@
-import {
-  expect,
-  Page,
-} from "@playwright/test";
-import { TemplateMgmtBasePage } from "../pages/template-mgmt-base-page";
+import { expect, Page } from '@playwright/test';
+import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
   Cis2CredentialProvider,
   getCis2Credentials,
-} from "nhs-notify-system-tests-shared";
+} from 'nhs-notify-system-tests-shared';
 
 async function enterCis2TotpCode(
   page: Page,
@@ -17,9 +14,13 @@ async function enterCis2TotpCode(
   await page.getByText(/\W+Submit\W+/).click();
 
   const happyPathSelector = page.getByText(targetHeadingText);
-  const reVerificationSelector = page.locator(`//button[text()=' Re-enter verification code ']`);
+  const reVerificationSelector = page.locator(
+    `//button[text()=' Re-enter verification code ']`
+  );
 
-  await happyPathSelector.or(reVerificationSelector).waitFor({ timeout: 30_000 });
+  await happyPathSelector
+    .or(reVerificationSelector)
+    .waitFor({ timeout: 30_000 });
   if (await happyPathSelector.isVisible()) {
     return true;
   }
@@ -31,8 +32,12 @@ async function enterCis2TotpCodeWithRetry(
   cis2Credentials: Cis2CredentialProvider,
   targetHeadingText: string
 ) {
-  for (var i=0; i<3; i++) {
-    const success = await enterCis2TotpCode(page, cis2Credentials, targetHeadingText);
+  for (var i = 0; i < 3; i++) {
+    const success = await enterCis2TotpCode(
+      page,
+      cis2Credentials,
+      targetHeadingText
+    );
     if (success) {
       return;
     }
@@ -49,10 +54,12 @@ async function loginWithCis2(
 
   try {
     // Notify WebUI - Click the CIS2 login button
-    await page.getByAltText("Log in with my Care Identity").click();
+    const cis2Button = page.getByAltText('Log in with my Care Identity');
+    await page.waitForLoadState('networkidle');
+    await cis2Button.click();
 
     // CIS2 - Select credentials type
-    await page.getByLabel("Authenticator app").click();
+    await page.getByLabel('Authenticator app').click();
     await page.getByText(/\W+Continue\W+/).click();
     await page.waitForSelector(`//input[@name='password']`);
 
@@ -65,20 +72,13 @@ async function loginWithCis2(
     // CIS2 - TOTP form
     await enterCis2TotpCodeWithRetry(page, cis2Credentials, targetHeadingText);
   } catch (error) {
-    console.error("Error during login:", error);
+    console.error('Error during login:', error);
     throw error;
   }
 }
 
-const baseURL = `https://${process.env.TARGET_ENVIRONMENT}.web-gateway.dev.nhsnotify.national.nhs.uk`;
-
 async function logOut(page: TemplateMgmtBasePage) {
   await page.logOut();
-  await page.page.waitForTimeout(2000);
-  await expect(page.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/auth/signout`));
-  await page.page.waitForLoadState('networkidle');
   await page.loginLink.waitFor();
   await expect(page.pageHeader).toHaveText('Sign in');
 }

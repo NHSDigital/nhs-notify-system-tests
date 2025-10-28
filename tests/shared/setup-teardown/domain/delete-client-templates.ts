@@ -8,18 +8,12 @@ import {
 
 const client = new DynamoDBClient({ region: 'eu-west-2' });
 
-const testUsers = JSON.parse(process.env.TEST_USERS ?? '[]') as Array<string>;
-const targetEnvironment = process.env.TARGET_ENVIRONMENT;
+export async function deleteClientTemplates(
+  environment: string,
+  clientId: string
+): Promise<void> {
+  const tableName = `nhs-notify-${environment}-app-api-templates`;
 
-if (!targetEnvironment) {
-  throw new Error('Missing TARGET_ENVIRONMENT');
-}
-
-console.log(`Test users (${testUsers.length}): ${JSON.stringify(testUsers)}`);
-
-const tableName = `nhs-notify-${targetEnvironment}-app-api-templates`;
-
-async function deleteTestUserData(owner: string): Promise<void> {
   const input: QueryCommandInput = {
     TableName: tableName,
     KeyConditionExpression: '#owner = :owner',
@@ -27,7 +21,7 @@ async function deleteTestUserData(owner: string): Promise<void> {
       '#owner': 'owner',
     },
     ExpressionAttributeValues: {
-      ':owner': { S: owner },
+      ':owner': { S: `CLIENT#${clientId}` },
     },
   };
 
@@ -44,7 +38,7 @@ async function deleteTestUserData(owner: string): Promise<void> {
     items.push(...Items);
   } while (input.ExclusiveStartKey);
 
-  console.log(`Found ${items.length} items for owner ${owner}`);
+  console.log(`Found ${items.length} items for client ${clientId}`);
 
   const itemKeys = items.map((item) => ({
     owner: item.owner,
@@ -61,11 +55,3 @@ async function deleteTestUserData(owner: string): Promise<void> {
     );
   }
 }
-
-async function deleteAllTestUserData(): Promise<void> {
-  for (let owner of testUsers) {
-    await deleteTestUserData(owner);
-  }
-}
-
-deleteAllTestUserData();

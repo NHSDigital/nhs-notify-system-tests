@@ -101,8 +101,7 @@ run_playwright_via_zap() {
     return 1
   fi
 
-  # also register 'cleanup' from run.sh
-  trap "cleanup_zap '$zap_proxy_url' '$zap_container_id'; cleanup" SIGINT SIGTERM EXIT
+  trap "cleanup_zap '$zap_proxy_url' '$zap_container_id'" SIGINT SIGTERM EXIT
 
   wait_for_zap $zap_proxy_url || {
     echo "ZAP health check failed."
@@ -113,10 +112,6 @@ run_playwright_via_zap() {
   export CI=true
 
   cd "$(git rev-parse --show-toplevel)"
-
-  print "Installing Playwright"
-
-  npx playwright install --with-deps > /dev/null
 
   cd tests/security
 

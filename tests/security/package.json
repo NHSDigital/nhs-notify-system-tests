@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "test:security:playwright": "playwright test --project security -c config/playwright.config.ts",
-    "test:security": "./run.sh $TARGET_ENVIRONMENT",
-    "test:security:local": "$(git rev-parse --show-toplevel)/scripts/tests/local-lifecycle.sh $(pwd) test:security $TARGET_ENVIRONMENT auth",
+    "test:security": "./run.sh",
+    "test:security:local": "$(git rev-parse --show-toplevel)/scripts/tests/local-lifecycle.sh $(pwd) test:security auth",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

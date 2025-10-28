@@ -49,7 +49,9 @@ async function loginWithCis2(
 
   try {
     // Notify WebUI - Click the CIS2 login button
-    await page.getByAltText("Log in with my Care Identity").click();
+    const cis2Button = page.getByAltText("Log in with my Care Identity")
+    await page.waitForLoadState('networkidle')
+    await cis2Button.click();
 
     // CIS2 - Select credentials type
     await page.getByLabel("Authenticator app").click();
