@@ -10,12 +10,22 @@ export default defineConfig({
   workers: process.env.CI ? 4 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
+    // Console friendly reporter
     ['line'],
+    // Standard HTML report for local triage
     [
       'html',
       {
         outputFolder: '../playwright-report',
         open: process.env.CI ? 'never' : 'on-failure',
+      },
+    ],
+    // JUnit XML for downstream metrics (duration, pass rate, flakiness, failure categories)
+    [
+      'junit',
+      {
+        // Single file output; artifact upload step in GitHub Actions can target this path
+        outputFile: '../test-results/junit.xml',
       },
     ],
   ],
