@@ -4,6 +4,7 @@ bot
 Cognito
 Cyber
 Dependabot
+Git[Hh]ub
 dev
 draw.io
 drawio
