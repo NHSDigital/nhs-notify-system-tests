@@ -49,7 +49,7 @@ async function loginWithCis2(
 
   try {
     // Notify WebUI - Click the CIS2 login button
-    const cis2Button = page.getByAltText("Log in with my Care Identity")
+    const cis2Button = page.getByText("Log in with my Care Identity")
     await page.waitForLoadState('networkidle')
     await cis2Button.click();
 
