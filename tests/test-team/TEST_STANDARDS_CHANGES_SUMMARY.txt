@@ -1,0 +1,125 @@
+NHS NOTIFY SYSTEM TESTS – PRODUCT TEST STANDARDS IMPLEMENTATION SUMMARY
+=====================================================================
+Date: 2025-11-04
+Branch: feature/CCM-12895_test_standards (initial work also on feature/CCM-12741_ai_pipeline_health)
+Scope: Establish enforceable Playwright product test standards, real‑time guidance, automated validation, and CI + pre-commit enforcement.
+
+1. Standards Definition
+-----------------------
+Created: tests/test-team/standards/TEST_STANDARDS.md
+Purpose: Canonical, enforced rules for authoring Playwright product tests (naming, structure, selectors, retry patterns, auth, environment usage, logging, assertions).
+Why: Remove drift, improve maintainability, speed code review, enable automation to give immediate feedback.
+Key Rules: single top-level describe, titles start with "should ", page object first, selector priority (role > testid > text regex > CSS), bounded polling only, no hard-coded domains, timeout ≤ 60s, no inline credentials, minimal logging.
+
+2. Copilot Agent Instruction Refresh
+------------------------------------
+Recreated & enhanced: .github/copilot-instructions.md
+Added: Product Test Standards summary + inline prompt examples for automatic suggestion heuristics.
+Why: Let AI assistants (Copilot/other agents) give context-aware corrections DURING authoring; reduces post-commit churn.
+
+3. Static Validator Script
+--------------------------
+File: scripts/validate-product-tests.ts
+Features:
+  - Scans product tests (both *-e2e.ts and future *.spec.ts) via fast-glob.
+  - Rules implemented as machine checks: single describe, title prefix, disallow direct locators (unless annotated), timeout cap, detect sleep/waitForTimeout (warning), ban hard-coded https:// domains.
+  - JSON report + non-zero exit on violations; warnings don’t fail build.
+Resilience Additions:
+  - Graceful message if fast-glob not installed.
+  - Glob pattern fix (moved from unsupported extglob to explicit array patterns).
+Why: Deterministic, scriptable enforcement that can run locally, in pre-commit, and in CI.
+
+4. Package & Dependency Adjustments
+-----------------------------------
+Updated root package.json:
+  - Added devDependency: fast-glob
+  - Added script: validate:product-tests
+Ambient types: scripts/types/fast-glob.d.ts to silence missing type declaration.
+Why: Provide reliable tooling with minimal dependency footprint.
+
+5. Pre-Commit Hook Integration
+------------------------------
+Added hook in scripts/config/pre-commit.yaml:
+  - validate-product-tests (script: scripts/githooks/validate-product-tests.sh)
+Hook Behavior: Runs validator (skips if no test files). Fails commit on violations.
+Why: Immediate feedback before CI; prevents standards regressions early.
+
+6. GitHub Actions Workflow
+--------------------------
+File: .github/workflows/product-test-standards-check.yaml
+Triggers: pull_request (only when product test files or standards/instructions change)
+Steps: checkout → node setup → npm ci → run validator → summarize.
+Why: Gate merges with consistent standards; visible feedback in PR checks.
+
+7. Installer / Environment Reliability Improvements
+---------------------------------------------------
+Modified .tool-versions ordering: ensure runtime (python, nodejs) precedes dependent tools (pre-commit, poetry) to avoid early install failures.
+Refactored _install-dependencies loop (scripts/init.mk): replaced subshell for-loop with while-read pattern to mitigate "unexpected end of file" bash parsing error under .ONESHELL.
+Why: Remove fragile loop parsing; ensure deterministic bootstrap.
+
+8. Validator Evolution / Fixes
+------------------------------
+- Added explicit diagnostic warning when no files match.
+- Adjusted glob strategy to include existing *-e2e.ts naming convention.
+- Provided early exit with actionable message if dependencies missing.
+Why: Improve developer ergonomics and reduce false negatives (0 files scanned).
+
+9. Author Experience Enhancements
+---------------------------------
+Inline prompt examples documented in Copilot instructions to nudge corrections (rename tests, refactor locators, replace URLs, fix polling, remove sleep calls).
+Rationale: Lower cognitive load; standards shift from tribal knowledge to guided automation.
+
+10. Risk & Safety Considerations
+--------------------------------
+- Avoided modifying template-managed files except minimal necessary loop stabilization.
+- Traces kept off to reduce risk of secret leakage.
+- No reliance on external network calls inside validation (other than existing dependency installs).
+
+11. Follow-Up Opportunities (Not Yet Implemented)
+-------------------------------------------------
+- Add GitHub PR review annotations pointing to exact lines (could parse JSON and create review comments).
+- ESLint custom plugin mirroring validator rules for inline editor squiggles.
+- Auto-fix suggestions (e.g. rewrite direct locator to page object stub) in a future code-mod script.
+- Expand validator for selector priority linting & soft assertion annotation enforcement.
+
+12. How to Use (Developer Quick Start)
+--------------------------------------
+1. npm install (or npm ci)
+2. npm run validate:product-tests (expect JSON output)
+3. Commit changes; pre-commit hook will block if violations present.
+4. Open PR; standards workflow must pass before merge.
+
+12A. Getting Inline Editor Warnings (ESLint Live Feedback)
+----------------------------------------------------------
+Goal: See standards violations while editing tests instead of waiting for
+validator/pre-commit.
+
+Steps:
+1. Ensure dependencies installed:
+  npm install
+2. Verify ESLint config exists at repo root: .eslintrc.cjs
+3. In VS Code, install/enable the official "ESLint" extension.
+4. Open a product test file (e.g. tests/test-team/template-mgmt-e2e-tests/*.ts).
+5. Violations appear as squiggles for:
+  - Missing 'should ' prefix in test title.
+  - test.setTimeout > 60000 without // allowable timeout.
+  - Direct page.locator(...) without // allowable direct locator comment.
+6. Manual lint run (for confirmation):
+  npm run lint:product-tests
+7. If warnings do NOT appear:
+  - Check VS Code settings: "eslint.validate" includes "typescript".
+  - Run debug command:
+    npx eslint --print-config tests/test-team/template-mgmt-e2e-tests/template-mgmt-foreign-letter-e2e.ts | grep product-test-standards || echo 'Rules not applied'
+  - Ensure file name matches *-e2e.ts or *.spec.ts patterns.
+8. Optional exemption comments:
+  // allowable timeout     (before large test.setTimeout)
+  // allowable direct locator   (before intentional direct locator usage)
+
+Result: Authors receive immediate corrective guidance (titles, timeouts,
+locator usage) reducing review friction and commit churn.
+
+13. Summary Impact
+------------------
+Outcome: Standardization layer + automation pipeline that continuously enforces product test quality, reduces review friction, and enables AI-assisted authoring. The ecosystem now supports prevention (pre-commit), detection (CI), and guidance (Copilot prompts + standards file) with minimal maintenance overhead.
+
+-- End of Summary --

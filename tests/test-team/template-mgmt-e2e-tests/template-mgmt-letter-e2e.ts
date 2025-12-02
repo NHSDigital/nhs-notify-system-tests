@@ -1,5 +1,3 @@
-/* eslint-disable security/detect-non-literal-regexp */
-
 import { test } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
@@ -13,11 +11,12 @@ import {
 
 test.use({ storageState: 'login-state/primary.json' });
 
-test(`User creates and submits a new letter template successfully`, async ({
+test(`should create and submit a new letter template successfully`, async ({
   page,
   baseURL,
 }) => {
-  test.setTimeout(240_000); // override just for this test
+  // allowable timeout: letter template creation may require extra time for file upload and proof generation
+  test.setTimeout(240_000);
   const props = {
     basePage: new TemplateMgmtBasePage(page),
     letterPage: new TemplateMgmtLetterPage(page),

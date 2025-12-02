@@ -1,0 +1,101 @@
+{
+  "areaActionCounts": [],
+  "describePatterns": [
+    {
+      "describeName": null,
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-cis2-login-e2e.ts",
+      "valid": false
+    },
+    {
+      "describeName": null,
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-copy-e2e.ts",
+      "valid": false
+    },
+    {
+      "describeName": null,
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-delete-e2e.ts",
+      "valid": false
+    },
+    {
+      "describeName": null,
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-email-e2e.ts",
+      "valid": false
+    },
+    {
+      "describeName": null,
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-foreign-letter-e2e.ts",
+      "valid": false
+    },
+    {
+      "describeName": null,
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-letter-e2e.ts",
+      "valid": false
+    },
+    {
+      "describeName": null,
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-nhsapp-e2e.ts",
+      "valid": false
+    },
+    {
+      "describeName": null,
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-sms-e2e.ts",
+      "valid": false
+    }
+  ],
+  "duplicateTestTitles": [],
+  "generatedAt": "2025-11-13T14:01:02.799Z",
+  "largeInlineDataWarnings": [
+    {
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-cis2-login-e2e.ts",
+      "lines": 17
+    }
+  ],
+  "pollingPatterns": {
+    "boundedLoops": [],
+    "unboundedLoops": []
+  },
+  "selectorsUsage": {
+    "css": 0,
+    "directLocator": 0,
+    "role": 0,
+    "testid": 0,
+    "text": 0
+  },
+  "testsPerFile": [
+    {
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-cis2-login-e2e.ts",
+      "testCount": 1
+    },
+    {
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-copy-e2e.ts",
+      "testCount": 1
+    },
+    {
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-delete-e2e.ts",
+      "testCount": 1
+    },
+    {
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-email-e2e.ts",
+      "testCount": 1
+    },
+    {
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-foreign-letter-e2e.ts",
+      "testCount": 1
+    },
+    {
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-letter-e2e.ts",
+      "testCount": 1
+    },
+    {
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-nhsapp-e2e.ts",
+      "testCount": 1
+    },
+    {
+      "file": "tests/test-team/template-mgmt-e2e-tests/template-mgmt-sms-e2e.ts",
+      "testCount": 1
+    }
+  ],
+  "timeoutUsages": [],
+  "totalTestFiles": 8,
+  "totalTests": 8
+}

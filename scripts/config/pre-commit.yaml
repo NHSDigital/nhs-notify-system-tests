@@ -64,3 +64,10 @@ repos:
         entry: ./scripts/githooks/check-terraform-docs.sh
         language: script
         pass_filenames: false
+  - repo: local
+    hooks:
+      - id: validate-product-tests
+        name: Validate product Playwright specs
+        entry: /usr/bin/env ./scripts/githooks/validate-product-tests.sh
+        language: script
+        pass_filenames: false

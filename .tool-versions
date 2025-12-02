@@ -1,10 +1,10 @@
-act 0.2.64
-gitleaks 8.18.4
-pre-commit 3.6.0
-vale 3.6.0
-poetry 1.8.3
 python 3.11.6
 nodejs 20.18.2
+pre-commit 3.6.0
+poetry 1.8.3
+act 0.2.64
+gitleaks 8.18.4
+vale 3.6.0
 jq 1.6
 awscli 2.29.0
 # ==============================================================================
