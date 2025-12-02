@@ -46,9 +46,13 @@ _install-dependency: # Install asdf dependency - mandatory: name=[listed in the 
 	asdf install ${name} $(or ${version},)
 
 _install-dependencies: # Install all the dependencies listed in .tool-versions
-	for plugin in $$(grep ^[a-z] .tool-versions | sed 's/[[:space:]].*//'); do
-		make _install-dependency name="$${plugin}"
-	done
+	# Using while-read avoids subshell parsing issues seen with the previous for+command-substitution form.
+	# It skips blank lines and comment lines starting with '#'.
+	while IFS=' ' read -r plugin _rest; do \
+		[ -z "$$plugin" ] && continue; \
+		case "$$plugin" in \#*) continue ;; esac; \
+		make _install-dependency name="$$plugin"; \
+	done < .tool-versions
 
 clean:: # Remove all generated and temporary files (common) @Operations
 	rm -rf \

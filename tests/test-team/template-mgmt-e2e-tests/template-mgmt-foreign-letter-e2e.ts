@@ -1,5 +1,3 @@
-/* eslint-disable security/detect-non-literal-regexp */
-
 import { test } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
@@ -25,10 +23,11 @@ const testConfigs = [
 ];
 
 for (const { language, inputFileName } of testConfigs) {
-  test(`User creates and submits a new letter template successfully - ${language})`, async ({
+  test(`should create and submit a new letter template successfully - ${language})`, async ({
     page,
     baseURL,
   }) => {
+    // allowable timeout: foreign letter template uploads may take longer
     test.setTimeout(240_000); // override just for this test
 
     const props = {

@@ -1,18 +1,27 @@
 {
+  "dependencies": {
+    "generate-password": "^1.7.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.11.0",
+    "@typescript-eslint/parser": "^8.11.0",
+    "eslint": "^9.12.0",
+    "fast-glob": "^3.3.2",
+    "tsx": "^4.19.4"
+  },
   "name": "nhs-notify-system-tests",
+  "scripts": {
+    "generate:product-test": "tsx scripts/generate-product-test.ts",
+    "lint:product-tests": "eslint tests/test-team --ext .ts",
+    "metrics:compare": "tsx scripts/compare-product-test-metrics.ts",
+    "metrics:product-tests": "tsx scripts/generate-product-test-metrics.ts",
+    "typecheck": "npm run typecheck --workspaces",
+    "validate:product-tests": "npx tsx scripts/validate-product-tests.ts"
+  },
   "workspaces": [
     "tests/security",
     "tests/shared",
     "tests/test-data-cleanup",
     "tests/test-team"
-  ],
-  "dependencies": {
-    "generate-password": "^1.7.1"
-  },
-  "devDependencies": {
-    "tsx": "^4.19.4"
-  },
-  "scripts": {
-    "typecheck": "npm run typecheck --workspaces"
-  }
+  ]
 }
