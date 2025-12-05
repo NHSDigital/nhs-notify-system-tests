@@ -144,7 +144,7 @@ export class AuthHelper {
             Value: 'true',
           },
           {
-            Name: 'custom:internal_user_id',
+            Name: 'custom:nhs_notify_user_id',
             Value: internalUserId,
           },
         ],
