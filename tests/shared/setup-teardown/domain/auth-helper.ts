@@ -186,7 +186,7 @@ export class AuthHelper {
     if (!this.clientIds.has(clientId)) {
       this.clientIds.add(clientId);
 
-      await Promise.all([this.deleteClientConfig(clientId)]);
+      await this.deleteClientConfig(clientId);
     }
 
     await this.cognito.send(
