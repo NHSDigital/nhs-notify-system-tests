@@ -1,12 +1,9 @@
 import {
-  AdminAddUserToGroupCommand,
   AdminCreateUserCommand,
   AdminDeleteUserCommand,
   AdminDisableUserCommand,
   AdminSetUserPasswordCommand,
   CognitoIdentityProviderClient,
-  CreateGroupCommand,
-  DeleteGroupCommand,
   ListUserPoolsCommand,
   ListUserPoolsCommandOutput,
 } from '@aws-sdk/client-cognito-identity-provider';
@@ -48,6 +45,8 @@ export class AuthHelper {
 
   private static environment: string;
 
+  private static userTable: string;
+
   private readonly cognito = new CognitoIdentityProviderClient({
     region: 'eu-west-2',
   });
@@ -72,6 +71,7 @@ export class AuthHelper {
     this.environment = environment;
     const cognito = new CognitoIdentityProviderClient({ region: 'eu-west-2' });
     const poolName = `nhs-notify-${environment}-app`;
+    this.userTable = `nhs-notify-${environment}-app-users`;
 
     let nextToken: string | undefined = undefined;
 
@@ -112,7 +112,7 @@ export class AuthHelper {
     const internalUserId = randomUUID();
     await ddbDocClient.send(
       new PutCommand({
-        TableName: process.env.USERS_TABLE,
+        TableName: AuthHelper.userTable,
         Item: {
           PK: `INTERNAL_USER#${internalUserId}`,
           SK: `CLIENT#${clientId}`,
@@ -122,7 +122,7 @@ export class AuthHelper {
     );
     await ddbDocClient.send(
       new PutCommand({
-        TableName: process.env.USERS_TABLE,
+        TableName: AuthHelper.userTable,
         Item: {
           PK: `EXTERNAL_USER#${email}`,
           SK: `INTERNAL_USER#${internalUserId}`,
@@ -236,7 +236,7 @@ export class AuthHelper {
     externalUserIdentifier: string
   ): Promise<string[]> {
     const input: QueryCommandInput = {
-      TableName: process.env.USERS_TABLE,
+      TableName: AuthHelper.userTable,
       KeyConditionExpression: 'PK = :partitionKey',
       ExpressionAttributeValues: {
         ':partitionKey': `EXTERNAL_USER#${externalUserIdentifier}`,
@@ -252,7 +252,7 @@ export class AuthHelper {
     internalUserId: string
   ): Promise<string | undefined> {
     const input: QueryCommandInput = {
-      TableName: process.env.USERS_TABLE,
+      TableName: AuthHelper.userTable,
       KeyConditionExpression: 'PK = :partitionKey',
       ExpressionAttributeValues: {
         ':partitionKey': `INTERNAL_USER#${internalUserId}`,
@@ -276,7 +276,7 @@ export class AuthHelper {
       // Delete the mapping from EXTERNAL_USER to INTERNAL_USER
       await ddbDocClient.send(
         new DeleteItemCommand({
-          TableName: process.env.USERS_TABLE,
+          TableName: AuthHelper.userTable,
           Key: {
             PK: { S: `EXTERNAL_USER#${externalUserId}` },
             SK: { S: internalUserId },
@@ -290,7 +290,7 @@ export class AuthHelper {
         // Delete the mapping from INTERNAL_USER to CLIENT
         await ddbDocClient.send(
           new DeleteItemCommand({
-            TableName: process.env.USERS_TABLE,
+            TableName: AuthHelper.userTable,
             Key: {
               PK: { S: internalUserId },
               SK: { S: `CLIENT#${clientId}` },
