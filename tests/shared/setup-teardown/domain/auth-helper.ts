@@ -1,12 +1,9 @@
 import {
-  AdminAddUserToGroupCommand,
   AdminCreateUserCommand,
   AdminDeleteUserCommand,
   AdminDisableUserCommand,
   AdminSetUserPasswordCommand,
   CognitoIdentityProviderClient,
-  CreateGroupCommand,
-  DeleteGroupCommand,
   ListUserPoolsCommand,
   ListUserPoolsCommandOutput,
 } from '@aws-sdk/client-cognito-identity-provider';
@@ -17,6 +14,21 @@ import {
 } from '@aws-sdk/client-ssm';
 import type { StaticClientConfig } from '../../types';
 import { generate as generatePassword } from 'generate-password';
+import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  PutCommand,
+  QueryCommand,
+  QueryCommandInput,
+} from '@aws-sdk/lib-dynamodb';
+import { randomUUID } from 'node:crypto';
+
+const ddbDocClient = DynamoDBDocumentClient.from(
+  new DynamoDBClient({ region: 'eu-west-2' }),
+  {
+    marshallOptions: { removeUndefinedValues: true },
+  }
+);
 
 export type User = {
   email: string;
@@ -32,6 +44,8 @@ export class AuthHelper {
   private readonly runId: string;
 
   private static environment: string;
+
+  private static userTable: string;
 
   private readonly cognito = new CognitoIdentityProviderClient({
     region: 'eu-west-2',
@@ -57,6 +71,7 @@ export class AuthHelper {
     this.environment = environment;
     const cognito = new CognitoIdentityProviderClient({ region: 'eu-west-2' });
     const poolName = `nhs-notify-${environment}-app`;
+    this.userTable = `nhs-notify-${environment}-app-users`;
 
     let nextToken: string | undefined = undefined;
 
@@ -85,6 +100,36 @@ export class AuthHelper {
     const email = `${userKey}.${this.suite}.${this.runId}@nhs.net`;
     const clientId = `${clientKey}${this.runId}`;
 
+    if (!this.clientIds.has(clientId)) {
+      this.clientIds.add(clientId);
+
+      await Promise.all([this.configureClient(clientId, clientConfig)]);
+    }
+
+    // Delete any existing user records just in case the tests are being re-run
+    await AuthHelper.deleteUserRecords(email);
+
+    const internalUserId = randomUUID();
+    await ddbDocClient.send(
+      new PutCommand({
+        TableName: AuthHelper.userTable,
+        Item: {
+          PK: `INTERNAL_USER#${internalUserId}`,
+          SK: `CLIENT#${clientId}`,
+          client_id: clientId,
+        },
+      })
+    );
+    await ddbDocClient.send(
+      new PutCommand({
+        TableName: AuthHelper.userTable,
+        Item: {
+          PK: `EXTERNAL_USER#${email}`,
+          SK: `INTERNAL_USER#${internalUserId}`,
+        },
+      })
+    );
+
     const user = await this.cognito.send(
       new AdminCreateUserCommand({
         UserPoolId: this.userPoolId,
@@ -97,6 +142,10 @@ export class AuthHelper {
           {
             Name: 'email_verified',
             Value: 'true',
+          },
+          {
+            Name: 'custom:nhs_notify_user_id',
+            Value: internalUserId,
           },
         ],
         MessageAction: 'SUPPRESS',
@@ -124,17 +173,6 @@ export class AuthHelper {
       })
     );
 
-    if (!this.clientIds.has(clientId)) {
-      this.clientIds.add(clientId);
-
-      await Promise.all([
-        this.configureClient(clientId, clientConfig),
-        this.createClientGroup(clientId),
-      ]);
-    }
-
-    await this.addUserToClientGroup(email, clientId);
-
     return {
       email,
       password,
@@ -148,10 +186,7 @@ export class AuthHelper {
     if (!this.clientIds.has(clientId)) {
       this.clientIds.add(clientId);
 
-      await Promise.all([
-        this.deleteClientConfig(clientId),
-        this.deleteClientGroup(clientId),
-      ]);
+      await this.deleteClientConfig(clientId);
     }
 
     await this.cognito.send(
@@ -167,35 +202,8 @@ export class AuthHelper {
         Username: username,
       })
     );
-  }
 
-  private async createClientGroup(clientId: string) {
-    await this.cognito.send(
-      new CreateGroupCommand({
-        GroupName: `client:${clientId}`,
-        UserPoolId: this.userPoolId,
-        Description: `test-suite:${this.suite}`,
-      })
-    );
-  }
-
-  private async deleteClientGroup(clientId: string) {
-    await this.cognito.send(
-      new DeleteGroupCommand({
-        GroupName: `client:${clientId}`,
-        UserPoolId: this.userPoolId,
-      })
-    );
-  }
-
-  private async addUserToClientGroup(username: string, clientId: string) {
-    await this.cognito.send(
-      new AdminAddUserToGroupCommand({
-        GroupName: `client:${clientId}`,
-        Username: username,
-        UserPoolId: this.userPoolId,
-      })
-    );
+    await AuthHelper.deleteUserRecords(username);
   }
 
   private async configureClient(
@@ -222,5 +230,74 @@ export class AuthHelper {
         Name: clientParameterPath,
       })
     );
+  }
+
+  private static async findInternalUserIdentifiers(
+    externalUserIdentifier: string
+  ): Promise<string[]> {
+    const input: QueryCommandInput = {
+      TableName: AuthHelper.userTable,
+      KeyConditionExpression: 'PK = :partitionKey',
+      ExpressionAttributeValues: {
+        ':partitionKey': `EXTERNAL_USER#${externalUserIdentifier}`,
+      },
+    };
+
+    const result = await ddbDocClient.send(new QueryCommand(input));
+    const items = result.Items ?? ([] as { PK: string; SK: string }[]);
+    return items.map((item) => item.SK.replace('INTERNAL_USER#', ''));
+  }
+
+  private static async findInternalUserClientId(
+    internalUserId: string
+  ): Promise<string | undefined> {
+    const input: QueryCommandInput = {
+      TableName: AuthHelper.userTable,
+      KeyConditionExpression: 'PK = :partitionKey',
+      ExpressionAttributeValues: {
+        ':partitionKey': `INTERNAL_USER#${internalUserId}`,
+      },
+    };
+
+    const result = await ddbDocClient.send(new QueryCommand(input));
+    const items = result.Items ?? ([] as { client_id: string }[]);
+    return items[0]?.client_id;
+  }
+
+  private static async deleteUserRecords(
+    externalUserId: string
+  ): Promise<void> {
+    // Query to find the internal user ID associated with the external user ID
+    const internalUserIds = await this.findInternalUserIdentifiers(
+      externalUserId
+    );
+
+    for (const internalUserId of internalUserIds) {
+      // Delete the mapping from EXTERNAL_USER to INTERNAL_USER
+      await ddbDocClient.send(
+        new DeleteItemCommand({
+          TableName: AuthHelper.userTable,
+          Key: {
+            PK: { S: `EXTERNAL_USER#${externalUserId}` },
+            SK: { S: internalUserId },
+          },
+        })
+      );
+
+      // Retrieve the client ID associated with the internal user
+      const clientId = await this.findInternalUserClientId(internalUserId);
+      if (clientId) {
+        // Delete the mapping from INTERNAL_USER to CLIENT
+        await ddbDocClient.send(
+          new DeleteItemCommand({
+            TableName: AuthHelper.userTable,
+            Key: {
+              PK: { S: internalUserId },
+              SK: { S: `CLIENT#${clientId}` },
+            },
+          })
+        );
+      }
+    }
   }
 }
