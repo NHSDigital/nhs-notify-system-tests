@@ -14,6 +14,9 @@ test-unit: # Run your unit tests from scripts/test/unit @Testing
 test-lint: # Lint your code from scripts/test/lint @Testing
 	make _test name="lint"
 
+test-typecheck: # Typecheck your code from scripts/test/typecheck @Testing
+	make _test name="typecheck"
+
 test-coverage: # Evaluate code coverage from scripts/test/coverage @Testing
 	make _test name="coverage"
 
@@ -51,16 +54,11 @@ test-ui: # Run your UI tests from scripts/test/ui @Testing
 test-ui-performance: # Run UI render tests from scripts/test/ui-performance @Testing
 	make _test name="ui-performance"
 
-test-product:
-	make _test name="product"
-
-test-zap-security:
-	make _test name="zap-security"
-
 test: # Run all the test tasks @Testing
 	make \
 		test-unit \
 		test-lint \
+		test-typecheck \
 		test-coverage \
 		test-contract \
 		test-security \
@@ -89,10 +87,10 @@ ${VERBOSE}.SILENT: \
 	test-soak \
 	test-integration \
 	test-lint \
+	test-typecheck \
 	test-load \
 	test-response-time \
 	test-security \
 	test-ui \
 	test-ui-performance \
-	test-product \
 	test-unit \
