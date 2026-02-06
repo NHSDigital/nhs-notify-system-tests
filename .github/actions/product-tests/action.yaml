@@ -39,7 +39,7 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.github_token }}
       run: |
-        ARTIFACT_NAME="auth-state"
+        ARTIFACT_NAME="templates-state"
         DEST_PATH="./tests/test-team/lifecycle/templates"
         echo "Downloading artifact '$ARTIFACT_NAME' to $DEST_PATH ..."
         gh run download "${{ inputs.github_run_id }}" --repo "${{ inputs.github_repository }}" --name "$ARTIFACT_NAME" --dir "$DEST_PATH"
