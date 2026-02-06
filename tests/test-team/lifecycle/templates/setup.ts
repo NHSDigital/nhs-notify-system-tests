@@ -55,7 +55,7 @@ async function main() {
     clientIds['RoutingEnabled'],
     TemplateType.NHS_APP,
     {
-      name: 'multi-channel-routing-config-nhsapp-template',
+      name: 'multi-channel-routing-config-nhsapp-template-name',
       message: 'multi-channel-routing-config-nhsapp-message',
     }
   );
@@ -68,6 +68,7 @@ async function main() {
     {
       name: 'multi-channel-routing-config-email-template-name',
       message: 'multi-channel-routing-config-email-template-message',
+      subject: 'multi-channel-routing-config-email-template-subject',
     }
   );
   stateFile.setValue('templates', 'multiChannelRoutingConfigEmail', multiChannelRoutingConfigEmailTemplate);
