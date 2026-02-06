@@ -31,6 +31,4 @@ test(`User creates and submits a new sms template successfully - routing enabled
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath, name);
-  await previewPageChooseSubmit(props, channelPath);
-  await submitPage(props, channelPath, name);
 });

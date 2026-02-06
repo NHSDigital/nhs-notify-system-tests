@@ -211,7 +211,8 @@ export function deleteTemplate(
 
 export function copyTemplate(
   { basePage, baseURL }: CommonStepsProps,
-  name:string
+  name: string,
+  routingEnabled = false,
 ) {
   return test.step('Copy template', async () => {
     await basePage.goBackLink.click();
@@ -245,8 +246,12 @@ export function copyTemplate(
     await basePage.page.reload(); // shouldn't need to do this
 
     await basePage.clickFirstTableRowLink();
-    await basePage.checkRadio('Edit template');
-    await basePage.clickButtonByName('Continue');
+    if (routingEnabled) {
+      await basePage.page.getByText('Edit template').click();
+    } else {
+      await basePage.checkRadio('Edit template');
+      await basePage.clickButtonByName('Continue');
+    }
     const timestamp = Date.now();
     const editedTemplateName = `Test edit changed ${timestamp}`;
     await basePage.fillTextBox('Template name', editedTemplateName);

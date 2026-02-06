@@ -32,5 +32,5 @@ test(`User copies a template - routing enabled`, async ({ page, baseURL }) => {
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath, name);
-  await copyTemplate(props, name);
+  await copyTemplate(props, name, true);
 });
