@@ -46,7 +46,7 @@ export const clients: Record<string, StaticClientConfig> = {
       },
     },
     auth: {
-      name: 'Routing Disabled',
+      name: 'Routing Enabled',
     },
   },
 };
