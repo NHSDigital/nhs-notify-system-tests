@@ -1,7 +1,7 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
 import { test } from '@playwright/test';
-import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtBasePage } from '../../pages/template-mgmt-base-page';
 import {
   startPage,
   chooseTemplate,
@@ -10,11 +10,11 @@ import {
   submitPage,
   startNewTemplate,
   previewPageChooseSubmit,
-} from '../functions/template-mgmt-e2e-common-steps';
+} from '../../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'login-state/primary.json' });
+test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
 
-test(`User creates and submits a new email template successfully`, async ({
+test(`User creates and submits a new sms template successfully - routing enabled`, async ({
   page,
   baseURL,
 }) => {
@@ -22,8 +22,8 @@ test(`User creates and submits a new email template successfully`, async ({
     basePage: new TemplateMgmtBasePage(page),
     baseURL,
   };
-  const channel = 'Email';
-  const channelPath = 'email';
+  const channel = 'Text message (SMS)';
+  const channelPath = 'text-message';
   const name = 'E2E Name';
 
   await startPage(props);

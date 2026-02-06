@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtBasePage } from '../../pages/template-mgmt-base-page';
 import {
   startPage,
   chooseTemplate,
@@ -8,11 +8,11 @@ import {
   submitPage,
   startNewTemplate,
   previewPageChooseSubmit,
-} from '../functions/template-mgmt-e2e-common-steps';
+} from '../../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'login-state/primary.json' });
+test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
 
-test(`User creates and submits a new nhsapp template successfully`, async ({
+test(`User creates and submits a new nhsapp template successfully - routing enabled`, async ({
   page,
   baseURL,
 }) => {

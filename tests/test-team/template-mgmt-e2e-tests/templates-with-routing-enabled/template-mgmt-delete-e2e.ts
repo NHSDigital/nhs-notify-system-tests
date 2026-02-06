@@ -1,7 +1,7 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
 import { test } from '@playwright/test';
-import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtBasePage } from '../../pages/template-mgmt-base-page';
 import {
   startPage,
   chooseTemplate,
@@ -9,11 +9,11 @@ import {
   previewPage,
   startNewTemplate,
   deleteTemplate,
-} from '../functions/template-mgmt-e2e-common-steps';
+} from '../../functions/template-mgmt-e2e-common-steps';
 
-test.use({ storageState: 'login-state/delete.json' });
+test.use({ storageState: 'login-state/deleteRoutingEnabled.json' });
 
-test(`User deletes a template`, async ({
+test(`User deletes a template - routing enabled`, async ({
   page,
   baseURL,
 }) => {

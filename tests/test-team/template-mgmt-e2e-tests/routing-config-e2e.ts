@@ -5,7 +5,7 @@ import { expect, Page, test } from '@playwright/test';
 import { StateFile } from 'nhs-notify-system-tests-shared';
 import z, { string } from 'zod';
 
-test.use({ storageState: 'login-state/routingEnabled.json' });
+test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
 
 const getSeededTemplateConfig = async (configFile: string | undefined) => {
 
