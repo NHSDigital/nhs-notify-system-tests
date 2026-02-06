@@ -8,9 +8,9 @@ import z, { string } from 'zod';
 test.use({ storageState: 'login-state/primary.json' });
 
 const getSeededTemplateConfig = async (configFile: string | undefined) => {
-  
+
     const projectRoot = path.resolve(dirname(configFile ?? ''), '..');
-  
+
     const templatesStateFile = new StateFile(
       path.join(projectRoot, 'lifecycle', 'templates'),
       process.env.RUN_ID
