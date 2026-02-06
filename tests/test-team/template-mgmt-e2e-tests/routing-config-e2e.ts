@@ -113,7 +113,9 @@ test(`User creates a multi-channel routing config`, async ({ page, baseURL, }, {
 
   await expect(page).toHaveURL(new RegExp(`${baseURL}/templates/message-plans/get-ready-to-move/${routingConfigId}(.*)`));
 
-  await page.getByText('Continue').click();
+  await page.getByText('Continue', { exact: true }).click();
+
+  await expect(page).toHaveURL(new RegExp(`${baseURL}/templates/message-plans/review-and-move-to-production/${routingConfigId}(.*)`));
 
   // remaining pages not ready yet
 });
