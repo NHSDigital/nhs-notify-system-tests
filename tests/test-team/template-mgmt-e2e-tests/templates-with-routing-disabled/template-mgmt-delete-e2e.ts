@@ -15,11 +15,9 @@ test.use({ storageState: 'login-state/delete.json' });
 
 test(`User deletes a template`, async ({
   page,
-  baseURL,
 }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
-    baseURL,
   };
   const channel = 'Email';
   const channelPath = 'email';

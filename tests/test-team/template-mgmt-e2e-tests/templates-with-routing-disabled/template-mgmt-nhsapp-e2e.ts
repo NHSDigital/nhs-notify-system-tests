@@ -14,11 +14,9 @@ test.use({ storageState: 'login-state/primary.json' });
 
 test(`User creates and submits a new nhsapp template successfully`, async ({
   page,
-  baseURL,
 }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
-    baseURL,
   };
   const channel = 'NHS App message';
   const channelPath = 'nhs-app';

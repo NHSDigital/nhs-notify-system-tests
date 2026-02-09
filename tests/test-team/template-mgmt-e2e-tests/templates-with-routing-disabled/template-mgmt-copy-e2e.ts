@@ -14,10 +14,9 @@ import {
 
 test.use({ storageState: 'login-state/copy.json' });
 
-test(`User copies a template`, async ({ page, baseURL }) => {
+test(`User copies a template`, async ({ page }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
-    baseURL,
   };
 
   const channel = 'Email';

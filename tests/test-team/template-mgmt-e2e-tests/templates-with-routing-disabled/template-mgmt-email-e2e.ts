@@ -16,11 +16,9 @@ test.use({ storageState: 'login-state/primary.json' });
 
 test(`User creates and submits a new email template successfully`, async ({
   page,
-  baseURL,
 }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
-    baseURL,
   };
   const channel = 'Email';
   const channelPath = 'email';

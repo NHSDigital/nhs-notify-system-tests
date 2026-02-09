@@ -12,11 +12,9 @@ test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
 
 test(`User creates and submits a new nhsapp template successfully - routing enabled`, async ({
   page,
-  baseURL,
 }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
-    baseURL,
   };
   const channel = 'NHS App message';
   const channelPath = 'nhs-app';

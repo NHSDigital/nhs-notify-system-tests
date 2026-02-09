@@ -14,11 +14,9 @@ test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
 
 test(`User creates and submits a new sms template successfully - routing enabled`, async ({
   page,
-  baseURL,
 }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
-    baseURL,
   };
   const channel = 'Text message (SMS)';
   const channelPath = 'text-message';

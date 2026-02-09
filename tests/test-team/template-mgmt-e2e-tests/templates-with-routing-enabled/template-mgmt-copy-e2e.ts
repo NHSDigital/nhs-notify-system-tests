@@ -13,10 +13,9 @@ import {
 
 test.use({ storageState: 'login-state/copyRoutingEnabled.json' });
 
-test(`User copies a template - routing enabled`, async ({ page, baseURL }) => {
+test(`User copies a template - routing enabled`, async ({ page }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
-    baseURL,
   };
 
   const channel = 'Email';

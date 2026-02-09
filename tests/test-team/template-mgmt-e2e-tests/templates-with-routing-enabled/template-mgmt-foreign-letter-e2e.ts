@@ -27,14 +27,12 @@ const testConfigs = [
 for (const { language, inputFileName } of testConfigs) {
   test(`User creates and submits a new letter template successfully - ${language} - routing enabled)`, async ({
     page,
-    baseURL,
   }) => {
     test.setTimeout(240_000); // override just for this test
 
     const props = {
       basePage: new TemplateMgmtBasePage(page),
       letterPage: new TemplateMgmtLetterPage(page),
-      baseURL,
     };
 
     const channel = 'Letter';

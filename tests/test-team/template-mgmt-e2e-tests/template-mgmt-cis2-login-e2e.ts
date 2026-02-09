@@ -24,7 +24,6 @@ test.use({ storageState: { cookies: [], origins: [] } });
  *    - CIS2 'prompt=login' works to force a re-authentication
  */
 test('User logs in via CIS2, saves data in templates, logs out and logs back in again', async ({
-  baseURL,
   page,
   context,
 }) => {
@@ -32,13 +31,12 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   const basePage = new TemplateMgmtBasePage(page);
   const props = {
     basePage,
-    baseURL,
   };
   const channel = 'Email';
   const channelPath = 'email';
   const name = 'E2E Name';
 
-  await startPage({ basePage, baseURL });
+  await startPage({ basePage });
   await loginWithCis2(basePage.page, 'Message templates');
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
@@ -47,6 +45,6 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   await context.storageState({ path: 'login-state/cis2.json' });
   await logOut(basePage);
   await page.waitForLoadState('networkidle');
-  await startPage({ basePage, baseURL });
+  await startPage({ basePage });
   await loginWithCis2(basePage.page, 'Message templates');
 });

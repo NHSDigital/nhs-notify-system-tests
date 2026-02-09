@@ -14,11 +14,9 @@ test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
 
 test(`User creates and submits a new email template successfully - routing enabled`, async ({
   page,
-  baseURL,
 }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
-    baseURL,
   };
   const channel = 'Email';
   const channelPath = 'email';
