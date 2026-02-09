@@ -82,6 +82,8 @@ export async function createEmailTemplate(
     '/templates/create-email-template'
   );
 
+  await expect(page.getByTestId('navigation-links')).toBeVisible();
+
   console.log(
     name,
     'log 1',
