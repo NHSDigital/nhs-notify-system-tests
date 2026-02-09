@@ -141,6 +141,8 @@ export async function createSmsTemplate(
     '/templates/create-text-message-template'
   );
 
+  await expect(page.getByTestId('navigation-links')).toBeVisible();
+
   console.log(
     name,
     'log 1',
@@ -183,6 +185,8 @@ export async function createNhsAppTemplate(
   await expect(page).toHaveURL(
     '/templates/create-nhs-app-template'
   );
+
+  await expect(page.getByTestId('navigation-links')).toBeVisible();
 
   console.log(
     name,
