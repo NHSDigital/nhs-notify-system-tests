@@ -31,5 +31,5 @@ test(`User creates and submits a new letter template successfully`, async ({
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createLetterTemplate(props, name);
-  await requestProof(props, channel, channelPath);
+  await requestProof(props, channelPath, true);
 });

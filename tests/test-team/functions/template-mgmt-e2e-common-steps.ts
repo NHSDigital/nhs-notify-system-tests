@@ -116,12 +116,10 @@ export function createTemplate(
 
 export function requestProof(
   { basePage, baseURL, letterPage }: CommonLetterStepsProps,
-  channel: string,
   channelPath: string,
+  routingEnabled: boolean,
 ) {
   return test.step('Request Proof', async () => {
-    const maxRetries = 10;
-    const retryInterval = 2000;
     await basePage.clickButtonByName('Request a proof');
     await basePage.clickButtonByName('Go back');
     await expect(basePage.page).toHaveURL(
@@ -137,9 +135,13 @@ export function requestProof(
     await basePage.checkStatus('Waiting for proof');
     await letterPage.waitForProofRequest();
     await letterPage.verifyFiles();
-    await letterPage.submitLetterTemplate();
 
-})
+    if (routingEnabled) {
+      await letterPage.approveLetterTemplate();
+    } else {
+      await letterPage.submitLetterTemplate();
+    }
+  })
 }
 
 export function previewPage(
