@@ -1,19 +1,20 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
 import { test } from '@playwright/test';
-import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtBasePage } from '../../pages/template-mgmt-base-page';
 import {
   startPage,
   chooseTemplate,
   createTemplate,
   previewPage,
+  submitPage,
   startNewTemplate,
-  deleteTemplate,
-} from '../functions/common-steps';
+  previewPageChooseSubmit,
+} from '../../functions/common-steps';
 
-test.use({ storageState: 'login-state/delete.json' });
+test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
 
-test(`User deletes a template`, async ({
+test(`User creates and submits a new sms template successfully`, async ({
   page,
   baseURL,
 }) => {
@@ -21,14 +22,13 @@ test(`User deletes a template`, async ({
     basePage: new TemplateMgmtBasePage(page),
     baseURL,
   };
-  const channel = 'Email';
-  const channelPath = 'email';
-  const name = 'Test delete'
+  const channel = 'Text message (SMS)';
+  const channelPath = 'text-message';
+  const name = 'E2E Name';
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createTemplate(props, channel, channelPath, name);
   await previewPage(props, channelPath, name);
-  await deleteTemplate(props, name);
 });

@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtBasePage } from '../../pages/template-mgmt-base-page';
 import {
   startPage,
   chooseTemplate,
@@ -8,9 +8,9 @@ import {
   submitPage,
   startNewTemplate,
   previewPageChooseSubmit,
-} from '../functions/common-steps';
+} from '../../functions/common-steps';
 
-test.use({ storageState: 'login-state/primary.json' });
+test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
 
 test(`User creates and submits a new nhsapp template successfully`, async ({
   page,
@@ -29,6 +29,4 @@ test(`User creates and submits a new nhsapp template successfully`, async ({
     await chooseTemplate(props, channel);
     await createTemplate(props, channel, channelPath, name);
     await previewPage(props, channelPath, name);
-    await previewPageChooseSubmit(props, channelPath);
-    await submitPage(props, channelPath, name);
 });

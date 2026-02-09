@@ -6,6 +6,7 @@ import {
   getCis2ClientId,
   TemplateFactory,
   StorageHelper,
+  TemplateType,
 } from 'nhs-notify-system-tests-shared';
 import { clients } from '../../fixtures/clients';
 import { randomUUID } from 'node:crypto';
@@ -52,8 +53,45 @@ async function main() {
     clientIds['SecSpider']
   );
 
+  const multiChannelRoutingConfigNhsAppTemplate = TemplateFactory.create(
+    randomUUID(),
+    clientIds['PrimaryRoutingEnabled'],
+    TemplateType.NHS_APP,
+    {
+      name: 'multi-channel-routing-config-nhsapp-template-name',
+      message: 'multi-channel-routing-config-nhsapp-message',
+    }
+  );
+  stateFile.setValue('templates', 'multiChannelRoutingConfigNhsApp', multiChannelRoutingConfigNhsAppTemplate);
+
+  const multiChannelRoutingConfigEmailTemplate = TemplateFactory.create(
+    randomUUID(),
+    clientIds['PrimaryRoutingEnabled'],
+    TemplateType.EMAIL,
+    {
+      name: 'multi-channel-routing-config-email-template-name',
+      message: 'multi-channel-routing-config-email-template-message',
+      subject: 'multi-channel-routing-config-email-template-subject',
+    }
+  );
+  stateFile.setValue('templates', 'multiChannelRoutingConfigEmail', multiChannelRoutingConfigEmailTemplate);
+
+  const multiChannelRoutingConfigSmsTemplate = TemplateFactory.create(
+    randomUUID(),
+    clientIds['PrimaryRoutingEnabled'],
+    TemplateType.SMS,
+    {
+      name: 'multi-channel-routing-config-sms-template-name',
+      message: 'multi-channel-routing-config-sms-template-message',
+    }
+  );
+  stateFile.setValue('templates', 'multiChannelRoutingConfigSms', multiChannelRoutingConfigSmsTemplate);
+
   await new StorageHelper(`nhs-notify-${targetEnvrionment}-app-api-templates`, [
     smsTemplate,
+    multiChannelRoutingConfigNhsAppTemplate,
+    multiChannelRoutingConfigEmailTemplate,
+    multiChannelRoutingConfigSmsTemplate,
   ]).seedData();
 
   await stateFile.persist();

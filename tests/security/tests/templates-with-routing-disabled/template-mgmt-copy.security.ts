@@ -1,7 +1,7 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
 import { test } from '@playwright/test';
-import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtBasePage } from '../../pages/template-mgmt-base-page';
 import { getRandomChannel } from 'nhs-notify-system-tests-shared';
 import {
   startPage,
@@ -10,7 +10,7 @@ import {
   previewPage,
   startNewTemplate,
   copyTemplate,
-} from '../functions/common-steps';
+} from '../../functions/common-steps';
 
 test.use({ storageState: 'login-state/copy.json' });
 

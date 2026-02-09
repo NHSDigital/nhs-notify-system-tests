@@ -1,7 +1,7 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
 import { test } from '@playwright/test';
-import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtBasePage } from '../../pages/template-mgmt-base-page';
 import {
   startPage,
   chooseTemplate,
@@ -10,7 +10,7 @@ import {
   submitPage,
   startNewTemplate,
   previewPageChooseSubmit,
-} from '../functions/common-steps';
+} from '../../functions/common-steps';
 
 test.use({ storageState: 'login-state/primary.json' });
 
