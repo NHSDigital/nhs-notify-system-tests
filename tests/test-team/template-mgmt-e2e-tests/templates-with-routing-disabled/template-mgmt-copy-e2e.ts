@@ -21,7 +21,7 @@ test(`User copies a template`, async ({ page }) => {
 
   const channel = 'Email';
   const channelPath = 'email';
-  const name = 'Test edit';
+  const name = 'copy template e2e test';
 
   console.log('name = ', channel, 'path = ', channelPath);
 

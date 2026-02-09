@@ -18,7 +18,7 @@ test(`User creates and submits a new nhsapp template successfully - routing enab
   };
   const channel = 'NHS App message';
   const channelPath = 'nhs-app';
-  const name = 'E2E Name';
+  const name = 'nhs app template e2e test - routing enabled';
 
   await startPage(props);
   await startNewTemplate(props);

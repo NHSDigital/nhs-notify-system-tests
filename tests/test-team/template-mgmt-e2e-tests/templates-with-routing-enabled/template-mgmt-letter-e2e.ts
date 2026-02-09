@@ -23,7 +23,7 @@ test(`User creates and submits a new letter template successfully - routing enab
   };
   const channel = 'Letter';
   const channelPath = 'letter';
-  const name = 'E2E Name';
+  const name = 'letter template e2e test - routing enabled';
   const language = 'en';
   const inputFileName = 'template.pdf';
 

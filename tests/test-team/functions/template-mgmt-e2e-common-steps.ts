@@ -82,13 +82,53 @@ export async function createEmailTemplate(
     '/templates/create-email-template'
   );
 
+  console.log(
+    name,
+    'log 1',
+    await page.locator('[id="emailTemplateName"]').inputValue(),
+    await page.locator('[id="emailTemplateSubjectLine"]').inputValue(),
+    await page.locator('[id="emailTemplateMessage"]').inputValue()
+  );
+
   await page.locator('[id="emailTemplateName"]').fill(name);
+
+  console.log(
+    name,
+    'log 2',
+    await page.locator('[id="emailTemplateName"]').inputValue(),
+    await page.locator('[id="emailTemplateSubjectLine"]').inputValue(),
+    await page.locator('[id="emailTemplateMessage"]').inputValue()
+  );
 
   await page.locator('[id="emailTemplateSubjectLine"]').fill('E2E subject');
 
+  console.log(
+    name,
+    'log 3',
+    await page.locator('[id="emailTemplateName"]').inputValue(),
+    await page.locator('[id="emailTemplateSubjectLine"]').inputValue(),
+    await page.locator('[id="emailTemplateMessage"]').inputValue()
+  );
+
   await page.locator('[id="emailTemplateMessage"]').fill('E2E Message');
 
+  console.log(
+    name,
+    'log 4',
+    await page.locator('[id="emailTemplateName"]').inputValue(),
+    await page.locator('[id="emailTemplateSubjectLine"]').inputValue(),
+    await page.locator('[id="emailTemplateMessage"]').inputValue()
+  );
+
   await page.getByText('Save and preview').click();
+
+  console.log(
+    name,
+    'log 5',
+    await page.locator('[id="emailTemplateName"]').inputValue(),
+    await page.locator('[id="emailTemplateSubjectLine"]').inputValue(),
+    await page.locator('[id="emailTemplateMessage"]').inputValue()
+  );
 }
 
 export async function createSmsTemplate(
@@ -99,11 +139,39 @@ export async function createSmsTemplate(
     '/templates/create-text-message-template'
   );
 
+  console.log(
+    name,
+    'log 1',
+    await page.locator('[id="smsTemplateName"]').inputValue(),
+    await page.locator('[id="smsTemplateMessage"]').inputValue()
+  );
+
   await page.locator('[id="smsTemplateName"]').fill(name);
+
+  console.log(
+    name,
+    'log 2',
+    await page.locator('[id="smsTemplateName"]').inputValue(),
+    await page.locator('[id="smsTemplateMessage"]').inputValue()
+  );
 
   await page.locator('[id="smsTemplateMessage"]').fill('E2E Message');
 
+  console.log(
+    name,
+    'log 3',
+    await page.locator('[id="smsTemplateName"]').inputValue(),
+    await page.locator('[id="smsTemplateMessage"]').inputValue()
+  );
+
   await page.getByText('Save and preview').click();
+
+  console.log(
+    name,
+    'log 4',
+    await page.locator('[id="smsTemplateName"]').inputValue(),
+    await page.locator('[id="smsTemplateMessage"]').inputValue()
+  );
 }
 
 export async function createNhsAppTemplate(
@@ -114,12 +182,41 @@ export async function createNhsAppTemplate(
     '/templates/create-nhs-app-template'
   );
 
+  console.log(
+    name,
+    'log 1',
+    await page.locator('[id="nhsAppTemplateName"]').inputValue(),
+    await page.locator('[id="nhsAppTemplateMessage"]').inputValue()
+  );
+  
   await page.locator('[id="nhsAppTemplateName"]').fill(name);
+
+  console.log(
+    name,
+    'log 2',
+    await page.locator('[id="nhsAppTemplateName"]').inputValue(),
+    await page.locator('[id="nhsAppTemplateMessage"]').inputValue()
+  );
 
   await page.locator('[id="nhsAppTemplateMessage"]').fill('E2E Message');
 
+  console.log(
+    name,
+    'log 3',
+    await page.locator('[id="nhsAppTemplateName"]').inputValue(),
+    await page.locator('[id="nhsAppTemplateMessage"]').inputValue()
+  );
+
   await page.getByText('Save and preview').click();
+
+  console.log(
+    name,
+    'log 4',
+    await page.locator('[id="nhsAppTemplateName"]').inputValue(),
+    await page.locator('[id="nhsAppTemplateMessage"]').inputValue()
+  );
 }
+
 
 export function requestProof(
   { basePage, letterPage }: CommonLetterStepsProps,

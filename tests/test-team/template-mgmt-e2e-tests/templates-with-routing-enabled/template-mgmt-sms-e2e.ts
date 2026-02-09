@@ -20,7 +20,7 @@ test(`User creates and submits a new sms template successfully - routing enabled
   };
   const channel = 'Text message (SMS)';
   const channelPath = 'text-message';
-  const name = 'E2E Name';
+  const name = 'SMS template e2e test - routing enabled';
 
   await startPage(props);
   await startNewTemplate(props);

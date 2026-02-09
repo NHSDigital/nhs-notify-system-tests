@@ -20,7 +20,7 @@ test(`User copies a template - routing enabled`, async ({ page }) => {
 
   const channel = 'Email';
   const channelPath = 'email';
-  const name = 'Test edit';
+  const name = 'copy template e2e test - routing enabled';
 
   console.log('name = ', channel, 'path = ', channelPath);
 

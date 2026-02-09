@@ -22,7 +22,7 @@ test(`User creates and submits a new email template successfully`, async ({
   };
   const channel = 'Email';
   const channelPath = 'email';
-  const name = 'E2E Name';
+  const name = 'email template e2e test';
 
   await startPage(props);
   await startNewTemplate(props);

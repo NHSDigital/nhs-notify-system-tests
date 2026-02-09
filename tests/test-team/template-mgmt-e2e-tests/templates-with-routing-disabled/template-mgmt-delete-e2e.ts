@@ -21,7 +21,7 @@ test(`User deletes a template`, async ({
   };
   const channel = 'Email';
   const channelPath = 'email';
-  const name = 'Test delete';
+  const name = 'delete template e2e test';
 
   await startPage(props);
   await startNewTemplate(props);

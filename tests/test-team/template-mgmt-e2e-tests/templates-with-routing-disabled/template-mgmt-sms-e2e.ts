@@ -22,7 +22,7 @@ test(`User creates and submits a new sms template successfully`, async ({
   };
   const channel = 'Text message (SMS)';
   const channelPath = 'text-message';
-  const name = 'E2E Name';
+  const name = 'SMS template e2e test';
 
   await startPage(props);
   await startNewTemplate(props);

@@ -36,7 +36,7 @@ for (const { language, inputFileName } of testConfigs) {
     };
 
     const channel = 'Letter';
-    const name = `E2E Name ${language}`;
+    const name = `${language} language template e2e test - routing enabled`;
 
     await startPage(props);
     await startNewTemplate(props);
