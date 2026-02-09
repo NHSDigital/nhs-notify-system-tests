@@ -4,7 +4,7 @@ import { loginWithCis2, logOut } from '../functions/login';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
   chooseTemplate,
-  createTemplate,
+  createEmailTemplate,
   previewPage,
   startNewTemplate,
   startPage,
@@ -28,9 +28,6 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   page,
   context,
 }) => {
-  if (!baseURL) {
-    throw new Error(`Missing baseURL ${baseURL}`);
-  }
 
   const basePage = new TemplateMgmtBasePage(page);
   const props = {
@@ -45,7 +42,7 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   await loginWithCis2(basePage.page, 'Message templates');
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath, name);
+  await createEmailTemplate(page, name);
   await previewPage(props, channelPath, name);
   await context.storageState({ path: 'login-state/cis2.json' });
   await logOut(basePage);

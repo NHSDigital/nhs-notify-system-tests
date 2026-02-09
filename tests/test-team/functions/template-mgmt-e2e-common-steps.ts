@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
 
@@ -14,10 +14,10 @@ type CommonLetterStepsProps = CommonStepsProps & {
 export function startPage({ basePage, baseURL }: CommonStepsProps) {
   return test.step('start page', async () => {
     await basePage.navigateTo(
-      `${baseURL}/templates/create-and-submit-templates`
+      '/templates/create-and-submit-templates'
     );
     await expect(basePage.page).toHaveURL(
-      `${baseURL}/templates/create-and-submit-templates`
+      '/templates/create-and-submit-templates'
     );
     await expect(basePage.pageHeader).toHaveText(
       'Create and submit a template to NHS Notify'
@@ -38,7 +38,7 @@ export function chooseTemplate(
 ) {
   return test.step('Choose template type', async () => {
     await expect(basePage.page).toHaveURL(
-      `${baseURL}/templates/choose-a-template-type`
+      '/templates/choose-a-template-type'
     );
 
     await expect(basePage.pageHeader).toHaveText(
@@ -77,41 +77,51 @@ export function createLetterTemplate(
   });
 }
 
-export function createTemplate(
-  { basePage, baseURL }: CommonStepsProps,
-  channel: string,
-  channelPath: string,
-  name: string
+export async function createEmailTemplate(
+  page: Page,
+  name: string,
 ) {
-  return test.step('Create template', async () => {
+  await expect(page).toHaveURL(
+    '/templates/create-email-template'
+  );
 
-    const pageSlug = `create-${channelPath}-template`
+  await page.locator('[id="emailTemplateName"]').fill(name);
 
-    await expect(basePage.page).toHaveURL(
-      `${baseURL}/templates/${pageSlug}`
-    );
-    if (channel === 'Email') {
-      await expect(basePage.pageHeader).toHaveText(`Create email template`);
-    } else if (channel === 'Text message (SMS)') {
-      await expect(basePage.pageHeader).toHaveText(
-        `Create text message template`
-      );
-    } else {
-      await expect(basePage.pageHeader).toHaveText(
-        `Create ${channel} template`
-      );
-    }
+  await page.locator('[id="emailTemplateSubjectLine"]').fill('E2E subject');
 
-    await basePage.fillTextBox('Template name', name);
+  await page.locator('[id="emailTemplateMessage"]').fill('E2E Message');
 
-    if (channel === 'Email') {
-      await basePage.fillTextBox('Subject line', 'E2E subject');
-    }
+  await page.getByText('Save and continue').click();
+}
 
-    await basePage.fillTextBox('Message', 'E2E Message');
-    await basePage.clickButtonByName('Save and preview');
+export async function createSmsTemplate(
+  page: Page,
+  name: string,
+) {
+  await expect(page).toHaveURL(
+    '/templates/create-text-message-template'
+  );
 
-  });
+  await page.locator('[id="smsTemplateName"]').fill(name);
+
+  await page.locator('[id="smsTemplateMessage"]').fill('E2E Message');
+
+  await page.getByText('Save and continue').click();
+}
+
+export async function createNhsAppTemplate(
+  page: Page,
+  name: string,
+) {
+  await expect(page).toHaveURL(
+    '/templates/create-nhs-app-template'
+  );
+
+  await page.locator('[id="nhsAppTemplateName"]').fill(name);
+
+  await page.locator('[id="nhsAppTemplateMessage"]').fill('E2E Message');
+
+  await page.getByText('Save and continue').click();
 }
 
 export function requestProof(

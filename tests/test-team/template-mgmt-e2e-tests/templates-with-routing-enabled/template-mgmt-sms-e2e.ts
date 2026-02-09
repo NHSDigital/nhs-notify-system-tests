@@ -5,11 +5,9 @@ import { TemplateMgmtBasePage } from '../../pages/template-mgmt-base-page';
 import {
   startPage,
   chooseTemplate,
-  createTemplate,
   previewPage,
-  submitPage,
   startNewTemplate,
-  previewPageChooseSubmit,
+  createSmsTemplate,
 } from '../../functions/template-mgmt-e2e-common-steps';
 
 test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
@@ -29,6 +27,6 @@ test(`User creates and submits a new sms template successfully - routing enabled
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath, name);
+  await createSmsTemplate(page, name);
   await previewPage(props, channelPath, name);
 });

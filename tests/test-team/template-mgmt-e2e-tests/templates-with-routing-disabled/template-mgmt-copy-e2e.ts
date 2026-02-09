@@ -6,10 +6,10 @@ import { getRandomChannel } from 'nhs-notify-system-tests-shared';
 import {
   startPage,
   chooseTemplate,
-  createTemplate,
   previewPage,
   startNewTemplate,
   copyTemplate,
+  createEmailTemplate,
 } from '../../functions/template-mgmt-e2e-common-steps';
 
 test.use({ storageState: 'login-state/copy.json' });
@@ -20,9 +20,8 @@ test(`User copies a template`, async ({ page, baseURL }) => {
     baseURL,
   };
 
-  const randomChannel = getRandomChannel();
-  const channel = randomChannel.name;
-  const channelPath = randomChannel.path;
+  const channel = 'Email';
+  const channelPath = 'email';
   const name = 'Test edit';
 
   console.log('name = ', channel, 'path = ', channelPath);
@@ -30,7 +29,7 @@ test(`User copies a template`, async ({ page, baseURL }) => {
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath, name);
+  await createEmailTemplate(page, name);
   await previewPage(props, channelPath, name);
   await copyTemplate(props, name);
 });
