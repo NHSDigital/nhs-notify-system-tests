@@ -26,26 +26,20 @@ test.setTimeout(180_000);
  *    - CIS2 'prompt=login' works to force a re-authentication
  */
 test('User logs in via CIS2, saves data in templates, logs out and logs back in again', async ({
-  baseURL,
   page,
   context,
 }) => {
-  if (!baseURL) {
-    throw new Error(`Missing baseURL ${baseURL}`);
-  }
-
   const basePage = new TemplateMgmtBasePage(page);
   const letterPage = new TemplateMgmtLetterPage(page);
   const props = {
     basePage,
-    baseURL,
     letterPage,
   };
   const channel = 'Email';
   const channelPath = 'email';
   const name = 'E2E Name';
 
-  await startPage({ basePage, baseURL });
+  await startPage({ basePage });
   await loginWithCis2(basePage.page, 'Message templates');
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
@@ -54,6 +48,6 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   await context.storageState({ path: 'login-state/cis2.json' });
   await logOut(basePage);
   await page.waitForLoadState('networkidle');
-  await startPage({ basePage, baseURL });
+  await startPage({ basePage });
   await loginWithCis2(basePage.page, 'Message templates');
 });

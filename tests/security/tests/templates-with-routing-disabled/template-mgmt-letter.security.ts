@@ -15,17 +15,15 @@ test.use({ storageState: 'login-state/primary.json' });
 
 test(`User creates and submits a new letter template successfully`, async ({
   page,
-  baseURL,
 }) => {
   test.setTimeout(240_000); // override just for this test
   const props = {
     basePage: new TemplateMgmtBasePage(page),
     letterPage: new TemplateMgmtLetterPage(page),
-    baseURL,
   };
   const channel = 'Letter';
   const channelPath = 'letter';
-  const name = 'E2E Name';
+  const name = 'letter template e2e test';
 
   await startPage(props);
   await startNewTemplate(props);

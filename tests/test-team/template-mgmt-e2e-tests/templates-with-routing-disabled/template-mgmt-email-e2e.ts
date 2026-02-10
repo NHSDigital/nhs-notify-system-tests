@@ -20,6 +20,7 @@ test(`User creates and submits a new email template successfully`, async ({
   const props = {
     basePage: new TemplateMgmtBasePage(page),
   };
+
   const channel = 'Email';
   const channelPath = 'email';
   const name = 'email template e2e test';

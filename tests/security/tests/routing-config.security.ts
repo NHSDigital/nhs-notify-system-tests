@@ -28,7 +28,6 @@ const getSeededTemplateConfig = async (configFile: string | undefined) => {
 
 const previewAndSelectTemplate = async (
   page: Page,
-  baseURL: string | undefined,
   routingConfigId: string,
   channel: string,
   channelUrlSegment: string,
@@ -37,11 +36,11 @@ const previewAndSelectTemplate = async (
 
   await page.getByTestId(`choose-template-link-${channel}`).click();
 
-  await expect(page).toHaveURL(new RegExp(`${baseURL}/templates/message-plans/choose-${channelUrlSegment}-template/${routingConfigId}\?(.*)`));
+  await expect(page).toHaveURL(new RegExp(`/templates/message-plans/choose-${channelUrlSegment}-template/${routingConfigId}\?(.*)`));
 
   await page.getByTestId(`${templateId}-preview-link`).click();
 
-  await expect(page).toHaveURL(new RegExp(`${baseURL}/templates/message-plans/choose-${channelUrlSegment}-template/${routingConfigId}/preview-template/${templateId}\?(.*)`));
+  await expect(page).toHaveURL(new RegExp(`/templates/message-plans/choose-${channelUrlSegment}-template/${routingConfigId}/preview-template/${templateId}\?(.*)`));
 
   await expect(page.getByText(templateId)).toBeVisible();
   await expect(page.getByText(templateName)).toBeVisible();
@@ -49,42 +48,41 @@ const previewAndSelectTemplate = async (
 
   await page.getByTestId('back-link-bottom').click();
 
-  await expect(page).toHaveURL(new RegExp(`${baseURL}/templates/message-plans/choose-${channelUrlSegment}-template/${routingConfigId}\?(.*)`));
+  await expect(page).toHaveURL(new RegExp(`/templates/message-plans/choose-${channelUrlSegment}-template/${routingConfigId}\?(.*)`));
 
   await page.getByTestId(`${templateId}-radio`).check();
 
   await page.getByText('Save and continue').click();
 
-  await expect(page).toHaveURL(new RegExp(`${baseURL}/templates/message-plans/choose-templates/${routingConfigId}(.*)`));
+  await expect(page).toHaveURL(new RegExp(`/templates/message-plans/choose-templates/${routingConfigId}(.*)`));
 }
 
-test(`User creates a multi-channel routing config`, async ({ page, baseURL, }, { config: { configFile } }) => {
+test(`User creates a multi-channel routing config`, async ({ page }, { config: { configFile } }) => {
 
   const templates = await getSeededTemplateConfig(configFile);
-  await page.goto(`${baseURL}/templates/message-plans`);
+  await page.goto('/templates/message-plans');
 
   await page.getByText('New message plan').click();
 
-  await expect(page).toHaveURL(`${baseURL}/templates/message-plans/choose-message-order`);
+  await expect(page).toHaveURL('/templates/message-plans/choose-message-order');
 
   await page.getByLabel('NHS App, Email, Text message', { exact: true }).check();
 
   await page.getByText('Save and continue').click();
 
-  await expect(page).toHaveURL(`${baseURL}/templates/message-plans/create-message-plan?messageOrder=NHSAPP%2CEMAIL%2CSMS`);
+  await expect(page).toHaveURL('/templates/message-plans/create-message-plan?messageOrder=NHSAPP%2CEMAIL%2CSMS');
 
   await page.getByLabel('Message plan name').fill('message plan name');
 
   await page.getByText('Save and continue').click();
 
-  await expect(page).toHaveURL(new RegExp(`${baseURL}/templates/message-plans/choose-templates/(.*)`));
+  await expect(page).toHaveURL(new RegExp('/templates/message-plans/choose-templates/(.*)'));
 
   const urlSegments = page.url().split('/');
   const routingConfigId = urlSegments[urlSegments.length - 1];
 
   await previewAndSelectTemplate(
     page,
-    baseURL,
     routingConfigId,
     'NHSAPP',
     'nhs-app',
@@ -92,7 +90,6 @@ test(`User creates a multi-channel routing config`, async ({ page, baseURL, }, {
   );
   await previewAndSelectTemplate(
     page,
-    baseURL,
     routingConfigId,
     'EMAIL',
     'email',
@@ -100,7 +97,6 @@ test(`User creates a multi-channel routing config`, async ({ page, baseURL, }, {
   );
   await previewAndSelectTemplate(
     page,
-    baseURL,
     routingConfigId,
     'SMS',
     'text-message',
@@ -109,11 +105,11 @@ test(`User creates a multi-channel routing config`, async ({ page, baseURL, }, {
 
   await page.getByText('Move to production').click();
 
-  await expect(page).toHaveURL(new RegExp(`${baseURL}/templates/message-plans/get-ready-to-move/${routingConfigId}(.*)`));
+  await expect(page).toHaveURL(new RegExp(`/templates/message-plans/get-ready-to-move/${routingConfigId}(.*)`));
 
   await page.getByText('Continue', { exact: true }).click();
 
-  await expect(page).toHaveURL(new RegExp(`${baseURL}/templates/message-plans/review-and-move-to-production/${routingConfigId}(.*)`));
+  await expect(page).toHaveURL(new RegExp(`/templates/message-plans/review-and-move-to-production/${routingConfigId}(.*)`));
 
   // remaining pages not ready yet
 });

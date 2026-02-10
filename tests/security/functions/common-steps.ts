@@ -1,23 +1,22 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import { TemplateMgmtLetterPage } from '../pages/template-mgmt-letter-page';
 
 type CommonStepsProps = {
   basePage: TemplateMgmtBasePage;
-  baseURL?: string;
 };
 
 type CommonLetterStepsProps = CommonStepsProps & {
   letterPage: TemplateMgmtLetterPage;
 };
 
-export function startPage({ basePage, baseURL }: CommonStepsProps) {
+export function startPage({ basePage }: CommonStepsProps) {
   return test.step('start page', async () => {
     await basePage.navigateTo(
-      `${baseURL}/templates/create-and-submit-templates`
+      '/templates/create-and-submit-templates'
     );
     await expect(basePage.page).toHaveURL(
-      `${baseURL}/templates/create-and-submit-templates`
+      '/templates/create-and-submit-templates'
     );
     await expect(basePage.pageHeader).toHaveText(
       'Create and submit a template to NHS Notify'
@@ -33,12 +32,12 @@ export function startNewTemplate({ basePage }: CommonStepsProps) {
 }
 
 export function chooseTemplate(
-  { basePage, baseURL }: CommonStepsProps,
+  { basePage }: CommonStepsProps,
   channel: string
 ) {
   return test.step('Choose template type', async () => {
     await expect(basePage.page).toHaveURL(
-      `${baseURL}/templates/choose-a-template-type`
+      '/templates/choose-a-template-type'
     );
 
     await expect(basePage.pageHeader).toHaveText(
@@ -52,14 +51,12 @@ export function chooseTemplate(
 }
 
 export function createLetterTemplate(
-  { basePage, baseURL, letterPage }: CommonLetterStepsProps,
+  { basePage, letterPage }: CommonLetterStepsProps,
   name: string
 ) {
   return test.step('Create template', async () => {
-    const pageSlug = 'upload-letter-template';
-
     await expect(basePage.page).toHaveURL(
-      `${baseURL}/templates/${pageSlug}`
+      '/templates/upload-letter-template'
     );
 
     await expect(basePage.pageHeader).toHaveText(
@@ -74,45 +71,61 @@ export function createLetterTemplate(
   });
 }
 
-export function createTemplate(
-  { basePage, baseURL }: CommonStepsProps,
-  channel: string,
-  channelPath: string,
-  name: string
+export async function createEmailTemplate(
+  page: Page,
+  name: string,
 ) {
-  return test.step('Create template', async () => {
+  await expect(page).toHaveURL(
+    '/templates/create-email-template'
+  );
 
-    const pageSlug = `create-${channelPath}-template`
+  await expect(page.getByTestId('navigation-links')).toBeVisible();
 
-    await expect(basePage.page).toHaveURL(
-      `${baseURL}/templates/${pageSlug}`
-    );
-    if (channel === 'Email') {
-      await expect(basePage.pageHeader).toHaveText(`Create email template`);
-    } else if (channel === 'Text message (SMS)') {
-      await expect(basePage.pageHeader).toHaveText(
-        `Create text message template`
-      );
-    } else {
-      await expect(basePage.pageHeader).toHaveText(
-        `Create ${channel} template`
-      );
-    }
+  await page.getByLabel('Template name').fill(name);
 
-    await basePage.fillTextBox('Template name', name);
+  await page.getByLabel('Subject line').fill('E2E subject');
 
-    if (channel === 'Email') {
-      await basePage.fillTextBox('Subject line', 'E2E subject');
-    }
+  await page.getByLabel('Message').fill('E2E Message');
 
-    await basePage.fillTextBox('Message', 'E2E Message');
-    await basePage.clickButtonByName('Save and preview');
+  await page.getByText('Save and preview').click();
+}
 
-  });
+export async function createSmsTemplate(
+  page: Page,
+  name: string,
+) {
+  await expect(page).toHaveURL(
+    '/templates/create-text-message-template'
+  );
+
+  await expect(page.getByTestId('navigation-links')).toBeVisible();
+
+  await page.getByLabel('Template name').fill(name);
+
+  await page.getByLabel('Message').fill('E2E Message');
+
+  await page.getByText('Save and preview').click();
+}
+
+export async function createNhsAppTemplate(
+  page: Page,
+  name: string,
+) {
+  await expect(page).toHaveURL(
+    '/templates/create-nhs-app-template'
+  );
+
+  await expect(page.getByTestId('navigation-links')).toBeVisible();
+  
+  await page.getByLabel('Template name').fill(name);
+
+  await page.getByLabel('Message').fill('E2E Message');
+
+  await page.getByText('Save and preview').click();
 }
 
 export function requestProof(
-  { basePage, baseURL, letterPage }: CommonLetterStepsProps,
+  { basePage, letterPage }: CommonLetterStepsProps,
   channelPath: string,
   routingEnabled: boolean,
 ) {
@@ -121,12 +134,12 @@ export function requestProof(
     await basePage.clickButtonByName('Go back');
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/templates/preview-${channelPath}-template/(.*)`)
+      new RegExp(`/templates/preview-${channelPath}-template/(.*)`)
     );
     await basePage.clickButtonByName('Request a proof');
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/templates/request-proof-of-template/(.*)`)
+      new RegExp('/templates/request-proof-of-template/(.*)')
     );
     await basePage.clickButtonByName('Request a proof');
     await basePage.checkStatus('Waiting for proof');
@@ -142,14 +155,14 @@ export function requestProof(
 }
 
 export function previewPage(
-  { basePage, baseURL }: CommonStepsProps,
+  { basePage }: CommonStepsProps,
   channelPath: string,
   name: string
 ) {
   return test.step('Preview page', async () => {
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/templates/preview-${channelPath}-template/(.*)`)
+      new RegExp(`/templates/preview-${channelPath}-template/(.*)`)
     );
 
     await expect(basePage.pageHeader).toHaveText(name);
@@ -157,7 +170,7 @@ export function previewPage(
 }
 
 export function previewPageChooseSubmit(
-  { basePage, baseURL }: CommonStepsProps,
+  { basePage }: CommonStepsProps,
   channelPath: string,
 ) {
   return test.step('Preview page - select submit', async () => {
@@ -167,28 +180,26 @@ export function previewPageChooseSubmit(
 
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/templates/submit-${channelPath}-template/(.*)`)
+      new RegExp(`}/templates/submit-${channelPath}-template/(.*)`)
     );
   });
 }
 
 export function deleteTemplate(
-  { basePage, baseURL }: CommonStepsProps,
+  { basePage }: CommonStepsProps,
   name:string
 ) {
   return test.step('Delete template', async () => {
     await basePage.goBackLink.click();
     await expect(basePage.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/templates/message-templates`)
+      '/templates/message-templates'
     );
     const rowCount = await basePage.tableRows();
 
     await basePage.clickLinkByName('Delete ' + name);
     await basePage.clickButtonByName('No, go back');
     await expect(basePage.page).toHaveURL(
-        // eslint-disable-next-line security/detect-non-literal-regexp
-        new RegExp(`${baseURL}/templates/message-templates`)
+        '/templates/message-templates'
       );
     let rowCountCheck = await basePage.tableRows();
     expect(rowCount).toBe(rowCount);
@@ -196,8 +207,7 @@ export function deleteTemplate(
     await basePage.clickLinkByName('Delete ' + name);
     await basePage.clickButtonByName('Yes, delete template');
     await expect(basePage.page).toHaveURL(
-        // eslint-disable-next-line security/detect-non-literal-regexp
-        new RegExp(`${baseURL}/templates/message-templates`)
+        '/templates/message-templates'
       );
     rowCountCheck = await basePage.tableRows();
     expect(rowCountCheck).toBe(rowCount-1);
@@ -206,14 +216,13 @@ export function deleteTemplate(
 }
 
 export function copyTemplate(
-  { basePage, baseURL }: CommonStepsProps,
+  { basePage }: CommonStepsProps,
   name:string
 ) {
   return test.step('Copy template', async () => {
     await basePage.goBackLink.click();
     await expect(basePage.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/templates/message-templates`)
+      '/templates/message-templates'
     );
     const rowCount = await basePage.tableRows();
 
@@ -225,16 +234,14 @@ export function copyTemplate(
     }
 
     await expect(basePage.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/templates/copy-template/(.*)`)
+      new RegExp(`/templates/copy-template/(.*)`)
     );
 
     await basePage.checkRadio('Email');
     await basePage.clickButtonByName('Continue');
 
     await expect(basePage.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/templates/message-templates`)
+      '/templates/message-templates'
     );
 
     await basePage.page.reload(); // shouldn't need to do this
@@ -258,14 +265,14 @@ export function copyTemplate(
 }
 
 export function submitPage(
-  { basePage, baseURL }: CommonStepsProps,
+  { basePage }: CommonStepsProps,
   channelPath: string,
   name: string
 ) {
   return test.step('Submit page', async () => {
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/templates/submit-${channelPath}-template/(.*)`)
+      new RegExp(`/templates/submit-${channelPath}-template/(.*)`)
     );
 
     await expect(basePage.pageHeader).toHaveText('Submit ' + `'` + name + `'`);
@@ -275,7 +282,7 @@ export function submitPage(
     // Submitted Page
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`${baseURL}/templates/${channelPath}-template-submitted/(.*)`)
+      new RegExp(`/templates/${channelPath}-template-submitted/(.*)`)
     );
 
     await expect(basePage.pageHeader).toHaveText('Template submitted');

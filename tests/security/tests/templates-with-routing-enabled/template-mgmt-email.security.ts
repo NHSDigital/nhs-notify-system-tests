@@ -5,30 +5,26 @@ import { TemplateMgmtBasePage } from '../../pages/template-mgmt-base-page';
 import {
   startPage,
   chooseTemplate,
-  createTemplate,
+  createEmailTemplate,
   previewPage,
-  submitPage,
   startNewTemplate,
-  previewPageChooseSubmit,
 } from '../../functions/common-steps';
 
 test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
 
 test(`User creates and submits a new email template successfully`, async ({
   page,
-  baseURL,
 }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
-    baseURL,
   };
   const channel = 'Email';
   const channelPath = 'email';
-  const name = 'E2E Name';
+  const name = 'email template e2e test - routing enabled';
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath, name);
+  await createEmailTemplate(page, name);
   await previewPage(props, channelPath, name);
 });

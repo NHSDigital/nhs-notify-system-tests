@@ -19,6 +19,7 @@ test(`User deletes a template - routing enabled`, async ({
   const props = {
     basePage: new TemplateMgmtBasePage(page),
   };
+
   const channel = 'Email';
   const channelPath = 'email';
   const name = 'delete template e2e test - routing enabled';
