@@ -57,7 +57,7 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Primary - Routing Enabled',
     },
   },
-  CopyRoutingEnableSec: {
+  CopyRoutingEnabledSec: {
     templates: {
       campaignIds: ['CopyRoutingEnabled-Campaign'],
       features: {
