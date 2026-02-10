@@ -3,7 +3,7 @@ import {
   parseSetupTeardownArgs,
   StateFile,
   deleteClientConfigs,
-  deleteClientTemplates,
+  deleteClientEntries,
 } from 'nhs-notify-system-tests-shared';
 import z from 'zod';
 
@@ -48,13 +48,19 @@ async function main() {
     z.string().default('')
   );
 
-  const deleted = await Promise.allSettled(
+  const deletedTemplates = await Promise.allSettled(
     [...clientIds, cis2ClientId].map((id) =>
-      deleteClientTemplates(targetEnvrionment, id)
+      deleteClientEntries(id, `nhs-notify-${targetEnvrionment}-app-api-templates`)
     )
   );
 
-  const failures = deleted.flatMap((res) =>
+  const deletedRoutingConfigs = await Promise.allSettled(
+    [...clientIds, cis2ClientId].map((id) =>
+      deleteClientEntries(id, `nhs-notify-${targetEnvrionment}-app-api-routing-configuration`)
+    )
+  );
+
+  const failures = [...deletedTemplates, ...deletedRoutingConfigs].flatMap((res) =>
     res.status === 'rejected' ? [res.reason] : []
   );
 

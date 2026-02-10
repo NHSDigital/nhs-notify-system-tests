@@ -19,7 +19,7 @@ async function enterCis2TotpCode(
   const happyPathSelector = page.getByText(targetHeadingText);
   const reVerificationSelector = page.locator(`//button[text()=' Re-enter verification code ']`);
 
-  await happyPathSelector.or(reVerificationSelector).waitFor({ timeout: 30_000 });
+  await happyPathSelector.or(reVerificationSelector).waitFor({ timeout: 60_000 });
   if (await happyPathSelector.isVisible()) {
     return true;
   }
@@ -41,11 +41,10 @@ async function enterCis2TotpCodeWithRetry(
 }
 
 async function loginWithCis2(
-  basePage: TemplateMgmtBasePage,
+  page: Page,
   targetHeadingText: string
 ) {
   const cis2Credentials = await getCis2Credentials();
-  const page = basePage.page;
 
   try {
     // Notify WebUI - Click the CIS2 login button

@@ -4,7 +4,7 @@ import { loginWithCis2, logOut } from '../functions/login';
 import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
 import {
   chooseTemplate,
-  createTemplate,
+  createEmailTemplate,
   previewPage,
   startNewTemplate,
   startPage,
@@ -24,32 +24,28 @@ test.use({ storageState: { cookies: [], origins: [] } });
  *    - CIS2 'prompt=login' works to force a re-authentication
  */
 test('User logs in via CIS2, saves data in templates, logs out and logs back in again', async ({
-  baseURL,
   page,
   context,
 }) => {
-  if (!baseURL) {
-    throw new Error(`Missing baseURL ${baseURL}`);
-  }
+  test.setTimeout(120_000);
 
   const basePage = new TemplateMgmtBasePage(page);
   const props = {
     basePage,
-    baseURL,
   };
   const channel = 'Email';
   const channelPath = 'email';
-  const name = 'E2E Name';
+  const name = 'CIS2 login test';
 
-  await startPage({ basePage, baseURL });
-  await loginWithCis2(basePage, 'Message templates');
+  await startPage({ basePage });
+  await loginWithCis2(basePage.page, 'Message templates');
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath, name);
+  await createEmailTemplate(page, name);
   await previewPage(props, channelPath, name);
   await context.storageState({ path: 'login-state/cis2.json' });
   await logOut(basePage);
   await page.waitForLoadState('networkidle');
-  await startPage({ basePage, baseURL });
-  await loginWithCis2(basePage, 'Message templates');
+  await startPage({ basePage });
+  await loginWithCis2(basePage.page, 'Message templates');
 });

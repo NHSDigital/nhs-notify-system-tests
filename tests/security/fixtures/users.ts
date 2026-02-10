@@ -18,4 +18,16 @@ export const users: Record<string, StaticUserConfig> = {
     clientKey: 'SecSpider',
     clientConfig: clients['SecSpider'].auth,
   },
+  primaryRoutingEnabled: {
+    clientKey: 'PrimaryRoutingEnabledSec',
+    clientConfig: clients['PrimaryRoutingEnabledSec'].auth,
+  },
+  copyRoutingEnabled: {
+    clientKey: 'CopyRoutingEnabledSec',
+    clientConfig: clients['CopyRoutingEnabledSec'].auth,
+  },
+  deleteRoutingEnabled: {
+    clientKey: 'DeleteRoutingEnabledSec',
+    clientConfig: clients['DeleteRoutingEnabledSec'].auth,
+  },
 };

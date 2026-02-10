@@ -6,6 +6,7 @@ export const clients: Record<string, StaticClientConfig> = {
       campaignIds: ['ProductPrimary-Campaign'],
       features: {
         proofing: true,
+        routing: false,
       },
     },
     auth: {
@@ -17,6 +18,7 @@ export const clients: Record<string, StaticClientConfig> = {
       campaignIds: ['Client2Product-Campaign'],
       features: {
         proofing: true,
+        routing: false,
       },
     },
     auth: {
@@ -28,10 +30,47 @@ export const clients: Record<string, StaticClientConfig> = {
       campaignIds: ['Client3Product-Campaign'],
       features: {
         proofing: true,
+        routing: false,
       },
     },
     auth: {
       name: 'Client 3 Product',
+    },
+  },
+  PrimaryRoutingEnabledProduct: {
+    templates: {
+      campaignIds: ['PrimaryRoutingEnabled-Campaign'],
+      features: {
+        proofing: true,
+        routing: true,
+      },
+    },
+    auth: {
+      name: 'Primary - Routing Enabled',
+    },
+  },
+  CopyRoutingEnabledProduct: {
+    templates: {
+      campaignIds: ['CopyRoutingEnabled-Campaign'],
+      features: {
+        proofing: true,
+        routing: true,
+      },
+    },
+    auth: {
+      name: 'Copy - Routing Enabled',
+    },
+  },
+  DeleteRoutingEnabledProduct: {
+    templates: {
+      campaignIds: ['DeleteRoutingEnabled-Campaign'],
+      features: {
+        proofing: true,
+        routing: true,
+      },
+    },
+    auth: {
+      name: 'Delete - Routing Enabled',
     },
   },
 };

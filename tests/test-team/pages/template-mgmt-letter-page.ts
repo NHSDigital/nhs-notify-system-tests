@@ -151,4 +151,10 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
     await this.page.getByRole('button', { name: 'Approve and submit' }).click();
     await expect(this.page.locator('#template-submitted')).toBeVisible();
   }
+
+  async approveLetterTemplate() {
+    await this.page.getByTestId('preview-letter-template-cta').click();
+    await this.page.getByText('Approve template proof').click();
+    await expect(this.page.getByText('Message templates')).toBeVisible();
+  }
 }

@@ -108,9 +108,9 @@ export class TemplateMgmtBasePage {
     await expect(this.page.getByText(status)).toBeVisible();
   }
 
-  async fillTextBox(textBoxName: string, textBoxContent: string) {
+  async fillTextBox(textBoxLabel: string, textBoxContent: string) {
     await this.page
-      .getByRole("textbox", { name: textBoxName })
+      .getByLabel(textBoxLabel)
       .fill(textBoxContent);
   }
 

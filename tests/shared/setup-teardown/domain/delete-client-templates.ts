@@ -8,12 +8,10 @@ import {
 
 const client = new DynamoDBClient({ region: 'eu-west-2' });
 
-export async function deleteClientTemplates(
-  environment: string,
-  clientId: string
+export async function deleteClientEntries(
+  clientId: string,
+  tableName: string,
 ): Promise<void> {
-  const tableName = `nhs-notify-${environment}-app-api-templates`;
-
   const input: QueryCommandInput = {
     TableName: tableName,
     KeyConditionExpression: '#owner = :owner',
