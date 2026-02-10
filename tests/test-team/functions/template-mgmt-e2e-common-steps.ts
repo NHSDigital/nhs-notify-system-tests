@@ -224,7 +224,6 @@ export function deleteTemplate(
 
 export function copyTemplate(
   { basePage }: CommonStepsProps,
-  name: string,
   routingEnabled = false,
 ) {
   return test.step('Copy template', async () => {
@@ -243,15 +242,13 @@ export function copyTemplate(
     }
 
     await expect(basePage.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`/templates/copy-template/(.*)`)
+      new RegExp('/templates/copy-template/(.*)')
     );
 
     await basePage.checkRadio('Email');
     await basePage.clickButtonByName('Continue');
 
     await expect(basePage.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
       '/templates/message-templates'
     );
 

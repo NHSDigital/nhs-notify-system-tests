@@ -27,5 +27,5 @@ test(`User copies a template`, async ({ page }) => {
   await chooseTemplate(props, channel);
   await createEmailTemplate(page, name);
   await previewPage(props, channelPath, name);
-  await copyTemplate(props, name);
+  await copyTemplate(props);
 });

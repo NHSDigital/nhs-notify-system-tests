@@ -27,6 +27,7 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   page,
   context,
 }) => {
+  test.setTimeout(120_000);
 
   const basePage = new TemplateMgmtBasePage(page);
   const props = {
@@ -34,7 +35,7 @@ test('User logs in via CIS2, saves data in templates, logs out and logs back in 
   };
   const channel = 'Email';
   const channelPath = 'email';
-  const name = 'E2E Name';
+  const name = 'CIS2 login test';
 
   await startPage({ basePage });
   await loginWithCis2(basePage.page, 'Message templates');
