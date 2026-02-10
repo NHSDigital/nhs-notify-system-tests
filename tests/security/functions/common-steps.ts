@@ -126,7 +126,7 @@ export async function createNhsAppTemplate(
   );
 
   await expect(page.getByTestId('navigation-links')).toBeVisible();
-  
+
   await page.getByLabel('Template name').fill(name);
 
   await page.getByLabel('Message').fill('E2E Message');
