@@ -90,7 +90,12 @@ export async function createEmailTemplate(
 
   await page.getByLabel('Message').fill('E2E Message');
 
-  await page.getByText('Save and preview').click();
+  await page.getByText('Save and preview').click({
+    position: {
+      x: 50,
+      y: 50
+    }
+  });
 }
 
 export async function createSmsTemplate(
@@ -107,7 +112,12 @@ export async function createSmsTemplate(
 
   await page.getByLabel('Message').fill('E2E Message');
 
-  await page.getByText('Save and preview').click();
+  await page.getByText('Save and preview').click({
+    position: {
+      x: 50,
+      y: 50
+    }
+  });
 }
 
 export async function createNhsAppTemplate(
@@ -124,7 +134,12 @@ export async function createNhsAppTemplate(
 
   await page.getByLabel('Message').fill('E2E Message');
 
-  await page.getByText('Save and preview').click();
+  await page.getByText('Save and preview').click({
+    position: {
+      x: 50,
+      y: 50
+    }
+  });
 }
 
 
