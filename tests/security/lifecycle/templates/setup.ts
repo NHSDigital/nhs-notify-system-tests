@@ -55,7 +55,7 @@ async function main() {
 
   const multiChannelRoutingConfigNhsAppTemplate = TemplateFactory.create(
     randomUUID(),
-    clientIds['PrimaryRoutingEnabled'],
+    clientIds['PrimaryRoutingEnabledSec'],
     TemplateType.NHS_APP,
     {
       name: 'multi-channel-routing-config-nhsapp-template-name',
@@ -66,7 +66,7 @@ async function main() {
 
   const multiChannelRoutingConfigEmailTemplate = TemplateFactory.create(
     randomUUID(),
-    clientIds['PrimaryRoutingEnabled'],
+    clientIds['PrimaryRoutingEnabledSec'],
     TemplateType.EMAIL,
     {
       name: 'multi-channel-routing-config-email-template-name',
@@ -78,7 +78,7 @@ async function main() {
 
   const multiChannelRoutingConfigSmsTemplate = TemplateFactory.create(
     randomUUID(),
-    clientIds['PrimaryRoutingEnabled'],
+    clientIds['PrimaryRoutingEnabledSec'],
     TemplateType.SMS,
     {
       name: 'multi-channel-routing-config-sms-template-name',

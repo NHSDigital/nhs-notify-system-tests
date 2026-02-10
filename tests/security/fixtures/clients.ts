@@ -45,7 +45,7 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Client 4 Security ZAP Spider Scan',
     },
   },
-  PrimaryRoutingEnabled: {
+  PrimaryRoutingEnabledSec: {
     templates: {
       campaignIds: ['PrimaryRoutingEnabled-Campaign'],
       features: {
@@ -57,7 +57,7 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Primary - Routing Enabled',
     },
   },
-  CopyRoutingEnabled: {
+  CopyRoutingEnableSec: {
     templates: {
       campaignIds: ['CopyRoutingEnabled-Campaign'],
       features: {
@@ -69,7 +69,7 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Copy - Routing Enabled',
     },
   },
-  DeleteRoutingEnabled: {
+  DeleteRoutingEnabledSec: {
     templates: {
       campaignIds: ['DeleteRoutingEnabled-Campaign'],
       features: {

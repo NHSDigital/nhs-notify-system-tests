@@ -37,7 +37,7 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Client 3 Product',
     },
   },
-  PrimaryRoutingEnabled: {
+  PrimaryRoutingEnabledProduct: {
     templates: {
       campaignIds: ['PrimaryRoutingEnabled-Campaign'],
       features: {
@@ -49,7 +49,7 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Primary - Routing Enabled',
     },
   },
-  CopyRoutingEnabled: {
+  CopyRoutingEnabledProduct: {
     templates: {
       campaignIds: ['CopyRoutingEnabled-Campaign'],
       features: {
@@ -61,7 +61,7 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Copy - Routing Enabled',
     },
   },
-  DeleteRoutingEnabled: {
+  DeleteRoutingEnabledProduct: {
     templates: {
       campaignIds: ['DeleteRoutingEnabled-Campaign'],
       features: {
