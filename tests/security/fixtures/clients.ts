@@ -45,4 +45,40 @@ export const clients: Record<string, StaticClientConfig> = {
       name: 'Client 4 Security ZAP Spider Scan',
     },
   },
+  PrimaryRoutingEnabledSec: {
+    templates: {
+      campaignIds: ['PrimaryRoutingEnabled-Campaign'],
+      features: {
+        proofing: true,
+        routing: true,
+      },
+    },
+    auth: {
+      name: 'Primary - Routing Enabled',
+    },
+  },
+  CopyRoutingEnabledSec: {
+    templates: {
+      campaignIds: ['CopyRoutingEnabled-Campaign'],
+      features: {
+        proofing: true,
+        routing: true,
+      },
+    },
+    auth: {
+      name: 'Copy - Routing Enabled',
+    },
+  },
+  DeleteRoutingEnabledSec: {
+    templates: {
+      campaignIds: ['DeleteRoutingEnabled-Campaign'],
+      features: {
+        proofing: true,
+        routing: true,
+      },
+    },
+    auth: {
+      name: 'Delete - Routing Enabled',
+    },
+  },
 };

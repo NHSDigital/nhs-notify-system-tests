@@ -1,34 +1,31 @@
 /* eslint-disable security/detect-non-literal-regexp */
 
 import { test } from '@playwright/test';
-import { TemplateMgmtBasePage } from '../pages/template-mgmt-base-page';
+import { TemplateMgmtBasePage } from '../../pages/template-mgmt-base-page';
 import {
   startPage,
   chooseTemplate,
-  createTemplate,
+  createEmailTemplate,
   previewPage,
   startNewTemplate,
-  deleteTemplate,
-} from '../functions/common-steps';
+  copyTemplate,
+} from '../../functions/common-steps';
 
-test.use({ storageState: 'login-state/delete.json' });
+test.use({ storageState: 'login-state/copy.json' });
 
-test(`User deletes a template`, async ({
-  page,
-  baseURL,
-}) => {
+test(`User copies a template`, async ({ page }) => {
   const props = {
     basePage: new TemplateMgmtBasePage(page),
-    baseURL,
   };
+
   const channel = 'Email';
   const channelPath = 'email';
-  const name = 'Test delete'
+  const name = 'copy template e2e test';
 
   await startPage(props);
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
-  await createTemplate(props, channel, channelPath, name);
+  await createEmailTemplate(page, name);
   await previewPage(props, channelPath, name);
-  await deleteTemplate(props, name);
+  await copyTemplate(props);
 });
