@@ -1,7 +1,7 @@
 # NHS Notify Code Owners
 
 # Notify default owners
-* @NHSDigital/nhs-notify-qa
+* @NHSDigital/nhs-notify-web-template-management
 
 # Codeowners must be final check
 /.github/CODEOWNERS @NHSDigital/nhs-notify-code-owners
