@@ -1,9 +1,5 @@
 import { TOTP } from "totp-generator";
 
-import { getSecret } from "./secret-client";
-
-const cis2CredentialsSecretId = "test/cis2-int/credentials";
-
 type Cis2Credentials = {
   username: string;
   password: string;
@@ -16,10 +12,16 @@ export type Cis2CredentialProvider = {
   totp: () => string;
 };
 
-export async function getCis2Credentials(): Promise<Cis2CredentialProvider> {
-  const cis2Credentials = await getSecret<Cis2Credentials>(
-    cis2CredentialsSecretId
-  );
+function getCredentials(): Cis2Credentials {
+  const rawCredentials = process.env.SYSTEM_TESTS_CIS2_INT_CREDENTIALS ?? '';
+  if (!rawCredentials) {
+    throw new Error("CIS2 credentials not found in environment variable SYSTEM_TESTS_CIS2_INT_CREDENTIALS");
+  }
+  return JSON.parse(rawCredentials) as Cis2Credentials;
+}
+
+export async function getCis2CredentialProvider(): Promise<Cis2CredentialProvider> {
+  const cis2Credentials = getCredentials();
 
   return {
     username: cis2Credentials.username,

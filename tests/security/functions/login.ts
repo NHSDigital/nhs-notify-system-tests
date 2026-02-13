@@ -5,15 +5,15 @@ import {
 import { TemplateMgmtBasePage } from "../pages/template-mgmt-base-page";
 import {
   Cis2CredentialProvider,
-  getCis2Credentials,
+  getCis2CredentialProvider,
 } from "nhs-notify-system-tests-shared";
 
 async function enterCis2TotpCode(
   page: Page,
-  cis2Credentials: Cis2CredentialProvider,
+  cis2CredentialProvider: Cis2CredentialProvider,
   targetHeadingText: string
 ) {
-  await page.getByLabel('Enter verification code').fill(cis2Credentials.totp());
+  await page.getByLabel('Enter verification code').fill(cis2CredentialProvider.totp());
   await page.getByText(/\W+Submit\W+/).click();
 
   const happyPathSelector = page.getByText(targetHeadingText);
@@ -28,11 +28,11 @@ async function enterCis2TotpCode(
 
 async function enterCis2TotpCodeWithRetry(
   page: Page,
-  cis2Credentials: Cis2CredentialProvider,
+  cis2CredentialProvider: Cis2CredentialProvider,
   targetHeadingText: string
 ) {
   for (var i=0; i<3; i++) {
-    const success = await enterCis2TotpCode(page, cis2Credentials, targetHeadingText);
+    const success = await enterCis2TotpCode(page, cis2CredentialProvider, targetHeadingText);
     if (success) {
       return;
     }
@@ -44,7 +44,7 @@ async function loginWithCis2(
   page: Page,
   targetHeadingText: string
 ) {
-  const cis2Credentials = await getCis2Credentials();
+  const cis2CredentialProvider = await getCis2CredentialProvider();
 
   try {
     // Notify WebUI - Click the CIS2 login button
@@ -58,13 +58,13 @@ async function loginWithCis2(
     await page.waitForSelector(`//input[@name='password']`);
 
     // CIS2 - Username/password form
-    await page.fill('input[name="email"]', cis2Credentials.username);
-    await page.fill('input[name="password"]', cis2Credentials.password);
+    await page.fill('input[name="email"]', cis2CredentialProvider.username);
+    await page.fill('input[name="password"]', cis2CredentialProvider.password);
     await page.getByText(/\W+Continue\W+/).click();
     await expect(page.getByText('Enter verification code')).toBeVisible();
 
     // CIS2 - TOTP form
-    await enterCis2TotpCodeWithRetry(page, cis2Credentials, targetHeadingText);
+    await enterCis2TotpCodeWithRetry(page, cis2CredentialProvider, targetHeadingText);
   } catch (error) {
     console.error("Error during login:", error);
     throw error;
