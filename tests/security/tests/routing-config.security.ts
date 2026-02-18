@@ -58,6 +58,7 @@ const previewAndSelectTemplate = async (
 }
 
 test(`User creates a multi-channel routing config`, async ({ page }, { config: { configFile } }) => {
+  test.setTimeout(180_000);
 
   const templates = await getSeededTemplateConfig(configFile);
   await page.goto('/templates/message-plans');
@@ -111,5 +112,11 @@ test(`User creates a multi-channel routing config`, async ({ page }, { config: {
 
   await expect(page).toHaveURL(new RegExp(`/templates/message-plans/review-and-move-to-production/${routingConfigId}(.*)`));
 
-  // remaining pages not ready yet
+  await page.getByText('Move to production').click();
+
+  await expect(page).toHaveURL('/templates/message-plans');
+
+  await page.getByText(/Production \(\d+\)/).click();
+
+  await expect(page.getByText(routingConfigId)).toBeVisible();
 });
