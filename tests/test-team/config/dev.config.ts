@@ -34,6 +34,10 @@ export default defineConfig({
           slowMo: 0,
         },
         video: 'on',
+        viewport: {
+          height: 1200,
+          width: 1600,
+        },
         headless: true
       },
     },

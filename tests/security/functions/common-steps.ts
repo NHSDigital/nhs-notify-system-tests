@@ -79,13 +79,14 @@ export async function createEmailTemplate(
     '/templates/create-email-template'
   );
 
+  await page.waitForLoadState('load');
   await expect(page.getByTestId('navigation-links')).toBeVisible();
 
-  await page.getByLabel('Template name').fill(name);
+  await page.getByLabel('Template name').pressSequentially(name);
 
-  await page.getByLabel('Subject line').fill('E2E subject');
+  await page.getByLabel('Subject line').pressSequentially('E2E subject');
 
-  await page.getByLabel('Message').fill('E2E Message');
+  await page.getByLabel('Message').pressSequentially('E2E Message');
 
   await page.getByText('Save and preview').click({
     position: {
@@ -103,12 +104,15 @@ export async function createSmsTemplate(
     '/templates/create-text-message-template'
   );
 
+  await page.waitForLoadState('load');
   await expect(page.getByTestId('navigation-links')).toBeVisible();
+  await expect(page.getByTestId('character-message-count')).toBeVisible();
 
-  await page.getByLabel('Template name').fill(name);
+  await page.getByLabel('Template name').pressSequentially(name);
 
-  await page.getByLabel('Message').fill('E2E Message');
+  await page.getByLabel('Message').pressSequentially('E2E Message');
 
+  await expect(page.getByTestId('character-message-count')).toBeVisible();
   await page.getByText('Save and preview').click({
     position: {
       x: 50,
@@ -125,12 +129,15 @@ export async function createNhsAppTemplate(
     '/templates/create-nhs-app-template'
   );
 
+  await page.waitForLoadState('load');
   await expect(page.getByTestId('navigation-links')).toBeVisible();
+  await expect(page.getByTestId('character-count')).toBeVisible();
 
-  await page.getByLabel('Template name').fill(name);
+  await page.getByLabel('Template name').pressSequentially(name);
 
-  await page.getByLabel('Message').fill('E2E Message');
+  await page.getByLabel('Message').pressSequentially('E2E Message');
 
+  await expect(page.getByTestId('character-count')).toBeVisible();
   await page.getByText('Save and preview').click({
     position: {
       x: 50,
@@ -274,7 +281,7 @@ export function copyTemplate(
     await basePage.clickButtonByName('Save and preview');
     await expect(basePage.pageHeader).toHaveText(editedTemplateName);
     await basePage.clickBackLink();
-    await basePage.page.waitForSelector('text=Message templates', { timeout: 10_000 });
+    await basePage.page.waitForSelector('text=Message templates');
     await basePage.waitForLoad();
     await expect(basePage.templateEdited(editedTemplateName)).toBeVisible();
 

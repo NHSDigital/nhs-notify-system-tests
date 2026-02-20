@@ -8,67 +8,63 @@ import {
   getCis2CredentialProvider,
 } from "nhs-notify-system-tests-shared";
 
-async function enterCis2TotpCode(
+async function enterVerificationCode(
   page: Page,
   cis2CredentialProvider: Cis2CredentialProvider,
-  targetHeadingText: string
 ) {
   await page.getByLabel('Enter verification code').fill(cis2CredentialProvider.totp());
-  await page.getByText(/\W+Submit\W+/).click();
 
-  const happyPathSelector = page.getByText(targetHeadingText);
-  const reVerificationSelector = page.locator(`//button[text()=' Re-enter verification code ']`);
+  await page.getByText('Submit').click();
 
-  await happyPathSelector.or(reVerificationSelector).waitFor({ timeout: 60_000 });
-  if (await happyPathSelector.isVisible()) {
-    return true;
+  await expect(
+      page.getByText('Message templates')
+    .or(
+      page.getByText('Re-enter verification code')
+    )
+    .or(
+      page.getByText('Sign in using an NHS account')
+    )).toBeVisible({ timeout: 90_000 });
+
+  if (await page.getByText('Message templates').isVisible()) {
+    return;
   }
-  return false;
+
+  if (await page.getByText('Re-enter verification code').isVisible()) {
+    await page.getByText('Re-enter verification code').click();
+    enterVerificationCode(page, cis2CredentialProvider);
+
+    return;
+  }
+
+  if (await page.getByText('Sign in using an NHS account').isVisible()) {
+    await cis2Login(page);
+
+    return;
+  }
+
+  throw new Error('Unexpected outcome');
 }
 
-async function enterCis2TotpCodeWithRetry(
+export async function cis2Login(
   page: Page,
-  cis2CredentialProvider: Cis2CredentialProvider,
-  targetHeadingText: string
-) {
-  for (var i=0; i<3; i++) {
-    const success = await enterCis2TotpCode(page, cis2CredentialProvider, targetHeadingText);
-    if (success) {
-      return;
-    }
-    await page.getByText(/\W+Re-enter verification code\W+/).click();
-  }
-}
-
-async function loginWithCis2(
-  page: Page,
-  targetHeadingText: string
 ) {
   const cis2CredentialProvider = await getCis2CredentialProvider();
 
-  try {
-    // Notify WebUI - Click the CIS2 login button
-    const cis2Button = page.getByText("Log in with my Care Identity")
-    await page.waitForLoadState('networkidle')
-    await cis2Button.click();
+  await page.waitForLoadState('load');
 
-    // CIS2 - Select credentials type
-    await page.getByLabel("Authenticator app").click();
-    await page.getByText(/\W+Continue\W+/).click();
-    await page.waitForSelector(`//input[@name='password']`);
+  await page.getByText("Log in with my Care Identity").click();
 
-    // CIS2 - Username/password form
-    await page.fill('input[name="email"]', cis2CredentialProvider.username);
-    await page.fill('input[name="password"]', cis2CredentialProvider.password);
-    await page.getByText(/\W+Continue\W+/).click();
-    await expect(page.getByText('Enter verification code')).toBeVisible();
+  await page.getByLabel("Authenticator app").click();
 
-    // CIS2 - TOTP form
-    await enterCis2TotpCodeWithRetry(page, cis2CredentialProvider, targetHeadingText);
-  } catch (error) {
-    console.error("Error during login:", error);
-    throw error;
-  }
+  await page.getByText('Continue').click();
+
+  await page.getByLabel('What is your email address?').fill(cis2CredentialProvider.username);
+
+  await page.getByLabel('What is your password?').fill(cis2CredentialProvider.password);
+
+  await page.getByText('Continue').click();
+
+  await enterVerificationCode(page, cis2CredentialProvider);
 }
 
 async function logOut(page: TemplateMgmtBasePage) {
@@ -77,4 +73,4 @@ async function logOut(page: TemplateMgmtBasePage) {
   await expect(page.pageHeader).toHaveText('Sign in');
 }
 
-export { loginWithCis2, expect, logOut };
+export { expect, logOut };
