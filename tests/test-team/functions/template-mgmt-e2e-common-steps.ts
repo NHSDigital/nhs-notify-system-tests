@@ -68,9 +68,9 @@ export function createLetterTemplate(
 
     await basePage.fillTextBox('Template name', name);
 
-    await letterPage.selectLetterOption('Letter type','x1');
-    await letterPage.selectLetterOption('Letter language',language);
-    await letterPage.uploadLetterTemplate('Letter template PDF', inputFileName, language);
+    await letterPage.selectLetterOption('Letter type', 'x1');
+    await letterPage.selectLetterOption('Letter language', language);
+    await letterPage.uploadLetterTemplate(inputFileName);
   });
 }
 
@@ -151,33 +151,21 @@ export async function createNhsAppTemplate(
 }
 
 
-export function requestProof(
+export function submitTemplate(
   { basePage, letterPage }: CommonLetterStepsProps,
   channelPath: string,
-  routingEnabled: boolean,
 ) {
-  return test.step('Request Proof', async () => {
-    await basePage.clickButtonByName('Request a proof');
+  return test.step('Submit template', async () => {
+    await basePage.clickButtonByName('Submit template');
     await basePage.clickButtonByName('Go back');
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
       new RegExp(`/templates/preview-${channelPath}-template/(.*)`)
     );
-    await basePage.clickButtonByName('Request a proof');
-    await expect(basePage.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp('/templates/request-proof-of-template/(.*)')
-    );
-    await basePage.clickButtonByName('Request a proof');
-    await basePage.checkStatus('Waiting for proof');
-    await letterPage.waitForProofRequest();
-    await letterPage.verifyFiles();
 
-    if (routingEnabled) {
-      await letterPage.approveLetterTemplate();
-    } else {
-      await letterPage.submitLetterTemplate();
-    }
+    await basePage.checkStatus('Not yet submitted');
+
+    await letterPage.submitLetterTemplate();
   })
 }
 
@@ -214,7 +202,7 @@ export function previewPageChooseSubmit(
 
 export function deleteTemplate(
   { basePage }: CommonStepsProps,
-  name:string
+  name: string
 ) {
   return test.step('Delete template', async () => {
     await basePage.goBackLink.click();
@@ -227,8 +215,8 @@ export function deleteTemplate(
     await basePage.clickLinkByName('Delete ' + name);
     await basePage.clickButtonByName('No, go back');
     await expect(basePage.page).toHaveURL(
-        '/templates/message-templates'
-      );
+      '/templates/message-templates'
+    );
     let rowCountCheck = await basePage.tableRows();
     console.log(rowCountCheck);
     expect(rowCount).toBe(rowCount);
@@ -236,11 +224,11 @@ export function deleteTemplate(
     await basePage.clickLinkByName('Delete ' + name);
     await basePage.clickButtonByName('Yes, delete template');
     await expect(basePage.page).toHaveURL(
-        '/templates/message-templates'
-      );
+      '/templates/message-templates'
+    );
     rowCountCheck = await basePage.tableRows();
-    console.log(rowCount-1);
-    expect(rowCountCheck).toBe(rowCount-1);
+    console.log(rowCount - 1);
+    expect(rowCountCheck).toBe(rowCount - 1);
     expect(basePage.templateToDelete).not.toBeVisible();
   });
 }
@@ -296,7 +284,7 @@ export function copyTemplate(
 
     const rowCountCheck = await basePage.tableRows();
     console.log(rowCountCheck)
-    expect(rowCountCheck).toBe(rowCount+1);
+    expect(rowCountCheck).toBe(rowCount + 1);
   });
 }
 

@@ -8,7 +8,7 @@ import {
   chooseTemplate,
   createLetterTemplate,
   startNewTemplate,
-  requestProof,
+  submitTemplate,
 } from '../../functions/common-steps';
 
 test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
@@ -29,5 +29,5 @@ test(`User creates and submits a new letter template successfully`, async ({
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createLetterTemplate(props, name);
-  await requestProof(props, channelPath, true);
+  await submitTemplate(props, channelPath);
 });

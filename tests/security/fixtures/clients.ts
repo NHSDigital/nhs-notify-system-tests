@@ -5,7 +5,7 @@ export const clients: Record<string, StaticClientConfig> = {
     templates: {
       campaignIds: ['SecPrimary-Campaign'],
       features: {
-        proofing: true,
+        proofing: false,
       },
     },
     auth: {
@@ -16,7 +16,7 @@ export const clients: Record<string, StaticClientConfig> = {
     templates: {
       campaignIds: ['Client2Sec-Campaign'],
       features: {
-        proofing: true,
+        proofing: false,
       },
     },
     auth: {
@@ -27,7 +27,7 @@ export const clients: Record<string, StaticClientConfig> = {
     templates: {
       campaignIds: ['Client3Sec-Campaign'],
       features: {
-        proofing: true,
+        proofing: false,
       },
     },
     auth: {
@@ -38,7 +38,7 @@ export const clients: Record<string, StaticClientConfig> = {
     templates: {
       campaignIds: ['SecSpider-Campaign'],
       features: {
-        proofing: true,
+        proofing: false,
       },
     },
     auth: {
@@ -49,7 +49,7 @@ export const clients: Record<string, StaticClientConfig> = {
     templates: {
       campaignIds: ['PrimaryRoutingEnabled-Campaign'],
       features: {
-        proofing: true,
+        proofing: false,
         routing: true,
       },
     },
@@ -61,7 +61,7 @@ export const clients: Record<string, StaticClientConfig> = {
     templates: {
       campaignIds: ['CopyRoutingEnabled-Campaign'],
       features: {
-        proofing: true,
+        proofing: false,
         routing: true,
       },
     },
@@ -73,7 +73,7 @@ export const clients: Record<string, StaticClientConfig> = {
     templates: {
       campaignIds: ['DeleteRoutingEnabled-Campaign'],
       features: {
-        proofing: true,
+        proofing: false,
         routing: true,
       },
     },

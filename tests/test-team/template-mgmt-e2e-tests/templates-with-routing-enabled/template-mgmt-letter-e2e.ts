@@ -8,7 +8,7 @@ import {
   chooseTemplate,
   createLetterTemplate,
   startNewTemplate,
-  requestProof,
+  submitTemplate,
 } from '../../functions/template-mgmt-e2e-common-steps';
 
 test.use({ storageState: 'login-state/primaryRoutingEnabled.json' });
@@ -31,5 +31,5 @@ test(`User creates and submits a new letter template successfully - routing enab
   await startNewTemplate(props);
   await chooseTemplate(props, channel);
   await createLetterTemplate(props, name, language, inputFileName);
-  await requestProof(props, channelPath, true);
+  await submitTemplate(props, channelPath);
 });

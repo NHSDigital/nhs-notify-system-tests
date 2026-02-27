@@ -146,36 +146,6 @@ export async function createNhsAppTemplate(
   });
 }
 
-export function requestProof(
-  { basePage, letterPage }: CommonLetterStepsProps,
-  channelPath: string,
-  routingEnabled: boolean,
-) {
-  return test.step('Request Proof', async () => {
-    await basePage.clickButtonByName('Request a proof');
-    await basePage.clickButtonByName('Go back');
-    await expect(basePage.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp(`/templates/preview-${channelPath}-template/(.*)`)
-    );
-    await basePage.clickButtonByName('Request a proof');
-    await expect(basePage.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp('/templates/request-proof-of-template/(.*)')
-    );
-    await basePage.clickButtonByName('Request a proof');
-    await basePage.checkStatus('Waiting for proof');
-    await letterPage.waitForProofRequest();
-    await letterPage.verifyFiles();
-
-    if (routingEnabled) {
-      await letterPage.approveLetterTemplate();
-    } else {
-      await letterPage.submitLetterTemplate();
-    }
-})
-}
-
 export function previewPage(
   { basePage }: CommonStepsProps,
   channelPath: string,
@@ -313,4 +283,22 @@ export function submitPage(
 
     await expect(basePage.pageHeader).toHaveText('Template submitted');
   });
+}
+
+export function submitTemplate(
+  { basePage, letterPage }: CommonLetterStepsProps,
+  channelPath: string,
+) {
+  return test.step('Submit template', async () => {
+    await basePage.clickButtonByName('Submit template');
+    await basePage.clickButtonByName('Go back');
+    await expect(basePage.page).toHaveURL(
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      new RegExp(`/templates/preview-${channelPath}-template/(.*)`)
+    );
+
+    await basePage.checkStatus('Not yet submitted');
+
+    await letterPage.submitLetterTemplate();
+  })
 }
