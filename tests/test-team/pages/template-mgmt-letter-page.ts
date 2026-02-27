@@ -16,9 +16,7 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
   }
 
   async uploadLetterTemplate(
-    templateName: string,
     inputFileName: string,
-    language: string
   ) {
     const maxRetries = 40;
     const retryInterval = 2000;
@@ -32,27 +30,16 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
     for (let i = 0; i < maxRetries; i++) {
       try {
         await this.page.reload();
-        if (['ur', 'ar', 'fa'].includes(language)) {
-          await expect(this.page.getByText('Not yet submitted')).toBeVisible({
-            timeout: 1000,
-          });
-          await expect(this.page.getByText('Submit template')).toBeVisible({
-            timeout: 1000,
-          });
-          console.log(
-            'Success: "Not yet submitted" and "Submit template button" are visible.'
-          );
-          break;
-        } else {
-          await expect(this.page.getByText('Files uploaded')).toBeVisible({
-            timeout: 1000,
-          });
-          console.log('Success: "Files uploaded" is visible.');
-          await expect(this.page.getByText('Request a proof')).toBeVisible({
-            timeout: 1000,
-          });
-          break;
-        }
+        await expect(this.page.getByText('Not yet submitted')).toBeVisible({
+          timeout: 1000,
+        });
+        await expect(this.page.getByText('Submit template')).toBeVisible({
+          timeout: 1000,
+        });
+        console.log(
+          'Success: "Not yet submitted" and "Submit template button" are visible.'
+        );
+        break;
       } catch (e) {
         console.log(
           `Attempt ${i + 1} failed, retrying in ${retryInterval}ms...`
@@ -60,7 +47,7 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
         await this.page.waitForTimeout(retryInterval);
         if (i === maxRetries - 1) {
           throw new Error(
-            '"Files uploaded" was not visible after maximum retries.'
+            '"Not yet submitted" and "Submit template button" were not visible after maximum retries.'
           );
         }
       }
@@ -148,7 +135,7 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
 
   async submitLetterTemplate() {
     await this.page.getByTestId('preview-letter-template-cta').click();
-    await this.page.getByRole('button', { name: 'Approve and submit' }).click();
+    await this.page.getByRole('button', { name: 'Submit template' }).click();
     await expect(this.page.locator('#template-submitted')).toBeVisible();
   }
 

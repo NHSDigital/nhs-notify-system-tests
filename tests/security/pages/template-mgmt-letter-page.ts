@@ -26,10 +26,10 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
     for (let i = 0; i < maxRetries; i++) {
       try {
         await this.page.reload();
-        await expect(this.page.getByText('Files uploaded')).toBeVisible({
+        await expect(this.page.getByText('Not yet submitted')).toBeVisible({
           timeout: 1000,
         });
-        console.log('Success: "Files uploaded" is visible.');
+        console.log('Success: "Not yet submitted" is visible.');
         break;
       } catch (e) {
         console.log(
@@ -38,12 +38,12 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
         await this.page.waitForTimeout(retryInterval);
         if (i === maxRetries - 1) {
           throw new Error(
-            '"Files uploaded" was not visible after maximum retries.'
+            '"Not yet submitted" was not visible after maximum retries.'
           );
         }
       }
     }
-    await expect(this.page.getByText('Request a proof')).toBeVisible({
+    await expect(this.page.getByRole('button', { name: 'Submit template' })).toBeVisible({
       timeout: 1000,
     });
   }
@@ -129,7 +129,7 @@ export class TemplateMgmtLetterPage extends TemplateMgmtBasePage {
 
   async submitLetterTemplate() {
     await this.page.getByTestId('preview-letter-template-cta').click();
-    await this.page.getByRole('button', { name: 'Approve and submit' }).click();
+    await this.page.getByRole('button', { name: 'Submit template' }).click();
     await expect(this.page.locator('#template-submitted')).toBeVisible();
   }
 

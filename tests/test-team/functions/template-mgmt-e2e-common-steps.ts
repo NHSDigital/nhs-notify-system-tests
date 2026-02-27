@@ -70,7 +70,7 @@ export function createLetterTemplate(
 
     await letterPage.selectLetterOption('Letter type','x1');
     await letterPage.selectLetterOption('Letter language',language);
-    await letterPage.uploadLetterTemplate('Letter template PDF', inputFileName, language);
+    await letterPage.uploadLetterTemplate(inputFileName);
   });
 }
 
@@ -151,37 +151,25 @@ export async function createNhsAppTemplate(
 }
 
 
-export function requestProof(
+export function submitTemplate(
   { basePage, letterPage }: CommonLetterStepsProps,
   channelPath: string,
-  routingEnabled: boolean,
 ) {
-  return test.step('Request Proof', async () => {
-    await basePage.clickButtonByName('Request a proof');
+  return test.step('Submit template', async () => {
+    await basePage.clickButtonByName('Submit template');
     await basePage.clickButtonByName('Go back');
     await expect(basePage.page).toHaveURL(
       // eslint-disable-next-line security/detect-non-literal-regexp
       new RegExp(`/templates/preview-${channelPath}-template/(.*)`)
     );
-    await basePage.clickButtonByName('Request a proof');
-    await expect(basePage.page).toHaveURL(
-      // eslint-disable-next-line security/detect-non-literal-regexp
-      new RegExp('/templates/request-proof-of-template/(.*)')
-    );
-    await basePage.clickButtonByName('Request a proof');
-    await basePage.checkStatus('Waiting for proof');
-    await letterPage.waitForProofRequest();
-    await letterPage.verifyFiles();
 
-    if (routingEnabled) {
-      await letterPage.approveLetterTemplate();
-    } else {
-      await letterPage.submitLetterTemplate();
-    }
+    await basePage.checkStatus('Not yet submitted');
+
+    await letterPage.submitLetterTemplate();
   })
 }
 
-export function previewPage(
+ export function previewPage(
   { basePage }: CommonStepsProps,
   channelPath: string,
   name: string
