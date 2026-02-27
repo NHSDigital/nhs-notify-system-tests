@@ -22,3 +22,4 @@ awscli 2.29.0
 # docker/sonarsource/sonar-scanner-cli 5.0.1@sha256:494ecc3b5b1ee1625bd377b3905c4284e4f0cc155cff397805a244dee1c7d575 # SEE: https://hub.docker.com/r/sonarsource/sonar-scanner-cli/tags
 # docker/ghcr.io/anchore/grype v0.92.2@sha256:651e558f9ba84f2a790b3449c8a57cbbf4f34e004f7d3f14ae8f8cbeede4cd33 # SEE: https://github.com/anchore/grype/pkgs/container/grype
 # docker/ghcr.io/anchore/syft v1.26.0@sha256:de078f51704a213906970b1475edd6006b8af50aa159852e125518237487b8c6 # SEE: https://github.com/anchore/syft/pkgs/container/syft
+terraform-docs 0.19.0

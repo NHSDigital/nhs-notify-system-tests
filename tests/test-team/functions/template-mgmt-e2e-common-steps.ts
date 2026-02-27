@@ -68,8 +68,8 @@ export function createLetterTemplate(
 
     await basePage.fillTextBox('Template name', name);
 
-    await letterPage.selectLetterOption('Letter type','x1');
-    await letterPage.selectLetterOption('Letter language',language);
+    await letterPage.selectLetterOption('Letter type', 'x1');
+    await letterPage.selectLetterOption('Letter language', language);
     await letterPage.uploadLetterTemplate(inputFileName);
   });
 }
@@ -169,7 +169,7 @@ export function submitTemplate(
   })
 }
 
- export function previewPage(
+export function previewPage(
   { basePage }: CommonStepsProps,
   channelPath: string,
   name: string
@@ -202,7 +202,7 @@ export function previewPageChooseSubmit(
 
 export function deleteTemplate(
   { basePage }: CommonStepsProps,
-  name:string
+  name: string
 ) {
   return test.step('Delete template', async () => {
     await basePage.goBackLink.click();
@@ -215,8 +215,8 @@ export function deleteTemplate(
     await basePage.clickLinkByName('Delete ' + name);
     await basePage.clickButtonByName('No, go back');
     await expect(basePage.page).toHaveURL(
-        '/templates/message-templates'
-      );
+      '/templates/message-templates'
+    );
     let rowCountCheck = await basePage.tableRows();
     console.log(rowCountCheck);
     expect(rowCount).toBe(rowCount);
@@ -224,11 +224,11 @@ export function deleteTemplate(
     await basePage.clickLinkByName('Delete ' + name);
     await basePage.clickButtonByName('Yes, delete template');
     await expect(basePage.page).toHaveURL(
-        '/templates/message-templates'
-      );
+      '/templates/message-templates'
+    );
     rowCountCheck = await basePage.tableRows();
-    console.log(rowCount-1);
-    expect(rowCountCheck).toBe(rowCount-1);
+    console.log(rowCount - 1);
+    expect(rowCountCheck).toBe(rowCount - 1);
     expect(basePage.templateToDelete).not.toBeVisible();
   });
 }
@@ -284,7 +284,7 @@ export function copyTemplate(
 
     const rowCountCheck = await basePage.tableRows();
     console.log(rowCountCheck)
-    expect(rowCountCheck).toBe(rowCount+1);
+    expect(rowCountCheck).toBe(rowCount + 1);
   });
 }
 
