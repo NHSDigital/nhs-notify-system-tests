@@ -54,7 +54,7 @@ const previewAndSelectTemplate = async (
 
   await page.getByText('Save and continue').click();
 
-  await expect(page).toHaveURL(new RegExp(`/templates/message-plans/choose-templates/${routingConfigId}(.*)`));
+  await expect(page).toHaveURL(new RegExp(`/templates/message-plans/edit-message-plan/${routingConfigId}(.*)`));
 }
 
 test(`User creates a multi-channel routing config`, async ({ page, }, { config: { configFile } }) => {
@@ -77,7 +77,7 @@ test(`User creates a multi-channel routing config`, async ({ page, }, { config: 
 
   await page.getByText('Save and continue').click();
 
-  await expect(page).toHaveURL(new RegExp('/templates/message-plans/choose-templates/(.*)'));
+  await expect(page).toHaveURL(new RegExp('/templates/message-plans/edit-message-plan/(.*)'));
 
   const urlSegments = page.url().split('/');
   const routingConfigId = urlSegments[urlSegments.length - 1];
