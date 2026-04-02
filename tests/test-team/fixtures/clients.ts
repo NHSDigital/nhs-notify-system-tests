@@ -7,6 +7,7 @@ export const clients: Record<string, StaticClientConfig> = {
       features: {
         proofing: false,
         routing: false,
+        legacyLetters: true
       },
     },
     auth: {
@@ -19,6 +20,7 @@ export const clients: Record<string, StaticClientConfig> = {
       features: {
         proofing: false,
         routing: false,
+        legacyLetters: true
       },
     },
     auth: {
@@ -31,6 +33,7 @@ export const clients: Record<string, StaticClientConfig> = {
       features: {
         proofing: false,
         routing: false,
+        legacyLetters: true
       },
     },
     auth: {
@@ -43,6 +46,7 @@ export const clients: Record<string, StaticClientConfig> = {
       features: {
         proofing: false,
         routing: true,
+        legacyLetters: true
       },
     },
     auth: {
@@ -55,6 +59,7 @@ export const clients: Record<string, StaticClientConfig> = {
       features: {
         proofing: false,
         routing: true,
+        legacyLetters: true
       },
     },
     auth: {
@@ -67,6 +72,7 @@ export const clients: Record<string, StaticClientConfig> = {
       features: {
         proofing: true,
         routing: true,
+        legacyLetters: true
       },
     },
     auth: {

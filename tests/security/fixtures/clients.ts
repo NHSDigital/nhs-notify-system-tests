@@ -6,6 +6,7 @@ export const clients: Record<string, StaticClientConfig> = {
       campaignIds: ['SecPrimary-Campaign'],
       features: {
         proofing: false,
+        legacyLetters: true
       },
     },
     auth: {
@@ -17,6 +18,7 @@ export const clients: Record<string, StaticClientConfig> = {
       campaignIds: ['Client2Sec-Campaign'],
       features: {
         proofing: false,
+        legacyLetters: true
       },
     },
     auth: {
@@ -28,6 +30,7 @@ export const clients: Record<string, StaticClientConfig> = {
       campaignIds: ['Client3Sec-Campaign'],
       features: {
         proofing: false,
+        legacyLetters: true
       },
     },
     auth: {
@@ -39,6 +42,7 @@ export const clients: Record<string, StaticClientConfig> = {
       campaignIds: ['SecSpider-Campaign'],
       features: {
         proofing: false,
+        legacyLetters: true
       },
     },
     auth: {
@@ -51,6 +55,7 @@ export const clients: Record<string, StaticClientConfig> = {
       features: {
         proofing: false,
         routing: true,
+        legacyLetters: true
       },
     },
     auth: {
@@ -63,6 +68,7 @@ export const clients: Record<string, StaticClientConfig> = {
       features: {
         proofing: false,
         routing: true,
+        legacyLetters: true
       },
     },
     auth: {
@@ -75,6 +81,7 @@ export const clients: Record<string, StaticClientConfig> = {
       features: {
         proofing: false,
         routing: true,
+        legacyLetters: true
       },
     },
     auth: {
