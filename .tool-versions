@@ -1,7 +1,10 @@
 act 0.2.64
 gitleaks 8.18.4
 pre-commit 3.6.0
+terraform 1.14.3
+terraform-docs 0.21.0
 vale 3.6.0
+# trivy 0.69.3 - TODO - Re-visit Trivy usage https://nhsd-jira.digital.nhs.uk/browse/CCM-15549
 poetry 1.8.3
 python 3.11.6
 nodejs 20.18.2
