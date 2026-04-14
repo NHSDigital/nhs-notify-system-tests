@@ -42,7 +42,7 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0 # Full history is needed to scan all commits
       - name: "Scan secrets"
@@ -53,7 +53,7 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0 # Full history is needed to compare branches
       - name: "Check file format"
@@ -64,7 +64,7 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0 # Full history is needed to compare branches
       - name: "Check Markdown format"
@@ -75,7 +75,7 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0 # Full history is needed to compare branches
       - name: "Check English usage"
@@ -87,7 +87,7 @@ jobs:
       terraform_changed: ${{ steps.check.outputs.terraform_changed }}
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: "Check for Terraform changes"
         id: check
@@ -111,7 +111,9 @@ jobs:
     if: needs.detect-terraform-changes.outputs.terraform_changed == 'true'
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: "Setup ASDF"
+        uses: asdf-vm/actions/setup@b7bcd026f18772e44fe1026d729e1611cc435d47
       - name: "Lint Terraform"
         uses: NHSDigital/nhs-notify-shared-modules/.github/actions/lint-terraform@3.0.9
   tfsec:
@@ -122,7 +124,7 @@ jobs:
     if: needs.detect-terraform-changes.outputs.terraform_changed == 'true'
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: "Setup ASDF"
         uses: asdf-vm/actions/setup@v4
       - name: "Perform Setup"
@@ -138,7 +140,7 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: "Count lines of code"
         uses: NHSDigital/nhs-notify-shared-modules/.github/actions/create-lines-of-code-report@3.0.9
         with:
@@ -157,7 +159,7 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: "Scan dependencies"
         uses: NHSDigital/nhs-notify-shared-modules/.github/actions/scan-dependencies@3.0.9
         with:
