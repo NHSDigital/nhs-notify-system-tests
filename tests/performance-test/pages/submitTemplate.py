@@ -5,5 +5,3 @@ class SubmitTemplate:
 
     async def submit_template(self):
         await self.page.get_by_role("button", name="Submit template").click()
-
-

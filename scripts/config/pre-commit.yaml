@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0 # Use the ref you want to point at
+    rev: v5.0.0 # Use the ref you want to point at
     hooks:
       - id: trailing-whitespace
       - id: detect-aws-credentials
@@ -14,53 +14,25 @@ repos:
       - id: mixed-line-ending
       - id: pretty-format-json
         args: ['--autofix']
-    # -   id: ...
-  - repo: local
+        exclude: |
+            (?x)^(
+                package(-lock)?\.json$ |
+                tests/.*/package(-lock)?\.json$ |
+                tests/.*/tsconfig.json |
+                internal/events/.*/.*\.schema\.json
+            )$
+
+  - repo: https://github.com/NHSDigital/nhs-notify-shared-modules
+    rev: 3.0.8
     hooks:
       - id: sort-dictionary
-        name: Sort dictionary
-        entry: ./scripts/githooks/sort-dictionary.sh
-        language: script
-        pass_filenames: false
-  - repo: local
-    hooks:
       - id: scan-secrets
-        name: Scan secrets
-        entry: /usr/bin/env check=whole-history ./scripts/githooks/scan-secrets.sh
-        language: script
-        pass_filenames: false
-  - repo: local
-    hooks:
+        args: [check=whole-history]
       - id: check-file-format
-        name: Check file format
-        entry: /usr/bin/env check=branch ./scripts/githooks/check-file-format.sh
-        language: script
-        pass_filenames: false
-  - repo: local
-    hooks:
+        args: [check=branch]
       - id: check-markdown-format
-        name: Check Markdown format
-        entry: /usr/bin/env check=branch ./scripts/githooks/check-markdown-format.sh
-        language: script
-        pass_filenames: false
-  - repo: local
-    hooks:
+        args: [check=branch]
       - id: check-english-usage
-        name: Check English usage
-        entry: /usr/bin/env check=branch ./scripts/githooks/check-english-usage.sh
-        language: script
-        pass_filenames: false
-  - repo: local
-    hooks:
+        args: [check=branch]
       - id: lint-terraform
-        name: Lint Terraform
-        entry: ./scripts/githooks/check-terraform-format.sh
-        language: script
-        pass_filenames: false
-  - repo: local
-    hooks:
       - id: generate-terraform-docs
-        name: Generate Terraform Docs
-        entry: ./scripts/githooks/check-terraform-docs.sh
-        language: script
-        pass_filenames: false
